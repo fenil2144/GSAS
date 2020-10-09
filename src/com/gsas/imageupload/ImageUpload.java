@@ -60,9 +60,9 @@ public class ImageUpload extends HttpServlet {
 			  //  PrintWriter pw=response.getWriter();
 			   // pw.print(name);
 				//System.out.println(name);
-			    image.write(new File("D:\\GSAS\\GSAS\\GSAS\\imagescheme"+name));//folder scheme image folder
+			    image.write(new File("D:\\GSAS\\GSAS\\GSAS\\WebContent\\imagescheme"+name));//create folder imagescheme where image of the  will be stored
 			    //images folder created in local computer and write function writes into that folder
-			   request.setAttribute("imagePath","D:\\GSAS\\GSAS\\GSAS\\imagescheme"+ name);
+			   request.setAttribute("imagePath","D:\\\\GSAS\\\\GSAS\\\\GSAS\\\\WebContent\\\\imagescheme"+ name);//
 			   RequestDispatcher rd=request.getRequestDispatcher("InsertSchemeServlet");
 			   rd.forward(request, response);
 			    
