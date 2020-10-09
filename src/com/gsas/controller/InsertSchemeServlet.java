@@ -50,7 +50,7 @@ public class InsertSchemeServlet extends HttpServlet {
 					schemeVO.setSchemeName(request.getParameter("schemeName"));
 					schemeVO.setSummary(request.getParameter("summary"));
 					schemeVO.setDescription(request.getParameter("description"));
-					schemeVO.setImagePath(request.getParameter("imagePath"));
+					schemeVO.setImagePath(request.getParameter("imagePath"));//get image path  from ImageUpload.java class 
 					
 					MinistryVO ministryVO = new MinistryVO(Long.parseLong(request.getParameter("ministry")));
 					schemeVO.setMinistryVO(ministryVO);
