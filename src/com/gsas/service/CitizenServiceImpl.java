@@ -1,10 +1,15 @@
 package com.gsas.service;
 
+import java.util.List;
+
 import com.gsas.dao.CitizenDao;
 import com.gsas.exception.AuthenticationException;
 import com.gsas.exception.CitizenNotFoundException;
+import com.gsas.exception.DatabaseException;
+import com.gsas.exception.SchemeNotFoundException;
 import com.gsas.model.CitizenDetailsVO;
 import com.gsas.model.LoginVO;
+import com.gsas.model.SchemeVO;
 import com.gsas.utility.LayerType;
 import com.gsas.utility.ObjectFactory;
 
@@ -42,6 +47,16 @@ public class CitizenServiceImpl implements CitizenService {
 	@Override
 	public void updateCitizenDetails(CitizenDetailsVO citizenDetailsVO) {
 		citizenDao.updateCitizenDetails(citizenDetailsVO);
+	}
+
+	@Override
+	public List<SchemeVO> getNotAppliedSchemeList(long citizenId) throws SchemeNotFoundException, DatabaseException {
+		return citizenDao.getNotAppliedSchemeList(citizenId);
+	}
+
+	@Override
+	public List<SchemeVO> getAppliedSchemeList(long citizenId, boolean approvedStatus) throws SchemeNotFoundException, DatabaseException {
+		return citizenDao.getAppliedSchemeList(citizenId, approvedStatus);
 	}
 
 }

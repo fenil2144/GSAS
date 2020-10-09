@@ -13,8 +13,8 @@ import javax.servlet.http.HttpSession;
 import com.gsas.exception.AuthenticationException;
 import com.gsas.model.LoginVO;
 import com.gsas.service.CitizenService;
-import com.gsas.utility.CitizenFactory;
 import com.gsas.utility.LayerType;
+import com.gsas.utility.ObjectFactory;
 
 /**
  * Servlet implementation class LoginServlet
@@ -28,12 +28,12 @@ public class LoginServlet extends HttpServlet {
     }
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		CitizenService citizenService = (CitizenService) CitizenFactory.getInstance(LayerType.SERVICE);
+		CitizenService citizenService = (CitizenService) ObjectFactory.getInstance(LayerType.CITIZEN_SERVICE);
 		RequestDispatcher rd = null;
 		try {
 			LoginVO loginVO = citizenService.Authenticate(request.getParameter("username"), request.getParameter("password"));
 			HttpSession session = request.getSession();
-			session.setAttribute("citizenVO", loginVO);
+			session.setAttribute("loginVO", loginVO);
 			
 			
 			rd = request.getRequestDispatcher("viewAllSchemes.jsp");

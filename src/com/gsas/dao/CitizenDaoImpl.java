@@ -5,12 +5,18 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.gsas.exception.AuthenticationException;
 import com.gsas.exception.CitizenNotFoundException;
+import com.gsas.exception.DatabaseException;
+import com.gsas.exception.SchemeNotFoundException;
 import com.gsas.model.AddressVO;
 import com.gsas.model.CitizenDetailsVO;
 import com.gsas.model.LoginVO;
+import com.gsas.model.SchemeApplicantVO;
+import com.gsas.model.SchemeVO;
 import com.gsas.utility.DBUtility;
 
 public class CitizenDaoImpl implements CitizenDao {
@@ -19,7 +25,7 @@ public class CitizenDaoImpl implements CitizenDao {
 @Override
 	public void registerCitizen(CitizenDetailsVO citizenDetailsVO) {
 		try {
-			Connection connection = DBUtility.getConnection();
+			connection = DBUtility.getConnection();
 			PreparedStatement sequenceStatement = connection.prepareStatement("values(next value for citizen_seq)");
 			ResultSet rs = sequenceStatement.executeQuery();
 			long seq = 0;
@@ -49,7 +55,7 @@ public class CitizenDaoImpl implements CitizenDao {
 			
 			//citizen_details
 			preparedStatement = 
-					connection.prepareStatement("insert into citizen_details values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+					connection.prepareStatement("insert into citizen_master values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 			preparedStatement.setLong(1, seq);
 			preparedStatement.setString(2, citizenDetailsVO.getFirstName());
 			preparedStatement.setString(3, citizenDetailsVO.getMiddleName());
@@ -77,16 +83,15 @@ public class CitizenDaoImpl implements CitizenDao {
 		LoginVO loginVO = null;
 		try {
 			Connection connection = DBUtility.getConnection();
-			PreparedStatement fetchStatement = connection.prepareStatement("select * from citizenVO where username = ? and password = ? where is_employee=?");
+			PreparedStatement fetchStatement = connection.prepareStatement("select * from login_credential where user_name = ? and password = ? and is_employee= false");
 			fetchStatement.setString(1, userName);
 			fetchStatement.setString(2, password);
-			fetchStatement.setBoolean(3, false);
 			
 			ResultSet resultSet = fetchStatement.executeQuery();
 			if(resultSet.next()) {
 				loginVO = new LoginVO();
 				loginVO.setLoginId(resultSet.getLong("login_id"));
-				loginVO.setUserName(resultSet.getString("username"));
+				loginVO.setUserName(resultSet.getString("user_name"));
 				loginVO.setPassword(resultSet.getString("password"));
 				return loginVO;
 			}
@@ -108,7 +113,7 @@ public class CitizenDaoImpl implements CitizenDao {
 		try {
 						
 			connection = DBUtility.getConnection();
-			PreparedStatement preparedStatement = connection.prepareStatement("select * from citizen_details d inner join login_credential c "
+			PreparedStatement preparedStatement = connection.prepareStatement("select * from citizen_master d inner join login_credential c "
 					+ "on d.citizen_ref = c.citizen_id inner join citizen_address a"
 					+ " on a.address_id = d.address_ref where citizen_ref=?");
 
@@ -116,7 +121,7 @@ public class CitizenDaoImpl implements CitizenDao {
 			while(resultSet.next()){
 				LoginVO loginVO = new LoginVO();
 				loginVO.setLoginId(resultSet.getLong("login_id"));
-				loginVO.setUserName(resultSet.getString("username"));
+				loginVO.setUserName(resultSet.getString("user_name"));
 				loginVO.setPassword(resultSet.getString("password"));
 				loginVO.setEmployee(resultSet.getBoolean("is_employee"));
 				
@@ -164,7 +169,7 @@ public class CitizenDaoImpl implements CitizenDao {
 			connection = DBUtility.getConnection();
 			
 			//Update citizen_credential
-			PreparedStatement updateStatement = connection.prepareStatement("update login_credential set username=?,password=? where citizen_id=?");
+			PreparedStatement updateStatement = connection.prepareStatement("update login_credential set user_name=?,password=? where citizen_id=?");
 			updateStatement.setString(1, citizenDetailsVO.getCitizenVO().getUserName());
 			updateStatement.setString(2, citizenDetailsVO.getCitizenVO().getPassword());
 			updateStatement.setLong(3, citizenDetailsVO.getCitizenVO().getLoginId());
@@ -202,6 +207,86 @@ public class CitizenDaoImpl implements CitizenDao {
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	@Override
+	public List<SchemeVO> getNotAppliedSchemeList(long citizenId) throws SchemeNotFoundException, DatabaseException {
+		
+		List<SchemeVO> notAppliedSchemeList = new ArrayList<SchemeVO>();
+		
+		try {
+			Connection connection = DBUtility.getConnection();
+			
+			PreparedStatement selectStatement = connection.prepareStatement("SELECT scheme_id,scheme_name,summary,description,image_path,STATUS FROM scheme_master WHERE scheme_id NOT IN (SELECT scheme_ref FROM scheme_applicant WHERE citizen_ref = ? and status = ?");
+			selectStatement.setLong(1, citizenId);
+			selectStatement.setBoolean(2, true);
+			
+			ResultSet resultSet = selectStatement.executeQuery();
+			while(resultSet.next()) {
+				SchemeVO schemeVO = new SchemeVO();
+				schemeVO.setSchemeId(resultSet.getLong("scheme_id"));
+				schemeVO.setSchemeName(resultSet.getString("scheme_name"));
+				schemeVO.setSummary(resultSet.getString("summary"));
+				schemeVO.setDescription(resultSet.getString("description"));
+				schemeVO.setImagePath(resultSet.getString("image_path"));
+				
+				notAppliedSchemeList.add(schemeVO);
+			}
+			
+			resultSet.close();
+			selectStatement.close();	
+			connection.close();
+			if(notAppliedSchemeList.isEmpty()) {
+				throw new SchemeNotFoundException("Scheme Not Found");
+			}
+		} catch(SQLException | ClassNotFoundException e) {
+
+			throw new DatabaseException(e.getMessage());
+		}
+		return notAppliedSchemeList;
+
+	}
+	
+	@Override
+	public List<SchemeVO> getAppliedSchemeList(long citizenId,boolean approvedStatus) throws SchemeNotFoundException, DatabaseException {
+		List<SchemeVO> appliedSchemeList = new ArrayList<SchemeVO>();
+		
+		try {
+			Connection connection = DBUtility.getConnection();
+			
+			PreparedStatement selectStatement = connection.prepareStatement("SELECT scheme_id,scheme_name,summary,description,image_path,approved_status,reason FROM scheme_master s INNER JOIN scheme_applicant a ON s.scheme_id = a.scheme_ref WHERE citizen_ref = ? AND approved_status = ? and status = ?");
+			selectStatement.setLong(1, citizenId);
+			selectStatement.setBoolean(2, approvedStatus);
+			selectStatement.setBoolean(3, true);
+			
+			ResultSet resultSet = selectStatement.executeQuery();
+			while(resultSet.next()) {
+				SchemeVO schemeVO = new SchemeVO();
+				schemeVO.setSchemeId(resultSet.getLong("scheme_id"));
+				schemeVO.setSchemeName(resultSet.getString("scheme_name"));
+				schemeVO.setSummary(resultSet.getString("summary"));
+				schemeVO.setDescription(resultSet.getString("description"));
+				schemeVO.setImagePath(resultSet.getString("image_path"));
+				schemeVO.setStatus(resultSet.getBoolean("approved_status"));
+				
+				SchemeApplicantVO schemeApplicantVO = new SchemeApplicantVO();
+				schemeApplicantVO.setReason(resultSet.getString("reason"));
+				
+				schemeApplicantVO.setSchemeVO(schemeVO);
+				
+				appliedSchemeList.add(schemeVO);
+			}
+			
+			resultSet.close();
+			selectStatement.close();
+			connection.close();
+			if(appliedSchemeList.isEmpty()) {
+				throw new SchemeNotFoundException("Scheme Not Found");
+			}
+		} catch(SQLException | ClassNotFoundException e) {
+
+			throw new DatabaseException(e.getMessage());
+		}
+		return appliedSchemeList;
 	}
 
 

@@ -21,11 +21,12 @@ import com.gsas.model.SectorVO;
 import com.gsas.utility.DBUtility;
 
 public class SchemeDaoImpl implements SchemeDao{
+	private Connection connection;
 
 	@Override
 	public void addScheme(SchemeVO scheme) throws DatabaseException {
 		try {
-			Connection connection = DBUtility.getConnection();
+			connection = DBUtility.getConnection();
 			PreparedStatement sequenceStatement = connection.prepareStatement("values(next value for scheme_seq)");
 			ResultSet rs = sequenceStatement.executeQuery();
 			long seq = 0;
@@ -51,7 +52,7 @@ public class SchemeDaoImpl implements SchemeDao{
 
 			
 			//Add into Scheme Table
-			selectStatement = connection.prepareStatement("insert into scheme values(?,?,?,?,?,?,?,?,?,?)");
+			selectStatement = connection.prepareStatement("insert into scheme_master values(?,?,?,?,?,?,?,?,?,?)");
 			selectStatement.setLong(1, seq);//scheme id
 			selectStatement.setString(2, scheme.getSchemeName());
 			selectStatement.setString(3, scheme.getSummary());
@@ -105,7 +106,7 @@ public class SchemeDaoImpl implements SchemeDao{
 			selectStatement.setLong(5, scheme.getSchemeEligibilityVO().getProfessionVO().getProfessionId());
 			selectStatement.setLong(6, scheme.getSchemeId());
 			
-			selectStatement = connection.prepareStatement("update scheme set name=?, summary=?, description=?, image_path=?, ministry_ref=?, sector_ref=?, start_date=?, scheme_eligibility_ref=?, status=? where scheme_id=?");
+			selectStatement = connection.prepareStatement("update scheme_master set name=?, summary=?, description=?, image_path=?, ministry_ref=?, sector_ref=?, start_date=?, scheme_eligibility_ref=?, status=? where scheme_id=?");
 			selectStatement.setString(1, scheme.getSchemeName());
 			selectStatement.setString(2, scheme.getSummary());
 			selectStatement.setString(3, scheme.getDescription());
@@ -173,7 +174,7 @@ public class SchemeDaoImpl implements SchemeDao{
 		
 		try {
 			Connection connection = DBUtility.getConnection();
-			PreparedStatement selectStatement = connection.prepareStatement("select * from scheme s inner join ministry m on s.ministry_ref = m.ministry_id inner join sector sec on s.sector_ref = sec.sector_id  where scheme_id = ?");
+			PreparedStatement selectStatement = connection.prepareStatement("select * from scheme_master s inner join ministry m on s.ministry_ref = m.ministry_id inner join sector sec on s.sector_ref = sec.sector_id  where scheme_id = ?");
 			selectStatement.setLong(1, schemeId);
 			ResultSet resultSet = selectStatement.executeQuery();
 			while(resultSet.next()){
@@ -272,7 +273,7 @@ public class SchemeDaoImpl implements SchemeDao{
 		try {
 			Connection connection = DBUtility.getConnection();
 			
-			PreparedStatement selectStatement = connection.prepareStatement("select scheme_id,name,summary,description,image_path,status from scheme");
+			PreparedStatement selectStatement = connection.prepareStatement("select scheme_id,name,summary,description,image_path,status from scheme_master");
 			
 			ResultSet resultSet = selectStatement.executeQuery();
 			while(resultSet.next()) {

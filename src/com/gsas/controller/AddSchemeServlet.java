@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.gsas.exception.DataNotFoundException;
 import com.gsas.exception.DatabaseException;
 import com.gsas.exception.SchemeNotFoundException;
 import com.gsas.model.BankVO;
@@ -20,6 +21,7 @@ import com.gsas.model.LoginVO;
 import com.gsas.model.MinistryVO;
 import com.gsas.model.ProfessionVO;
 import com.gsas.model.SectorVO;
+import com.gsas.service.CommonService;
 import com.gsas.service.SchemeService;
 import com.gsas.utility.LayerType;
 import com.gsas.utility.ObjectFactory;
@@ -37,7 +39,7 @@ public class AddSchemeServlet extends HttpServlet {
 
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		SchemeService schemeService = (SchemeService) ObjectFactory.getInstance(LayerType.SCHEME_SERVICE);
+		CommonService commonService = (CommonService) ObjectFactory.getInstance(LayerType.COMMON_SERVICE);
 		RequestDispatcher rd = null;
 		List<MinistryVO> ministryList = null;
 		List<SectorVO> sectorList = null;
@@ -53,22 +55,22 @@ public class AddSchemeServlet extends HttpServlet {
 			if(loginVO != null) {
 				if(loginVO.isEmployee() == true) {						//If employee is already logged in
 					
-					ministryList = schemeService.getAllMinistry();
+					ministryList = commonService.getAllMinistry();
 					request.setAttribute("ministryList", ministryList);
 					
-					sectorList = schemeService.getAllSectors();
+					sectorList = commonService.getAllSectors();
 					request.setAttribute("sectorList", sectorList);
 					
-					professionList = schemeService.getAllProfessions();
+					professionList = commonService.getAllProfessions();
 					request.setAttribute("professionList", professionList);
 					
-					incomeGroupList = schemeService.getAllIncomeGroups();
+					incomeGroupList = commonService.getAllIncomeGroups();
 					request.setAttribute("incomeGroupList", incomeGroupList);
 					
-					documentList = schemeService.getAllDocuments();
+					documentList = commonService.getAllDocuments();
 					request.setAttribute("documentList", documentList);
 					
-					bankList = schemeService.getAllBanks();
+					bankList = commonService.getAllBanks();
 					request.setAttribute("bankList", bankList);
 					
 					
@@ -85,11 +87,11 @@ public class AddSchemeServlet extends HttpServlet {
 				rd = request.getRequestDispatcher("employeeLogin.jsp");
 				rd.forward(request, response);
 			}
-		}catch(SchemeNotFoundException | DatabaseException e) {
+		}catch(DatabaseException | DataNotFoundException e) {
 			rd = request.getRequestDispatcher("viewAllSchemes.jsp");
 			request.setAttribute("err", e.getMessage());
 			rd.forward(request, response);
-		}
+		} 
 	}
 
 

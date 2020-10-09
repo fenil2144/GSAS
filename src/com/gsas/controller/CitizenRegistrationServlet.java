@@ -50,7 +50,7 @@ public class CitizenRegistrationServlet extends HttpServlet {
 		citizenDetailsVO.setLastName(request.getParameter("lastName"));
 	
 		
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		formatter = formatter.withLocale( Locale.ENGLISH );  // Locale specifies human language for translating, and cultural norms for lowercase/uppercase and abbreviations and such. Example: Locale.US or Locale.CANADA_FRENCH
 		LocalDate date = LocalDate.parse(request.getParameter("dateOfBirth"), formatter);
 		citizenDetailsVO.setDateOfBirth(date);
