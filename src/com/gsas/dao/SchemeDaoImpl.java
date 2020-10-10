@@ -68,8 +68,8 @@ public class SchemeDaoImpl implements SchemeDao{
 			
 			
 			
-			List<DocumentVO> docList=scheme.getDocumentList();
-			for(DocumentVO doc : docList ) {
+			List<DocumentVO> documentList=scheme.getDocumentList();
+			for(DocumentVO doc : documentList ) {
 				selectStatement = connection.prepareStatement("insert into scheme_documents values(?,?,?)");
 				selectStatement.setLong(1, seq);
 				selectStatement.setLong(2, scheme.getSchemeId());
@@ -135,8 +135,8 @@ public class SchemeDaoImpl implements SchemeDao{
 			selectStatement.setLong(1, scheme.getSchemeId());
 			selectStatement.executeUpdate();
 			
-			List<DocumentVO> docList=scheme.getDocumentList();
-			for(DocumentVO doc : docList ) {
+			List<DocumentVO> documentList=scheme.getDocumentList();
+			for(DocumentVO doc : documentList ) {
 				selectStatement = connection.prepareStatement("insert into scheme_documents values(?,?,?)");
 				selectStatement.setLong(1, seq);
 				selectStatement.setLong(2, scheme.getSchemeId());
@@ -181,7 +181,7 @@ public class SchemeDaoImpl implements SchemeDao{
 			while(resultSet.next()){
 				schemeVO = new SchemeVO();
 				schemeVO.setSchemeId(resultSet.getLong("scheme_id"));
-				schemeVO.setSchemeName(resultSet.getString("name"));
+				schemeVO.setSchemeName(resultSet.getString("scheme_name"));
 				schemeVO.setSummary(resultSet.getString("summary"));
 				schemeVO.setDescription(resultSet.getString("description"));
 				schemeVO.setImagePath(resultSet.getString("image_path"));
@@ -342,7 +342,7 @@ public class SchemeDaoImpl implements SchemeDao{
 	//Adding SchemeApplicants  with there document list (this function in only called after validation)
 	
 	@Override
-	public SchemeApplicantVO addSchemeApplicant(SchemeApplicantVO schemeApplicant, List<SchemeApplicantDocumentsVO> doc)
+	public void addSchemeApplicant(SchemeApplicantVO schemeApplicant)
 			throws DatabaseException {
 		try {
 			Connection connection = DBUtility.getConnection();
@@ -357,37 +357,37 @@ public class SchemeDaoImpl implements SchemeDao{
 				System.out.println("Error in sequence number");
 			}
 			
-			for(SchemeApplicantDocumentsVO document: doc) {
-				PreparedStatement ps = connection.prepareStatement("insert into scheme_applicant_documents values(?,?,?,?)");
-				ps.setLong(1, document.getSchemeApplicantDocumentsId());
-				ps.setLong(2, seq);
-				ps.setLong(3, document.getDocumentVO().getDocumentId());
-				ps.setString(4, document.getDocumentPath());
-				ps.execute();
+			PreparedStatement insertStatement = connection.prepareStatement("insert into scheme_applicant values(?,?,?,?,?,?,?,?,?,?)");
+			insertStatement.setLong(1, seq);
+			insertStatement.setLong(2, schemeApplicant.getSchemeVO().getSchemeId());
+			insertStatement.setLong(3, schemeApplicant.getLoginVO().getLoginId());
+			insertStatement.setLong(4, schemeApplicant.getBankVO().getBankId());
+			insertStatement.setLong(5, schemeApplicant.getAccountNumber());
+			insertStatement.setString(6, schemeApplicant.getTypeOfAccount());
+			insertStatement.setString(7, schemeApplicant.getIfsc());
+			insertStatement.setString(8, schemeApplicant.getBranch());
+			insertStatement.setBoolean(9, schemeApplicant.isApprovedStatus());
+			insertStatement.setString(10, schemeApplicant.getReason());
+			insertStatement.execute();
+			
+			for(SchemeApplicantDocumentsVO document: schemeApplicant.getApplicantDocumentsList()) {
+				insertStatement = connection.prepareStatement("insert into scheme_applicant_documents values(?,?,?,?)");
+				insertStatement.setLong(1, seq);
+				insertStatement.setLong(2, seq);
+				insertStatement.setLong(3, document.getDocumentVO().getDocumentId());
+				insertStatement.setString(4, document.getDocumentPath());
+				insertStatement.execute();
 				
 			}
 			
-			PreparedStatement ps = connection.prepareStatement("insert into scheme_applicant values(?,?,?,?,?,?,?,?,?,?)");
-			ps.setLong(1, seq);
-			ps.setLong(2, schemeApplicant.getSchemeVO().getSchemeId());
-			ps.setLong(3, schemeApplicant.getLoginVO().getLoginId());
-			ps.setLong(4, schemeApplicant.getBankVO().getBankId());
-			ps.setLong(5, schemeApplicant.getAccountNumber());
-			ps.setString(6, schemeApplicant.getYpeOfAccount());
-			ps.setString(7, schemeApplicant.getIfsc());
-			ps.setString(8, schemeApplicant.getBranch());
-			ps.setBoolean(9, schemeApplicant.isApprovedStatus());
-			ps.setString(10, schemeApplicant.getReason());
-			ps.execute();
-			
-			ps.close();
+			insertStatement.close();
 			connection.close();
 			
 
 		}catch (ClassNotFoundException | SQLException e) {
 			throw new DatabaseException(e.getMessage());
 		}
-		return schemeApplicant;
+		
 	}
 	
 	
@@ -395,7 +395,7 @@ public class SchemeDaoImpl implements SchemeDao{
 	// Scheme applicant table)
 	
 	@Override
-	public SchemeApplicantVO addSchemeApplicant(SchemeApplicantVO schemeApplicant) throws DatabaseException {
+	public void addRejectedSchemeApplicant(SchemeApplicantVO schemeApplicant) throws DatabaseException {
 		try {
 			Connection connection = DBUtility.getConnection();
 			PreparedStatement sequenceStatement = connection.prepareStatement("values(next value for scheme_seq)");
@@ -414,7 +414,7 @@ public class SchemeDaoImpl implements SchemeDao{
 			ps.setLong(3, schemeApplicant.getLoginVO().getLoginId());
 			ps.setLong(4, schemeApplicant.getBankVO().getBankId());
 			ps.setLong(5, schemeApplicant.getAccountNumber());
-			ps.setString(6, schemeApplicant.getYpeOfAccount());
+			ps.setString(6, schemeApplicant.getTypeOfAccount());
 			ps.setString(7, schemeApplicant.getIfsc());
 			ps.setString(8, schemeApplicant.getBranch());
 			ps.setBoolean(9, schemeApplicant.isApprovedStatus());
@@ -427,47 +427,46 @@ public class SchemeDaoImpl implements SchemeDao{
 		}catch (ClassNotFoundException | SQLException e) {
 			throw new DatabaseException(e.getMessage());
 		}
-		return schemeApplicant;
 	}
 
 	@Override
-	public List<DocumentVO> getDocumentsList(Long scheme_id) throws DatabaseException {
-		List<DocumentVO> docList=new ArrayList<>();
+	public List<DocumentVO> getSchemeDocumentsList(Long scheme_id) throws DatabaseException {
+		List<DocumentVO> documentList=new ArrayList<>();
 		try {
 			Connection connection = DBUtility.getConnection();
 			
-			PreparedStatement selectStatement = connection.prepareStatement("select scheme_documents.scheme_ref, document.document_id, document.document_name FROM scheme_documents INNER JOIN document ON scheme_documents.documents_ref = document.document_id where scheme_ref=?");
+			PreparedStatement selectStatement = connection.prepareStatement("SELECT document_id, document_name FROM scheme_documents s INNER JOIN document d ON s.document_ref = d.document_id WHERE scheme_ref=?");
 			selectStatement.setLong(1, scheme_id);
 			ResultSet resultSet = selectStatement.executeQuery();
 			
 			while(resultSet.next()) {
-				DocumentVO doc=new DocumentVO();
-				doc.setDocumentId(resultSet.getLong("document_id"));
-				doc.setDocumentName(resultSet.getString("document_name"));
-				docList.add(doc);
+				DocumentVO documentVO=new DocumentVO();
+				documentVO.setDocumentId(resultSet.getLong("document_id"));
+				documentVO.setDocumentName(resultSet.getString("document_name"));
+				documentList.add(documentVO);
 			}
 			
 		}catch (ClassNotFoundException | SQLException e) {
 			throw new DatabaseException(e.getMessage());
 		}
-		return docList;
+		return documentList;
 	}
 
 	@Override
-	public List<BankVO> getBankList(Long scheme_id) throws DatabaseException {
+	public List<BankVO> getSchemeBankList(Long scheme_id) throws DatabaseException {
 		List<BankVO> bankList=new ArrayList<>();
 		try {
 			Connection connection = DBUtility.getConnection();
 			
-			PreparedStatement selectStatement = connection.prepareStatement("select scheme_banks.scheme_ref, bank.bank_id, bank.bank_name FROM scheme_banks INNER JOIN bank ON scheme_banks.bank_ref=bank.bank_id where scheme_ref=?");
+			PreparedStatement selectStatement = connection.prepareStatement("SELECT bank_id, bank_name FROM scheme_banks s INNER JOIN bank b ON s.bank_ref=b.bank_id WHERE scheme_ref=?");
 			selectStatement.setLong(1, scheme_id);
 			ResultSet resultSet = selectStatement.executeQuery();
 			
 			while(resultSet.next()) {
-				BankVO bank=new BankVO();
-				bank.setBankId(resultSet.getLong("bank_id"));
-				bank.setBankName(resultSet.getString("bank_name"));
-				bankList.add(bank);
+				BankVO bankVO=new BankVO();
+				bankVO.setBankId(resultSet.getLong("bank_id"));
+				bankVO.setBankName(resultSet.getString("bank_name"));
+				bankList.add(bankVO);
 			}
 			
 		}catch (ClassNotFoundException | SQLException e) {

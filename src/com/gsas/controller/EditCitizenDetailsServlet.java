@@ -38,10 +38,21 @@ public class EditCitizenDetailsServlet extends HttpServlet {
 
 			try {
 				if(loginVO != null) {		//Citizen must be Logged In in order to perform Edit Operation
-					CitizenDetailsVO citizenDetailsVO = citizenService.getCitizenDetails(loginVO.getLoginId());
-					request.setAttribute("citizenDetailsVO", citizenDetailsVO);
-					
-					requestDispatcher = request.getRequestDispatcher("editCitizenDetails.jsp");
+					if(loginVO.isEmployee() == false) {	
+						CitizenDetailsVO citizenDetailsVO = citizenService.getCitizenDetails(loginVO.getLoginId());
+						request.setAttribute("citizenDetailsVO", citizenDetailsVO);
+						
+						requestDispatcher = request.getRequestDispatcher("editCitizenDetails.jsp");
+						requestDispatcher.forward(request, response);
+					}
+					else {													//If employee is logged in
+						requestDispatcher = request.getRequestDispatcher("viewSchemesEmployeeServlet");
+						requestDispatcher.forward(request, response);
+					}
+				}
+				else {
+					request.setAttribute("err","Please Login First");
+					requestDispatcher = request.getRequestDispatcher("citizenLogin.jsp");
 					requestDispatcher.forward(request, response);
 				}
 				

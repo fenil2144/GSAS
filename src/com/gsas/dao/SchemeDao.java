@@ -15,8 +15,8 @@ public interface SchemeDao {
 	public void editScheme(SchemeVO scheme) throws DatabaseException;
 	public SchemeVO getSchemeDetails(Long schemeId) throws SchemeNotFoundException, DatabaseException;
 	public List<SchemeVO> getAllScheme() throws DatabaseException, SchemeNotFoundException;
-	public SchemeApplicantVO addSchemeApplicant(SchemeApplicantVO schemeApplicant, List<SchemeApplicantDocumentsVO> doc ) throws DatabaseException;
-	public SchemeApplicantVO addSchemeApplicant(SchemeApplicantVO schemeApplicant) throws DatabaseException;
-	public List<DocumentVO> getDocumentsList(Long scheme_id) throws DatabaseException;
-	public List<BankVO> getBankList(Long scheme_id) throws DatabaseException;
+	public void addSchemeApplicant(SchemeApplicantVO schemeApplicant) throws DatabaseException;
+	public void addRejectedSchemeApplicant(SchemeApplicantVO schemeApplicantVO) throws DatabaseException;
+	public List<DocumentVO> getSchemeDocumentsList(Long scheme_id) throws DatabaseException;
+	public List<BankVO> getSchemeBankList(Long scheme_id) throws DatabaseException;
 }

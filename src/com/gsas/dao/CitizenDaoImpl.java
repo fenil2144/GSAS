@@ -14,7 +14,9 @@ import com.gsas.exception.DatabaseException;
 import com.gsas.exception.SchemeNotFoundException;
 import com.gsas.model.AddressVO;
 import com.gsas.model.CitizenDetailsVO;
+import com.gsas.model.IncomeGroupVO;
 import com.gsas.model.LoginVO;
+import com.gsas.model.ProfessionVO;
 import com.gsas.model.SchemeApplicantVO;
 import com.gsas.model.SchemeVO;
 import com.gsas.utility.DBUtility;
@@ -39,8 +41,8 @@ public class CitizenDaoImpl implements CitizenDao {
 			//citizen_credential
 			PreparedStatement preparedStatement = connection.prepareStatement("insert into login_credential values(?,?,?,?)");
 			preparedStatement.setLong(1, seq);
-			preparedStatement.setString(2, citizenDetailsVO.getCitizenVO().getUserName());
-			preparedStatement.setString(3, citizenDetailsVO.getCitizenVO().getPassword());
+			preparedStatement.setString(2, citizenDetailsVO.getLoginVO().getUserName());
+			preparedStatement.setString(3, citizenDetailsVO.getLoginVO().getPassword());
 			preparedStatement.setBoolean(4, false);
 			preparedStatement.executeUpdate();
 			
@@ -65,8 +67,8 @@ public class CitizenDaoImpl implements CitizenDao {
 			preparedStatement.setString(7, citizenDetailsVO.getEmail());
 			preparedStatement.setLong(8, citizenDetailsVO.getPhone());
 			preparedStatement.setLong(9, seq); //address_ref FK (citizen_address)
-			preparedStatement.setString(10, citizenDetailsVO.getIncomeGroup());
-			preparedStatement.setString(11, citizenDetailsVO.getProfession());
+			preparedStatement.setLong(10, citizenDetailsVO.getIncomeGroup().getIncomeGroupId());
+			preparedStatement.setLong(11, citizenDetailsVO.getProfession().getProfessionId());
 			preparedStatement.setLong(12, citizenDetailsVO.getAdharNumber());
 			preparedStatement.setString(13, citizenDetailsVO.getPancardNumber());
 			preparedStatement.setLong(14, seq); //citizen_ref FK (citizen_credential)
@@ -142,11 +144,11 @@ public class CitizenDaoImpl implements CitizenDao {
 				citizenDetailsVO.setEmail(resultSet.getString("email"));
 				citizenDetailsVO.setPhone(resultSet.getLong("phone"));
 				citizenDetailsVO.setAddressVO(addressVO);
-				citizenDetailsVO.setIncomeGroup(resultSet.getString("income_group"));
-				citizenDetailsVO.setProfession(resultSet.getString("profession"));
+				citizenDetailsVO.setIncomeGroup(new IncomeGroupVO(resultSet.getLong("income_group_ref ")));
+				citizenDetailsVO.setProfession(new ProfessionVO(resultSet.getLong("profession_ref ")));
 				citizenDetailsVO.setAdharNumber(resultSet.getLong("adhar_number"));
 				citizenDetailsVO.setPancardNumber(resultSet.getString("pancard_number"));
-				citizenDetailsVO.setCitizenVO(loginVO);
+				citizenDetailsVO.setLoginVO(loginVO);
 				
 			}
 
@@ -170,9 +172,9 @@ public class CitizenDaoImpl implements CitizenDao {
 			
 			//Update citizen_credential
 			PreparedStatement updateStatement = connection.prepareStatement("update login_credential set user_name=?,password=? where citizen_id=?");
-			updateStatement.setString(1, citizenDetailsVO.getCitizenVO().getUserName());
-			updateStatement.setString(2, citizenDetailsVO.getCitizenVO().getPassword());
-			updateStatement.setLong(3, citizenDetailsVO.getCitizenVO().getLoginId());
+			updateStatement.setString(1, citizenDetailsVO.getLoginVO().getUserName());
+			updateStatement.setString(2, citizenDetailsVO.getLoginVO().getPassword());
+			updateStatement.setLong(3, citizenDetailsVO.getLoginVO().getLoginId());
 			updateStatement.executeUpdate();
 			
 			//Update citizen_address
@@ -185,7 +187,7 @@ public class CitizenDaoImpl implements CitizenDao {
 			updateStatement.executeUpdate();
 			
 			//Update citizen_details
-			updateStatement = connection.prepareStatement("update citizen_details set first_name=?,middle_name=?,last_name=?,date_of_birth=?,gender=?,email=?,phone=?,address_ref=?,income_group=?,profession=?,adhar_number=?,pancard_number=?,citizen_ref=? where citizen_details_id=?");
+			updateStatement = connection.prepareStatement("update citizen_details set first_name=?,middle_name=?,last_name=?,date_of_birth=?,gender=?,email=?,phone=?,address_ref=?,income_group_ref=?,profession_ref =?,adhar_number=?,pancard_number=?,citizen_ref=? where citizen_details_id=?");
 			updateStatement.setString(1, citizenDetailsVO.getFirstName());
 			updateStatement.setString(2, citizenDetailsVO.getMiddleName());
 			updateStatement.setString(3, citizenDetailsVO.getLastName());
@@ -194,11 +196,11 @@ public class CitizenDaoImpl implements CitizenDao {
 			updateStatement.setString(6, citizenDetailsVO.getEmail());
 			updateStatement.setLong(7, citizenDetailsVO.getPhone());
 			updateStatement.setLong(8, citizenDetailsVO.getAddressVO().getAddressId() ); //address_ref FK (citizen_address)
-			updateStatement.setString(9, citizenDetailsVO.getIncomeGroup());
-			updateStatement.setString(10, citizenDetailsVO.getProfession());
+			updateStatement.setLong(9, citizenDetailsVO.getIncomeGroup().getIncomeGroupId());
+			updateStatement.setLong(10, citizenDetailsVO.getProfession().getProfessionId());
 			updateStatement.setLong(11, citizenDetailsVO.getAdharNumber());
 			updateStatement.setString(12, citizenDetailsVO.getPancardNumber());
-			updateStatement.setLong(13, citizenDetailsVO.getCitizenVO().getLoginId()); //citizen_ref FK (citizen_credential)
+			updateStatement.setLong(13, citizenDetailsVO.getLoginVO().getLoginId()); //citizen_ref FK (citizen_credential)
 			updateStatement.setLong(14, citizenDetailsVO.getCitizenDetailsId());
 			updateStatement.executeUpdate();
 

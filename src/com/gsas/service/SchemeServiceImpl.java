@@ -68,93 +68,100 @@ public class SchemeServiceImpl implements SchemeService {
 	}
 	
 	@Override
-	public String validate(SchemeEligibilityVO schemeEligibility, CitizenDetailsVO citizenDetails){
+	public String validate(SchemeEligibilityVO schemeEligibilityVO, CitizenDetailsVO citizenDetailsVO){
 
 	//Age Validation
 	//Getting the age of citizen
 	LocalDate today = LocalDate.now();
-	int age = today.getYear() - citizenDetails.getDateOfBirth().getYear();
-	int month = today.getMonthValue() - citizenDetails.getDateOfBirth().getMonthValue();
-	if(month < 0 || (month == 0 && today.getDayOfMonth() < citizenDetails.getDateOfBirth().getDayOfMonth())) {
+	int age = today.getYear() - citizenDetailsVO.getDateOfBirth().getYear();
+	int month = today.getMonthValue() - citizenDetailsVO.getDateOfBirth().getMonthValue();
+	if(month < 0 || (month == 0 && today.getDayOfMonth() < citizenDetailsVO.getDateOfBirth().getDayOfMonth())) {
 	age--;
 	}
-	if(age < schemeEligibility.getMinAge() || age > schemeEligibility.getMaxAge()) {
-	return "Age criteria is not satisfied";
+	if(age < schemeEligibilityVO.getMinAge() || age > schemeEligibilityVO.getMaxAge()) {
+		return "Age criteria is not satisfied";
 	}
 	//Income Group Validation
-	if(schemeEligibility.getIncomeGroupVO().getIncomeGroupName() != citizenDetails.getIncomeGroup()) {
-	return "Income Group not matched";
+	if(schemeEligibilityVO.getIncomeGroupVO().getIncomeGroupId() != citizenDetailsVO.getIncomeGroup().getIncomeGroupId()) {
+		return "Income Group not matched";
 	}
 	//Gender Validation
-	if(schemeEligibility.getGender() != citizenDetails.getGender()) {
-	return "Scheme eligible only for "+schemeEligibility.getGender()+" , you can't apply";
+	if(schemeEligibilityVO.getGender() != citizenDetailsVO.getGender()) {
+		return "Scheme eligible only for "+schemeEligibilityVO.getGender()+" , you can't apply";
 	}
 	//Profession Validation
-	if(schemeEligibility.getProfessionVO().getProfessionName() != citizenDetails.getProfession()) {
-
-	return "Scheme eligible only for "+schemeEligibility.getProfessionVO().getProfessionName()+" , you can't apply";
+	if(schemeEligibilityVO.getProfessionVO().getProfessionId() != citizenDetailsVO.getProfession().getProfessionId()) {
+		return "Profession not matched";
 	}
 	return "All criteria validated successfully";
 	}
 
 	
 
+//	@Override
+//	public SchemeApplicantVO validate(SchemeVO scheme, BankVO bank, List<SchemeApplicantDocumentsVO> docList,
+//			SchemeApplicantVO schemeApplicant) {
+//		// TODO Auto-generated method stub
+//		
+//		Boolean isBankSupported = false, isDocSupported = true;
+//		//checking citizen bank with the banks supported by scheme
+//		for(BankVO i : scheme.getBankList()) 
+//			if(bank.equals(i)) {
+//				isBankSupported = true;
+//				break;
+//			}	
+//		//checking documents
+//		for(DocumentVO j : scheme.getDocumentList()) 
+//			for(SchemeApplicantDocumentsVO k : docList) 
+//				if(j.compareTo(k.getDocumentVO()) != 0) {
+//					isDocSupported = false;
+//					break;
+//				}			
+//		
+//		
+//		//if bank and documents are supported by the scheme
+//		if(isBankSupported == true && isDocSupported == true) {
+//			schemeApplicant.setApprovedStatus(true);
+//			schemeApplicant.setReason("Your Application has been accepted for "+scheme.getSchemeName());
+//			
+//		}
+//		//if the scheme does not support bank
+//		else if(isBankSupported == false && isDocSupported == true) {
+//			schemeApplicant.setApprovedStatus(false);
+//			schemeApplicant.setReason("Sorry! "+scheme.getSchemeName()+" does not support your bank");
+//			
+//		}//if the scheme does not support the documents
+//		else if(isBankSupported ==true && isDocSupported == false) {
+//			schemeApplicant.setApprovedStatus(false);
+//			schemeApplicant.setReason("Kindly upload all the necessary documents for "+scheme.getSchemeName());
+//		}
+//		//if both bank and documents are not supported by the scheme
+//		else {
+//			schemeApplicant.setApprovedStatus(false);
+//			schemeApplicant.setReason("Sorry! your bank details and documents don't match");			
+//		}
+//		
+//		return schemeApplicant;
+//	}
+
 	@Override
-	public SchemeApplicantVO validate(SchemeVO scheme, BankVO bank, List<SchemeApplicantDocumentsVO> docList,
-			SchemeApplicantVO schemeApplicant) {
-		// TODO Auto-generated method stub
-		
-		Boolean isBankSupported = false, isDocSupported = true;
-		//checking citizen bank with the banks supported by scheme
-		for(BankVO i : scheme.getBankList()) 
-			if(bank.equals(i)) {
-				isBankSupported = true;
-				break;
-			}	
-		//checking documents
-		for(DocumentVO j : scheme.getDocumentList()) 
-			for(SchemeApplicantDocumentsVO k : docList) 
-				if(j.compareTo(k.getDocumentVO()) != 0) {
-					isDocSupported = false;
-					break;
-				}			
-		
-		
-		//if bank and documents are supported by the scheme
-		if(isBankSupported == true && isDocSupported == true) {
-			schemeApplicant.setApprovedStatus(true);
-			schemeApplicant.setReason("Your Application has been accepted for "+scheme.getSchemeName());
-			
-		}
-		//if the scheme does not support bank
-		else if(isBankSupported == false && isDocSupported == true) {
-			schemeApplicant.setApprovedStatus(false);
-			schemeApplicant.setReason("Sorry! "+scheme.getSchemeName()+" does not support your bank");
-			
-		}//if the scheme does not support the documents
-		else if(isBankSupported ==true && isDocSupported == false) {
-			schemeApplicant.setApprovedStatus(false);
-			schemeApplicant.setReason("Kindly upload all the necessary documents for "+scheme.getSchemeName());
-		}
-		//if both bank and documents are not supported by the scheme
-		else {
-			schemeApplicant.setApprovedStatus(false);
-			schemeApplicant.setReason("Sorry! your bank details and documents don't match");			
-		}
-		
-		return schemeApplicant;
+	public void addSchemeApplicant(SchemeApplicantVO schemeApplicant) throws DatabaseException {
+		schemeDao.addSchemeApplicant(schemeApplicant);
 	}
 
 	@Override
-	public SchemeApplicantVO addSchemeApplicant(SchemeApplicantVO schemeApplicant,
-			List<SchemeApplicantDocumentsVO> document) throws DatabaseException {
-		// TODO Auto-generated method stub
-		
-		return schemeDao.addSchemeApplicant(schemeApplicant, document);
+	public void addRejectedSchemeApplicant(SchemeApplicantVO schemeApplicantVO) throws DatabaseException {
+		schemeDao.addRejectedSchemeApplicant(schemeApplicantVO);
 	}
 
 	@Override
-	public SchemeApplicantVO addSchemeApplicant(SchemeApplicantVO schemeApplicant) {
-		// TODO Auto-generated method stub
-		return schemeDao.addSchemeApplicant(schemeApplicant);
-	}}
+	public List<DocumentVO> getSchemeDocumentsList(Long scheme_id) throws DatabaseException {
+		return schemeDao.getSchemeDocumentsList(scheme_id);
+	}
+
+	@Override
+	public List<BankVO> getSchemeBankList(Long scheme_id) throws DatabaseException {
+		return schemeDao.getSchemeBankList(scheme_id);
+	}
+
+}

@@ -1,16 +1,16 @@
 package com.gsas.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import com.gsas.exception.AuthenticationException;
 import com.gsas.exception.DatabaseException;
 import com.gsas.model.BankVO;
 import com.gsas.model.DocumentVO;
@@ -33,13 +33,10 @@ public class ApplySchemeDocumentServlet extends HttpServlet {
      * Default constructor. 
      */
     public ApplySchemeDocumentServlet() {
-        // TODO Auto-generated constructor stub
     }
 
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		RequestDispatcher requestDispatcher = null;
@@ -50,44 +47,60 @@ public class ApplySchemeDocumentServlet extends HttpServlet {
 			HttpSession session = request.getSession();
 			LoginVO loginVO = (LoginVO) session.getAttribute("loginVO");
 			if(loginVO != null) {
-				SchemeApplicantDocumentsVO schemeApplicantDocuments =  new SchemeApplicantDocumentsVO();
-				SchemeApplicantVO schemeApplicant = (SchemeApplicantVO)request.getParameter("schemeApplicant");
-				List<SchemeApplicantDocumentsVO> docList = new ArrayList<>();
-				SchemeVO schemeVO = schemeService.getSchemeDetails(Long.parseLong(request.getParameter("schemeId"))); // get scheme from schemeID
-				
-				request.setParameter("schemeVO",schemeVO);
-				request.setParameter("scheme_banks",schemeVO.getBankList());
-				request.getParameter("scheme_documents",schemeVO.getDocumentList());
-				
-				//schemeApplicant Object
-				schemeApplicant.setSchemeVO(schemeVO);
-				schemeApplicant.setLoginVO(loginVO);
-				schemeApplicant.setBankVO(new BankVO(request.getParameter("bank").trim()));
-				schemeApplicant.setAccountNumber(request.getParameter("account_number"));
-				schemeApplicant.setTypeOfAccount(request.getParameter("type_of_account"));
-				schemeApplicant.setIfsc(request.getParameter("ifsc"));
-				schemeApplicant.setBranch(request.getParameter("branch"));
-				schemeApplicant.setApplicantDocumentsList((List<SchemeApplicantDocumentsVO>)request.getParameter("List"));
-				
-				//validating documents and bank
-				for(SchemeApplicantDocumentsVO items : schemeApplicant.getApplicantDocumentsList()) {
-				schemeApplicantDocuments.setDocumentVO(new DocumentVO(Long.parseLong(request.getParameter("docId"))));
-				schemeApplicantDocuments.setDocumentPath(request.getParameter("docPath"));
-				docList.add(schemeApplicantDocuments);
+				if(loginVO.isEmployee() == false) {
+					
+					SchemeApplicantDocumentsVO schemeApplicantDocuments =  null;
+					SchemeApplicantVO schemeApplicantVO = new SchemeApplicantVO();
+					List<SchemeApplicantDocumentsVO> applicantDocumentsdocList = null;
+					
+					//SchemeVO schemeVO = schemeService.getSchemeDetails(Long.parseLong(request.getParameter("schemeId"))); // get scheme from schemeID
+					
+//					request.setParameter("schemeVO",schemeVO);
+//					request.setParameter("scheme_banks",schemeVO.getBankList());
+//					request.getParameter("scheme_documents",schemeVO.getDocumentList());
+					
+					//schemeApplicantVO Object
+					schemeApplicantVO.setSchemeVO(new SchemeVO(Long.parseLong(request.getParameter("schemeId"))));
+					schemeApplicantVO.setLoginVO(loginVO);
+					schemeApplicantVO.setBankVO(new BankVO(Long.parseLong(request.getParameter("bank").trim())));
+					schemeApplicantVO.setAccountNumber(Long.parseLong(request.getParameter("accountNumber")));
+					schemeApplicantVO.setTypeOfAccount(request.getParameter("typeOfAccount"));
+					schemeApplicantVO.setIfsc(request.getParameter("ifsc"));
+					schemeApplicantVO.setBranch(request.getParameter("branch"));
+					
+					List<DocumentVO> documentList = schemeService.getSchemeDocumentsList(Long.parseLong(request.getParameter("schemeId")));
+					for(DocumentVO documentVO : documentList) {
+						schemeApplicantDocuments =  new SchemeApplicantDocumentsVO();
+						schemeApplicantDocuments.setDocumentVO(documentVO);
+						schemeApplicantDocuments.setDocumentPath("");
+						applicantDocumentsdocList.add(schemeApplicantDocuments);
+
+					}
+					schemeApplicantVO.setApplicantDocumentsList(applicantDocumentsdocList);
+					
+					//validating documents and bank
+//					for(SchemeApplicantDocumentsVO items : schemeApplicantVO.getApplicantDocumentsList()) {
+//					schemeApplicantDocuments.setDocumentVO(new DocumentVO(Long.parseLong(request.getParameter("docId"))));
+//					schemeApplicantDocuments.setDocumentPath(request.getParameter("docPath"));
+//					applicantDocumentsdocList.add(schemeApplicantDocuments);
+//					}
+					
+					//schemeApplicantVO = schemeService.validate(SchemeVO schemeVO, schemeApplicantVO.getBankVO(), applicantDocumentsdocList, schemeApplicantVO);
+					if(schemeApplicantVO.isApprovedStatus() == false){  
+						request.setAttribute("err",schemeApplicantVO.getReason());
+					} 
+					else {
+						// fill scheme_applicant table with status=true and store document
+						request.setAttribute("message","You have successfully applied for the scheme "+schemeApplicantVO.getSchemeVO().getSchemeName());
+						schemeService.addSchemeApplicant(schemeApplicantVO);
+					}
+					requestDispatcher = request.getRequestDispatcher("viewSchemesCitizenServlet");
+					requestDispatcher.forward(request, response);
+				}else {													//If employee is already logged in
+					requestDispatcher = request.getRequestDispatcher("viewSchemesEmployeeServlet");
+					requestDispatcher.forward(request, response);
 				}
-				schemeApplicant = schemeService.validate(schemeVO, schemeApplicant.getBankVO(), docList, schemeApplicant);
-				if(schemeApplicant.isApprovedStatus()){  
-					// fill scheme_applicant table with status=true and store document
-					schemeService.addSchemeApplicant(schemeApplicant, docList); 
-					requestDispatcher = request.getRequestDispatcher("applySchemes.jsp");					
-				} 
-				else {
-					schemeService.addSchemeApplicant(schemeApplicant);
-					requestDispatcher = request.getRequestDispatcher("displaySchemes.jsp");
-				}
-				request.setAttribute("err",schemeApplicant.getReason());
-				requestDispatcher.forward(request, response);
-				
+					
 			}
 			else {
 				request.setAttribute("err","Please Login First");
@@ -96,7 +109,7 @@ public class ApplySchemeDocumentServlet extends HttpServlet {
 			}
 			
 		} catch (DatabaseException e) {
-			requestDispatcher = request.getRequestDispatcher("ApplyScheme.jsp");
+			requestDispatcher = request.getRequestDispatcher("viewSchemesCitizenServlet");
 			request.setAttribute("err", e.getMessage());
 			requestDispatcher.forward(request, response);
 		}
