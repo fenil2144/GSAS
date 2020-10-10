@@ -98,62 +98,70 @@ public class SchemeServiceImpl implements SchemeService {
 
 	
 
+//	@Override
+//	public SchemeApplicantVO validate(SchemeVO scheme, BankVO bank, List<SchemeApplicantDocumentsVO> docList,
+//			SchemeApplicantVO schemeApplicant) {
+//		// TODO Auto-generated method stub
+//		
+//		Boolean isBankSupported = false, isDocSupported = true;
+//		//checking citizen bank with the banks supported by scheme
+//		for(BankVO i : scheme.getBankList()) 
+//			if(bank.equals(i)) {
+//				isBankSupported = true;
+//				break;
+//			}	
+//		//checking documents
+//		for(DocumentVO j : scheme.getDocumentList()) 
+//			for(SchemeApplicantDocumentsVO k : docList) 
+//				if(j.compareTo(k.getDocumentVO()) != 0) {
+//					isDocSupported = false;
+//					break;
+//				}			
+//		
+//		
+//		//if bank and documents are supported by the scheme
+//		if(isBankSupported == true && isDocSupported == true) {
+//			schemeApplicant.setApprovedStatus(true);
+//			schemeApplicant.setReason("Your Application has been accepted for "+scheme.getSchemeName());
+//			
+//		}
+//		//if the scheme does not support bank
+//		else if(isBankSupported == false && isDocSupported == true) {
+//			schemeApplicant.setApprovedStatus(false);
+//			schemeApplicant.setReason("Sorry! "+scheme.getSchemeName()+" does not support your bank");
+//			
+//		}//if the scheme does not support the documents
+//		else if(isBankSupported ==true && isDocSupported == false) {
+//			schemeApplicant.setApprovedStatus(false);
+//			schemeApplicant.setReason("Kindly upload all the necessary documents for "+scheme.getSchemeName());
+//		}
+//		//if both bank and documents are not supported by the scheme
+//		else {
+//			schemeApplicant.setApprovedStatus(false);
+//			schemeApplicant.setReason("Sorry! your bank details and documents don't match");			
+//		}
+//		
+//		return schemeApplicant;
+//	}
+
 	@Override
-	public SchemeApplicantVO validate(SchemeVO scheme, BankVO bank, List<SchemeApplicantDocumentsVO> docList,
-			SchemeApplicantVO schemeApplicant) {
-		// TODO Auto-generated method stub
-		
-		Boolean isBankSupported = false, isDocSupported = true;
-		//checking citizen bank with the banks supported by scheme
-		for(BankVO i : scheme.getBankList()) 
-			if(bank.equals(i)) {
-				isBankSupported = true;
-				break;
-			}	
-		//checking documents
-		for(DocumentVO j : scheme.getDocumentList()) 
-			for(SchemeApplicantDocumentsVO k : docList) 
-				if(j.compareTo(k.getDocumentVO()) != 0) {
-					isDocSupported = false;
-					break;
-				}			
-		
-		
-		//if bank and documents are supported by the scheme
-		if(isBankSupported == true && isDocSupported == true) {
-			schemeApplicant.setApprovedStatus(true);
-			schemeApplicant.setReason("Your Application has been accepted for "+scheme.getSchemeName());
-			
-		}
-		//if the scheme does not support bank
-		else if(isBankSupported == false && isDocSupported == true) {
-			schemeApplicant.setApprovedStatus(false);
-			schemeApplicant.setReason("Sorry! "+scheme.getSchemeName()+" does not support your bank");
-			
-		}//if the scheme does not support the documents
-		else if(isBankSupported ==true && isDocSupported == false) {
-			schemeApplicant.setApprovedStatus(false);
-			schemeApplicant.setReason("Kindly upload all the necessary documents for "+scheme.getSchemeName());
-		}
-		//if both bank and documents are not supported by the scheme
-		else {
-			schemeApplicant.setApprovedStatus(false);
-			schemeApplicant.setReason("Sorry! your bank details and documents don't match");			
-		}
-		
-		return schemeApplicant;
+	public void addSchemeApplicant(SchemeApplicantVO schemeApplicant) throws DatabaseException {
+		schemeDao.addSchemeApplicant(schemeApplicant);
 	}
 
 	@Override
-	public SchemeApplicantVO addSchemeApplicant(SchemeApplicantVO schemeApplicant,
-			List<SchemeApplicantDocumentsVO> document) throws DatabaseException {
-		// TODO Auto-generated method stub
-		
-		return schemeDao.addSchemeApplicant(schemeApplicant, document);
+	public void addRejectedSchemeApplicant(SchemeApplicantVO schemeApplicantVO) throws DatabaseException {
+		schemeDao.addRejectedSchemeApplicant(schemeApplicantVO);
 	}
 
 	@Override
-	public SchemeApplicantVO addSchemeApplicant(SchemeApplicantVO schemeApplicant) {
-		// TODO Auto-generated method stub
-		return schemeDao.addSchemeApplicant(schemeApplicant);
-	}}
+	public List<DocumentVO> getSchemeDocumentsList(Long scheme_id) throws DatabaseException {
+		return schemeDao.getSchemeDocumentsList(scheme_id);
+	}
+
+	@Override
+	public List<BankVO> getSchemeBankList(Long scheme_id) throws DatabaseException {
+		return schemeDao.getSchemeBankList(scheme_id);
+	}
+
+}

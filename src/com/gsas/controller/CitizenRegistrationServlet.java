@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.gsas.model.AddressVO;
 import com.gsas.model.CitizenDetailsVO;
+import com.gsas.model.IncomeGroupVO;
 import com.gsas.model.LoginVO;
+import com.gsas.model.ProfessionVO;
 import com.gsas.service.CitizenService;
 import com.gsas.utility.LayerType;
 import com.gsas.utility.ObjectFactory;
@@ -59,11 +61,11 @@ public class CitizenRegistrationServlet extends HttpServlet {
 		citizenDetailsVO.setEmail(request.getParameter("email"));
 		citizenDetailsVO.setPhone(Long.parseLong(request.getParameter("phone")));
 		citizenDetailsVO.setAddressVO(addressVO);
-		citizenDetailsVO.setIncomeGroup(request.getParameter("incomeGroup"));
-		citizenDetailsVO.setProfession(request.getParameter("profession"));
+		citizenDetailsVO.setIncomeGroup(new IncomeGroupVO(Long.parseLong(request.getParameter("incomeGroup"))));
+		citizenDetailsVO.setProfession(new ProfessionVO(Long.parseLong(request.getParameter("profession"))));
 		citizenDetailsVO.setAdharNumber(Long.parseLong( request.getParameter("adharNumber") ));
 		citizenDetailsVO.setPancardNumber(request.getParameter("pancardNumber"));
-		citizenDetailsVO.setCitizenVO(loginVO);
+		citizenDetailsVO.setLoginVO(loginVO);
 		
 		citizenService.registerCitizen(citizenDetailsVO);
 		

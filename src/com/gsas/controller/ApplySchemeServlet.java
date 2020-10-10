@@ -48,11 +48,14 @@ public class ApplySchemeServlet extends HttpServlet {
 				if(loginVO.isEmployee() == false) {	
 
 					SchemeApplicantVO schemeApplicant = new SchemeApplicantVO();
-					SchemeEligibilityVO citizenEligibilityDetails = new SchemeEligibilityVO();
 					SchemeVO schemeVO = schemeService.getSchemeDetails(Long.parseLong(request.getParameter("schemeId"))); // get scheme from schemeID
 					SchemeEligibilityVO schemeEligibilityVO = schemeVO.getSchemeEligibilityVO(); //get Eligibility of that scheme
 					CitizenDetailsVO citizenDetails = citizenService.getCitizenDetails(loginVO.getLoginId()); //get citizenDetails from citizenId						
 	
+					
+					schemeVO.setBankList(schemeService.getSchemeBankList(Long.getLong(request.getParameter("schemeId"))));
+					schemeVO.setDocumentList(schemeService.getSchemeDocumentsList(Long.getLong(request.getParameter("schemeId"))));
+					
 					//schemeApplicant Object
 					schemeApplicant.setSchemeVO(schemeVO);
 					schemeApplicant.setLoginVO(loginVO);
@@ -77,7 +80,7 @@ public class ApplySchemeServlet extends HttpServlet {
 					//on failed validation
 					else {
 						schemeApplicant.setApprovedStatus(false);
-						schemeService.addSchemeApplicant(schemeApplicant);
+						schemeService.addRejectedSchemeApplicant(schemeApplicant);
 					}
 					requestDispatcher = request.getRequestDispatcher("viewSchemesCitizenServlet");
 					request.setAttribute("err",schemeApplicant.getReason());
