@@ -11,14 +11,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.gsas.model.AddressVO;
 import com.gsas.model.CitizenDetailsVO;
 import com.gsas.model.LoginVO;
 import com.gsas.service.CitizenService;
-import com.gsas.utility.CitizenFactory;
 import com.gsas.utility.LayerType;
+import com.gsas.utility.ObjectFactory;
 
 /**
  * Servlet implementation class RegisterServlet
@@ -32,7 +31,7 @@ public class CitizenRegistrationServlet extends HttpServlet {
     }
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		CitizenService citizenService = (CitizenService) CitizenFactory.getInstance(LayerType.SERVICE);
+		CitizenService citizenService = (CitizenService) ObjectFactory.getInstance(LayerType.CITIZEN_SERVICE);
 		RequestDispatcher requestDispatcher = null;
 
 		LoginVO loginVO = new LoginVO();
@@ -51,7 +50,7 @@ public class CitizenRegistrationServlet extends HttpServlet {
 		citizenDetailsVO.setLastName(request.getParameter("lastName"));
 	
 		
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		formatter = formatter.withLocale( Locale.ENGLISH );  // Locale specifies human language for translating, and cultural norms for lowercase/uppercase and abbreviations and such. Example: Locale.US or Locale.CANADA_FRENCH
 		LocalDate date = LocalDate.parse(request.getParameter("dateOfBirth"), formatter);
 		citizenDetailsVO.setDateOfBirth(date);

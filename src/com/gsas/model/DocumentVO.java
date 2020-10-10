@@ -1,11 +1,15 @@
 package com.gsas.model;
 
-public class DocumentVO {
+public class DocumentVO implements Comparable<DocumentVO>{
 	
 	private long documentId;
 	private String documentName;
 	public DocumentVO() {
 		super();
+	}
+	public DocumentVO(long documentId) {
+		super();
+		this.documentId = documentId;
 	}
 	public DocumentVO(long documentId, String documentName) {
 		super();
@@ -27,6 +31,16 @@ public class DocumentVO {
 	@Override
 	public String toString() {
 		return "DocumentVO [documentId=" + documentId + ", documentName=" + documentName + "]";
+	}
+	@Override
+	public int compareTo(DocumentVO o) {
+		// TODO Auto-generated method stub
+		int result;
+		if(this.documentId-o.documentId == 0)
+			result = 0;
+		else
+			result = 1;
+		return result;
 	}
 	
 }

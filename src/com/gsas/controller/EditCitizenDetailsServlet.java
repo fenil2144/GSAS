@@ -14,8 +14,8 @@ import com.gsas.exception.CitizenNotFoundException;
 import com.gsas.model.CitizenDetailsVO;
 import com.gsas.model.LoginVO;
 import com.gsas.service.CitizenService;
-import com.gsas.utility.CitizenFactory;
 import com.gsas.utility.LayerType;
+import com.gsas.utility.ObjectFactory;
 
 /**
  * Servlet implementation class EditCitizenDetailsServlet
@@ -31,14 +31,14 @@ public class EditCitizenDetailsServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		CitizenService citizenService = (CitizenService) CitizenFactory.getInstance(LayerType.SERVICE);
+		CitizenService citizenService = (CitizenService) ObjectFactory.getInstance(LayerType.CITIZEN_SERVICE);
 		RequestDispatcher requestDispatcher = null;
 		HttpSession session = request.getSession();
-		LoginVO loginVO = (LoginVO) session.getAttribute("citizenVO");
+		LoginVO loginVO = (LoginVO) session.getAttribute("loginVO");
 
 			try {
 				if(loginVO != null) {		//Citizen must be Logged In in order to perform Edit Operation
-					CitizenDetailsVO citizenDetailsVO = citizenService.getCitizenDetails(loginVO.getCitizenId());
+					CitizenDetailsVO citizenDetailsVO = citizenService.getCitizenDetails(loginVO.getLoginId());
 					request.setAttribute("citizenDetailsVO", citizenDetailsVO);
 					
 					requestDispatcher = request.getRequestDispatcher("editCitizenDetails.jsp");

@@ -13,14 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.derby.client.am.DateTime;
-
 import com.gsas.model.AddressVO;
 import com.gsas.model.CitizenDetailsVO;
 import com.gsas.model.LoginVO;
 import com.gsas.service.CitizenService;
-import com.gsas.utility.CitizenFactory;
 import com.gsas.utility.LayerType;
+import com.gsas.utility.ObjectFactory;
 
 /**
  * Servlet implementation class UpdateCitizenDetailsServlet
@@ -36,11 +34,11 @@ public class UpdateCitizenDetailsServlet extends HttpServlet {
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		CitizenService citizenService = (CitizenService) CitizenFactory.getInstance(LayerType.SERVICE);
+		CitizenService citizenService = (CitizenService) ObjectFactory.getInstance(LayerType.CITIZEN_SERVICE);
 		HttpSession session = request.getSession();
 		RequestDispatcher requestDispatcher = null;
 
-		LoginVO loginVO = (LoginVO) session.getAttribute("citizenVO");
+		LoginVO loginVO = (LoginVO) session.getAttribute("loginVO");
 		if(loginVO != null) {	
 			loginVO.setUserName(request.getParameter("username"));
 			loginVO.setPassword(request.getParameter("password"));
@@ -76,7 +74,7 @@ public class UpdateCitizenDetailsServlet extends HttpServlet {
 			
 			citizenService.updateCitizenDetails(citizenDetailsVO);
 			
-			session.setAttribute("citizenVO", loginVO);
+			session.setAttribute("loginVO", loginVO);
 			session.setAttribute("message", "CitizenDetails Updated Successfully for Citizen Name: "+loginVO.getUserName());
 			
 			

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,7 +54,7 @@
 
 	<div class="main">
 		<div class="main1">
-			<form method="POST" action="">
+			<form method="POST" action="CitizenRegistrationServlet">
 				<div class="col1">
 					<label> Enter your Name<input type="text" name="firstName"
 						id="firstName" placeholder="First Name" required><input
@@ -63,8 +64,14 @@
 					</label>
 				</div>
 				<div class="col1">
+					<label> Username<input type="text"
+						name="username" id="username"
+						placeholder="Enter your Username" required><br>
+					</label>
+				</div>
+				<div class="col1">
 					<label> Enter your password<input type="password"
-						name="citizenPassword" id="citizenPassword"
+						name="password" id="citizenPassword"
 						placeholder="Enter your password." required><br>
 					</label>
 				</div>
@@ -97,7 +104,7 @@
 				</div>
 				<div class="col1">
 					<label> Enter your Phone Number<input type="text"
-						name="phoneNumber" id="phoneNumber"
+						name="phone" id="phone"
 						placeholder="Enter your Phone Number." required
 						pattern="[0-9]{10}"><br>
 					</label>
@@ -113,7 +120,7 @@
 						type="text" name="city" id="city" placeholder="Enter your city"
 						required> <input type="text" name="state" id="state"
 						placeholder="Enter your state" required> <input
-						type="number" name="pinCode" id="pinCode"
+						type="number" name="pincode" id="pincode"
 						placeholder="Enter your pincode" required pattern="[0-9]{6}">
 
 					</label>
@@ -148,7 +155,7 @@
 
 				<div class="col1">
 					<label>
-						<button type="submit" onclick="navigateLogin()">Submit</button>
+						<button type="submit" >Submit</button>	<!-- onclick="navigateLogin()" -->
 					</label>
 				</div>
 

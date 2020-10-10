@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -36,19 +37,22 @@
             </div>
             
      </div>
-     
+     <c:if test = "${message != null}">
+         <p><c:out value = "${message}"/><p>
+    </c:if>
+
         <div class="main">
             <div class="main1">
-                <form method="POST" action="./LoginServlet">
+                <form method="POST" action="CitizenLoginServlet">
                     <div class="col1">
-                        <input type="number" name="username" id="username" placeholder="Enter your employee ID" required><br>
+                        <input type="text" name="username" id="username" placeholder="Enter your employee ID" required><br>
                     </div>
                     <div class="col2">
                         <input type="password" name="password" id="password" placeholder="Enter your password." required><br>
 
                     </div>
                     <div class="col3">
-                        <button type="submit" id="submit" onclick="displayScheme()"> Submit </button>
+                        <button type="submit" id="submit" > Submit </button>
                     </div>
                     
                 </form>

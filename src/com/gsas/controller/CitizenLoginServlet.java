@@ -17,13 +17,13 @@ import com.gsas.utility.LayerType;
 import com.gsas.utility.ObjectFactory;
 
 /**
- * Servlet implementation class LoginServlet
+ * Servlet implementation class CitizenLoginServlet
  */
-@WebServlet("/LoginServlet")
-public class LoginServlet extends HttpServlet {
+@WebServlet("/CitizenLoginServlet")
+public class CitizenLoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public LoginServlet() {
+    public CitizenLoginServlet() {
         super();
     }
 
