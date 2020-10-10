@@ -1,18 +1,16 @@
 package com.gsas.exception;
 
-public class SchemeNotFoundException extends Exception{
+public class CitizenNotEligibleException extends Exception{
 
-	public SchemeNotFoundException() {
+	public CitizenNotEligibleException() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public SchemeNotFoundException(String message) {
+	public CitizenNotEligibleException(String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
-	
-	
 	
 	
 

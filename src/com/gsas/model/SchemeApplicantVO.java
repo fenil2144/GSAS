@@ -9,7 +9,7 @@ public class SchemeApplicantVO {
 	private LoginVO loginVO;
 	private BankVO bankVO;
 	private long accountNumber;
-	private String ypeOfAccount;
+	private String typeOfAccount;
 	private String ifsc;
 	private String branch;
 	private List<SchemeApplicantDocumentsVO> applicantDocumentsList;
@@ -21,7 +21,7 @@ public class SchemeApplicantVO {
 	}
 
 	public SchemeApplicantVO(long schemeApplicantId, SchemeVO schemeVO, LoginVO loginVO, BankVO bankVO,
-			long accountNumber, String ypeOfAccount, String ifsc, String branch,
+			long accountNumber, String typeOfAccount, String ifsc, String branch,
 			List<SchemeApplicantDocumentsVO> applicantDocumentsList, boolean approvedStatus, String reason) {
 		super();
 		this.schemeApplicantId = schemeApplicantId;
@@ -29,7 +29,7 @@ public class SchemeApplicantVO {
 		this.loginVO = loginVO;
 		this.bankVO = bankVO;
 		this.accountNumber = accountNumber;
-		this.ypeOfAccount = ypeOfAccount;
+		this.typeOfAccount = typeOfAccount;
 		this.ifsc = ifsc;
 		this.branch = branch;
 		this.applicantDocumentsList = applicantDocumentsList;
@@ -77,12 +77,12 @@ public class SchemeApplicantVO {
 		this.accountNumber = accountNumber;
 	}
 
-	public String getYpeOfAccount() {
-		return ypeOfAccount;
+	public String getTypeOfAccount() {
+		return typeOfAccount;
 	}
 
-	public void setYpeOfAccount(String ypeOfAccount) {
-		this.ypeOfAccount = ypeOfAccount;
+	public void setTypeOfAccount(String typeOfAccount) {
+		this.typeOfAccount = typeOfAccount;
 	}
 
 	public String getIfsc() {
@@ -128,7 +128,7 @@ public class SchemeApplicantVO {
 	@Override
 	public String toString() {
 		return "SchemeApplicantVO [schemeApplicantId=" + schemeApplicantId + ", schemeVO=" + schemeVO + ", loginVO="
-				+ loginVO + ", bankVO=" + bankVO + ", accountNumber=" + accountNumber + ", ypeOfAccount=" + ypeOfAccount
+				+ loginVO + ", bankVO=" + bankVO + ", accountNumber=" + accountNumber + ", typeOfAccount=" + typeOfAccount
 				+ ", ifsc=" + ifsc + ", branch=" + branch + ", applicantDocumentsList=" + applicantDocumentsList
 				+ ", approvedStatus=" + approvedStatus + ", reason=" + reason + "]";
 	}
