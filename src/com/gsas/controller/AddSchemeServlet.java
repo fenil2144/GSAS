@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 
 import com.gsas.exception.DataNotFoundException;
 import com.gsas.exception.DatabaseException;
-import com.gsas.exception.SchemeNotFoundException;
 import com.gsas.model.BankVO;
 import com.gsas.model.DocumentVO;
 import com.gsas.model.IncomeGroupVO;
@@ -22,7 +21,6 @@ import com.gsas.model.MinistryVO;
 import com.gsas.model.ProfessionVO;
 import com.gsas.model.SectorVO;
 import com.gsas.service.CommonService;
-import com.gsas.service.SchemeService;
 import com.gsas.utility.LayerType;
 import com.gsas.utility.ObjectFactory;
 

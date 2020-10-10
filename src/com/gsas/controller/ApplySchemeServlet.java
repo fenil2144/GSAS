@@ -1,22 +1,20 @@
 package com.gsas.controller;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.gsas.exception.CitizenNotFoundException;
 import com.gsas.exception.DatabaseException;
-import com.gsas.model.BankVO;
+import com.gsas.exception.SchemeNotFoundException;
 import com.gsas.model.CitizenDetailsVO;
-import com.gsas.model.DocumentVO;
 import com.gsas.model.LoginVO;
-import com.gsas.model.SchemeApplicantDocumentsVO;
 import com.gsas.model.SchemeApplicantVO;
 import com.gsas.model.SchemeEligibilityVO;
 import com.gsas.model.SchemeVO;
@@ -34,76 +32,76 @@ import com.gsas.utility.ObjectFactory;
 public class ApplySchemeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-    /**
-     * Default constructor. 
-     */
+
     public ApplySchemeServlet() {
-        // TODO Auto-generated constructor stub
     }
 
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		SchemeService schemeService = (SchemeService) ObjectFactory.getInstance(LayerType.SCHEME_SERVICE);
+		CitizenService citizenService = (CitizenService) ObjectFactory.getInstance(LayerType.CITIZEN_SERVICE);
+		HttpSession session = request.getSession();
+		RequestDispatcher requestDispatcher = null;
+		LoginVO loginVO = (LoginVO) session.getAttribute("citizenVO");
+		try {
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-				
-				RequestDispatcher requestDispatcher = null;
-				try {
-					SchemeService schemeService = (SchemeService) ObjectFactory.getInstance(LayerType.SCHEME_SERVICE);
-					CitizenService citizenService = (CitizenService) ObjectFactory.getInstance(LayerType.CITIZEN_SERVICE);
-					HttpSession session = request.getSession();
-					
-					LoginVO loginVO = (LoginVO) session.getAttribute("citizenVO");
-					if(loginVO != null) {
-					
+			if(loginVO != null) {
+				if(loginVO.isEmployee() == false) {	
 
-						SchemeApplicantVO schemeApplicant = new SchemeApplicantVO();
-						SchemeEligibilityVO citizenEligibilityDetails = new SchemeEligibilityVO();
-						SchemeVO schemeVO = schemeService.getSchemeDetails(Long.parseLong(request.getParameter("schemeId"))); // get scheme from schemeID
-						SchemeEligibilityVO schemeEligibilityVO = schemeVO.getSchemeEligibilityVO(); //get Eligibility of that scheme
-						CitizenDetailsVO citizenDetails = citizenService.getCitizenDetails(loginVO.getLoginId()); //get citizenDetails from citizenId						
+					SchemeApplicantVO schemeApplicant = new SchemeApplicantVO();
+					SchemeEligibilityVO citizenEligibilityDetails = new SchemeEligibilityVO();
+					SchemeVO schemeVO = schemeService.getSchemeDetails(Long.parseLong(request.getParameter("schemeId"))); // get scheme from schemeID
+					SchemeEligibilityVO schemeEligibilityVO = schemeVO.getSchemeEligibilityVO(); //get Eligibility of that scheme
+					CitizenDetailsVO citizenDetails = citizenService.getCitizenDetails(loginVO.getLoginId()); //get citizenDetails from citizenId						
 	
-						//schemeApplicant Object
-						schemeApplicant.setSchemeVO(schemeVO);
-						schemeApplicant.setLoginVO(loginVO);
-						schemeApplicant.setBankVO(null);
-						schemeApplicant.setAccountNumber(0);
-						schemeApplicant.setTypeOfAccount(null);
-						schemeApplicant.setIfsc(null);
-						schemeApplicant.setBranch(null);
-						schemeApplicant.setApplicantDocumentsList(null);
+					//schemeApplicant Object
+					schemeApplicant.setSchemeVO(schemeVO);
+					schemeApplicant.setLoginVO(loginVO);
+					
+					/*
+					 * schemeApplicant.setBankVO(null);
+					 * schemeApplicant.setAccountNumber(0);
+					 * schemeApplicant.setTypeOfAccount(null);
+					 * schemeApplicant.setIfsc(null);
+					 * schemeApplicant.setBranch(null);
+					 * schemeApplicant.setApplicantDocumentsList(null);
+					 */
+					
+					//checking if the citizen satisfies basic eligiblity criteria of the scheme
+				    schemeApplicant.setReason(schemeService.validate(schemeEligibilityVO, citizenDetails));					
+					//on successful validation
+					if(schemeApplicant.getReason().equals("All criteria validated successfuly")) {
+						schemeApplicant.setApprovedStatus(true);	
+						request.setAttribute("schemeVO",schemeVO);
 						
-						//checking if the citizen satisfies basic eligiblity criteria of the scheme
-					    schemeApplicant.setReason(schemeService.validate(schemeEligibilityVO, citizenDetails));					
-						//on successful validation
-						if(schemeApplicant.getReason().equals("All criteria validated successfuly")) {
-							schemeApplicant.setApprovedStatus(true);							
-							requestDispatcher = request.getRequestDispatcher("applySchemes.jsp");
-						}
-						//on failed validation
-						else {
-							schemeApplicant.setApprovedStatus(false);
-							schemeService.addSchemeApplicant(schemeApplicant);
-							requestDispatcher = request.getRequestDispatcher("displaySchemes.jsp");
-						}
-						request.setAttribute("err",schemeApplicant.getReason());
-						requestDispatcher.forward(request, response);			
 					}
-					
+					//on failed validation
 					else {
-						requestDispatcher = request.getRequestDispatcher("citizenLogin.jsp");
-						request.setAttribute("err","Sorry, You are not Authorized to view this Page");
-						requestDispatcher.forward(request, response);
-					
+						schemeApplicant.setApprovedStatus(false);
+						schemeService.addSchemeApplicant(schemeApplicant);
 					}
-				} catch (DatabaseException e) {
-					requestDispatcher = request.getRequestDispatcher("ApplyScheme.jsp");
-					request.setAttribute("err", e.getMessage());
+					requestDispatcher = request.getRequestDispatcher("viewSchemesCitizenServlet");
+					request.setAttribute("err",schemeApplicant.getReason());
+					requestDispatcher.forward(request, response);
+				}else {													//If employee is already logged in
+					requestDispatcher = request.getRequestDispatcher("viewSchemesEmployeeServlet");
 					requestDispatcher.forward(request, response);
 				}
-				
+			}
+			
+			else {
+				requestDispatcher = request.getRequestDispatcher("citizenLogin.jsp");
+				request.setAttribute("err","Sorry, You are not Authorized to view this Page");
+				requestDispatcher.forward(request, response);
+			
+			}
+		} catch (DatabaseException | SchemeNotFoundException | NumberFormatException | CitizenNotFoundException e) {
+			requestDispatcher = request.getRequestDispatcher("viewSchemesCitizenServlet");
+			request.setAttribute("err", e.getMessage());
+			requestDispatcher.forward(request, response);
+		}
 
 	}
+
+
 
 }

@@ -68,31 +68,30 @@ public class SchemeServiceImpl implements SchemeService {
 	}
 	
 	@Override
-	public String validate(SchemeEligibilityVO schemeEligibility, CitizenDetailsVO citizenDetails){
+	public String validate(SchemeEligibilityVO schemeEligibilityVO, CitizenDetailsVO citizenDetailsVO){
 
 	//Age Validation
 	//Getting the age of citizen
 	LocalDate today = LocalDate.now();
-	int age = today.getYear() - citizenDetails.getDateOfBirth().getYear();
-	int month = today.getMonthValue() - citizenDetails.getDateOfBirth().getMonthValue();
-	if(month < 0 || (month == 0 && today.getDayOfMonth() < citizenDetails.getDateOfBirth().getDayOfMonth())) {
+	int age = today.getYear() - citizenDetailsVO.getDateOfBirth().getYear();
+	int month = today.getMonthValue() - citizenDetailsVO.getDateOfBirth().getMonthValue();
+	if(month < 0 || (month == 0 && today.getDayOfMonth() < citizenDetailsVO.getDateOfBirth().getDayOfMonth())) {
 	age--;
 	}
-	if(age < schemeEligibility.getMinAge() || age > schemeEligibility.getMaxAge()) {
-	return "Age criteria is not satisfied";
+	if(age < schemeEligibilityVO.getMinAge() || age > schemeEligibilityVO.getMaxAge()) {
+		return "Age criteria is not satisfied";
 	}
 	//Income Group Validation
-	if(schemeEligibility.getIncomeGroupVO().getIncomeGroupName() != citizenDetails.getIncomeGroup()) {
-	return "Income Group not matched";
+	if(schemeEligibilityVO.getIncomeGroupVO().getIncomeGroupId() != citizenDetailsVO.getIncomeGroup().getIncomeGroupId()) {
+		return "Income Group not matched";
 	}
 	//Gender Validation
-	if(schemeEligibility.getGender() != citizenDetails.getGender()) {
-	return "Scheme eligible only for "+schemeEligibility.getGender()+" , you can't apply";
+	if(schemeEligibilityVO.getGender() != citizenDetailsVO.getGender()) {
+		return "Scheme eligible only for "+schemeEligibilityVO.getGender()+" , you can't apply";
 	}
 	//Profession Validation
-	if(schemeEligibility.getProfessionVO().getProfessionName() != citizenDetails.getProfession()) {
-
-	return "Scheme eligible only for "+schemeEligibility.getProfessionVO().getProfessionName()+" , you can't apply";
+	if(schemeEligibilityVO.getProfessionVO().getProfessionId() != citizenDetailsVO.getProfession().getProfessionId()) {
+		return "Profession not matched";
 	}
 	return "All criteria validated successfully";
 	}

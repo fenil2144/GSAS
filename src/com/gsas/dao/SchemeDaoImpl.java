@@ -179,7 +179,7 @@ public class SchemeDaoImpl implements SchemeDao{
 			while(resultSet.next()){
 				schemeVO = new SchemeVO();
 				schemeVO.setSchemeId(resultSet.getLong("scheme_id"));
-				schemeVO.setSchemeName(resultSet.getString("name"));
+				schemeVO.setSchemeName(resultSet.getString("scheme_name"));
 				schemeVO.setSummary(resultSet.getString("summary"));
 				schemeVO.setDescription(resultSet.getString("description"));
 				schemeVO.setImagePath(resultSet.getString("image_path"));
