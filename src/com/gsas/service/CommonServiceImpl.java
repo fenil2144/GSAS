@@ -2,7 +2,6 @@ package com.gsas.service;
 
 import java.util.List;
 
-import com.gsas.dao.CitizenDao;
 import com.gsas.dao.CommonDao;
 import com.gsas.exception.DataNotFoundException;
 import com.gsas.exception.DatabaseException;

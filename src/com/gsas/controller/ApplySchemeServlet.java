@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.gsas.exception.CitizenNotFoundException;
+import com.gsas.exception.DataNotFoundException;
 import com.gsas.exception.DatabaseException;
 import com.gsas.exception.SchemeNotFoundException;
 import com.gsas.model.CitizenDetailsVO;
@@ -97,12 +98,12 @@ public class ApplySchemeServlet extends HttpServlet {
 				requestDispatcher.forward(request, response);
 			
 			}
-		} catch (DatabaseException | SchemeNotFoundException | NumberFormatException | CitizenNotFoundException e) {
+		} catch (DatabaseException | SchemeNotFoundException | NumberFormatException | CitizenNotFoundException | DataNotFoundException e) {
 			e.printStackTrace();
 			requestDispatcher = request.getRequestDispatcher("viewSchemesCitizenServlet");
 			request.setAttribute("err", e.getMessage());
 			requestDispatcher.forward(request, response);
-		}
+		} 
 
 	}
 

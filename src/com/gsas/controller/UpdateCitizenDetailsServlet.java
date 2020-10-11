@@ -70,7 +70,7 @@ public class UpdateCitizenDetailsServlet extends HttpServlet {
 			citizenDetailsVO.setAddressVO(addressVO);
 			citizenDetailsVO.setIncomeGroup(new IncomeGroupVO(Long.parseLong(request.getParameter("incomeGroup"))));
 			citizenDetailsVO.setProfession(new ProfessionVO(Long.parseLong(request.getParameter("profession"))));
-			citizenDetailsVO.setAdharNumber(Long.parseLong(request.getParameter("adharNumber") ));
+			citizenDetailsVO.setAdharNumber(Long.parseLong( request.getParameter("adharNumber") ));
 			citizenDetailsVO.setPancardNumber(request.getParameter("pancardNumber"));
 			citizenDetailsVO.setLoginVO(loginVO);
 			

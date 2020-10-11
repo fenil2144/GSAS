@@ -6,6 +6,8 @@ import com.gsas.dao.CitizenDao;
 import com.gsas.exception.AuthenticationException;
 import com.gsas.exception.CitizenNotFoundException;
 import com.gsas.exception.DatabaseException;
+import com.gsas.exception.DuplicateUserException;
+import com.gsas.exception.InvalidSequenceException;
 import com.gsas.exception.SchemeNotFoundException;
 import com.gsas.model.CitizenDetailsVO;
 import com.gsas.model.LoginVO;
@@ -22,7 +24,7 @@ public class CitizenServiceImpl implements CitizenService {
 	}
 
 	@Override
-	public void registerCitizen(CitizenDetailsVO citizenDetailsVO) {
+	public void registerCitizen(CitizenDetailsVO citizenDetailsVO) throws DatabaseException, InvalidSequenceException {
 		citizenDao.registerCitizen(citizenDetailsVO);
 	}
 	
@@ -57,6 +59,16 @@ public class CitizenServiceImpl implements CitizenService {
 	@Override
 	public List<SchemeVO> getAppliedSchemeList(long citizenId, boolean approvedStatus) throws SchemeNotFoundException, DatabaseException {
 		return citizenDao.getAppliedSchemeList(citizenId, approvedStatus);
+	}
+
+
+	@Override
+	public boolean isCitizenUnique(CitizenDetailsVO citizenDetailsVO) throws DatabaseException, DuplicateUserException {
+		boolean isUnique = citizenDao.isCitizenUnique(citizenDetailsVO);
+		if(isUnique == false) {
+			throw new DuplicateUserException("Username, Adhar Or Pan already registered.");
+		}
+		return isUnique;
 	}
 
 }
