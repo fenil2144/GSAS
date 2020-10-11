@@ -1,8 +1,10 @@
 package com.gsas.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.RequestDispatcher;
@@ -12,6 +14,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import com.gsas.exception.DatabaseException;
 import com.gsas.exception.InvalidSequenceException;
@@ -51,7 +57,19 @@ public class InsertSchemeServlet extends HttpServlet {
 					schemeVO.setSchemeName(request.getParameter("schemeName"));
 					schemeVO.setSummary(request.getParameter("summary"));
 					schemeVO.setDescription(request.getParameter("description"));
-					schemeVO.setImagePath(request.getParameter("imagePath"));
+					
+					ServletFileUpload upload=new ServletFileUpload(new DiskFileItemFactory());
+					
+						List<FileItem> images=upload.parseRequest(request);//To store of list  files FileItem datatype is used 
+						
+							String name=images.get(0).getName();//gets the name of file  
+							try{name=name.substring(name.lastIndexOf("\\")+1);}catch(Exception e){}//this will give the name of file it removes stuffs like c:\downloads and gives the name
+
+							//System.out.println(name);
+							images.get(0).write(new File("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\images"+name));//create folder imagescheme where image of the  will be stored
+						    //images folder created in local computer and write function writes into that folder
+
+					schemeVO.setImagePath("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\images"+ name);
 					
 					MinistryVO ministryVO = new MinistryVO(Long.parseLong(request.getParameter("ministry")));
 					schemeVO.setMinistryVO(ministryVO);
@@ -90,6 +108,11 @@ public class InsertSchemeServlet extends HttpServlet {
 			}
 			
 		} catch (DatabaseException | InvalidSequenceException e) {
+			rd = request.getRequestDispatcher("AddSchemeServlet");
+			request.setAttribute("err", e.getMessage());
+			rd.forward(request, response);
+		} catch (Exception e) {
+			e.printStackTrace();
 			rd = request.getRequestDispatcher("AddSchemeServlet");
 			request.setAttribute("err", e.getMessage());
 			rd.forward(request, response);

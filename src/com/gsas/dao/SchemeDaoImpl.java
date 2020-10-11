@@ -332,7 +332,7 @@ public class SchemeDaoImpl implements SchemeDao{
 			selectStatement.close();
 			connection.close();
 			if(schemeList.isEmpty()) {
-				throw new SchemeNotFoundException("Please Add Schemes First");
+				throw new SchemeNotFoundException("Schemes Not Found");
 			}
 		} catch(SQLException | ClassNotFoundException e) {
 

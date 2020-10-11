@@ -47,7 +47,7 @@
 
 	<div class="main">
 		<div class="main1">
-			<form method="POST" action="InsertSchemeServlet">
+			<form method="POST" action="InsertSchemeServlet" enctype="multipart/form-data">
 				<div class="col1">
 					<label class="required-field">Enter scheme name</label> <input type="text"
 						name="schemeName" id="schemeName" placeholder="Enter scheme name"
