@@ -41,9 +41,11 @@ public class viewSchemesEmployeeServlet extends HttpServlet {
 		
 		try {
 			if(loginVO != null) {
+				System.out.println("In here.");
 				if(loginVO.isEmployee() == true) {						//If employee is already logged in
-					schemeList = schemeService.getAllScheme();			//return list of all schemes
-					rd = request.getRequestDispatcher("viewAllSchemes.jsp");
+					schemeList = schemeService.getAllScheme();	//return list of all schemes
+					request.setAttribute("schemeList",schemeList);
+					rd = request.getRequestDispatcher("schemeManagement.jsp");
 					rd.forward(request, response);
 				}
 				else {													//If user is already logged in
@@ -59,10 +61,19 @@ public class viewSchemesEmployeeServlet extends HttpServlet {
 		}catch(SchemeNotFoundException | DatabaseException e) {
 			rd = request.getRequestDispatcher("viewAllSchemes.jsp");
 			request.setAttribute("err", e.getMessage());
+			e.printStackTrace();
 			rd.forward(request, response);
 		}
 
 	}
+
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		doGet(req, resp);
+	}
+	
+	
 
 
 

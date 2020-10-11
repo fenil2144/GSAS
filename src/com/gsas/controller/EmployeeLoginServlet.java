@@ -54,10 +54,20 @@ public class EmployeeLoginServlet extends HttpServlet {
 			}
 			
 		} catch (AuthenticationException | DatabaseException e) {
+			e.printStackTrace();
 			rd = request.getRequestDispatcher("loginFailure.jsp");
 			request.setAttribute("err", e.getMessage());
 			rd.forward(request, response);
 		}
 	}
+
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doPost(req, resp);
+	}
+	
+	
 
 }

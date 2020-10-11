@@ -46,6 +46,7 @@ public class SchemeServiceImpl implements SchemeService {
 		} catch (SchemeNotFoundException e) {
 			throw new SchemeNotFoundException(e.getMessage());
 		} catch (DatabaseException e) {
+			e.printStackTrace();
 			throw new DatabaseException(e.getMessage());
 		}
 		if(schemeVO == null)
