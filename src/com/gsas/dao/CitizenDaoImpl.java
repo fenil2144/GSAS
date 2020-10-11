@@ -301,7 +301,7 @@ public class CitizenDaoImpl implements CitizenDao {
 		try {
 			Connection connection = DBUtility.getConnection();
 			
-			PreparedStatement selectStatement = connection.prepareStatement("SELECT * FROM citizen_master c INNER JOIN login_credential l ON c.citizen_ref = l.user_name WHERE user_name = ? OR aadhar_number = ? OR pancard_number= ?");
+			PreparedStatement selectStatement = connection.prepareStatement("SELECT * FROM citizen_master c INNER JOIN login_credential l ON c.citizen_ref = l.login_id WHERE user_name = ? OR aadhar_number = ? OR pancard_number= ?");
 					
 			selectStatement.setString(1, citizenDetailsVO.getLoginVO().getUserName());
 			selectStatement.setLong(2, citizenDetailsVO.getAdharNumber());

@@ -59,7 +59,7 @@
                 
                     <div class="row">
 				
-				<c:forEach items="${rejectedSchemeList}" var="schemeApplicantVO">
+				
 				<input type="hidden" name="schemeId" value="${schemeApplicantVO.schemeVO.schemeId }">
 					<div class="column">
 						<div class="card">
@@ -73,7 +73,6 @@
 
 						</div>
 						</div>
-							</c:forEach>
 							
 					</div>   
 					<form method="POST" action="ApplySchemeDocumentServlet">                
@@ -81,6 +80,7 @@
                         <label for="bank">Choose a bank:</label>
 
                         <select name="bank" id="bank">
+                        	<option value="select" id="select">Select</option>
                             <option value="hsbc">HSBC</option>
                             <option value="icic">ICICI</option>
                             <option value="hdfc">HDFC</option>

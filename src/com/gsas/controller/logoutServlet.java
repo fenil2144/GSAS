@@ -10,21 +10,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.gsas.exception.CitizenNotFoundException;
-import com.gsas.exception.DataNotFoundException;
-import com.gsas.exception.DatabaseException;
-import com.gsas.model.CitizenDetailsVO;
 import com.gsas.model.LoginVO;
 
 /**
  * Servlet implementation class logoutServlet
  */
-@WebServlet("/logoutServlet")
-public class logoutServlet extends HttpServlet {
+@WebServlet("/LogoutServlet")
+public class LogoutServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 
-    public logoutServlet() {
+    public LogoutServlet() {
         super();
     }
 

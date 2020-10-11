@@ -47,7 +47,7 @@
 			<a href="listSchemes.jsp">List Schemes</a>
 		</div>
 		<div class="content">
-			<a href="registerCitizen.jsp">Citizen Register</a>
+			<a href="AddCitizenServlet">Citizen Register</a>
 		</div>
 
 	</div>
@@ -55,7 +55,7 @@
 	<div class="main">
 		<div class="main1">
 			
-			<form method="POST" action="CitizenRegistrationServlet">
+			<form method="POST" action="CitizenRegistrationServlet" onSubmit="return validate()">
 				<div class="col1" id="name">
 					<label class="required-field"> Enter your Name</label><input type="text" name="firstName"
 						id="firstName" placeholder="First Name" required><input
@@ -71,20 +71,20 @@
 				</div>
 				<div class="col1" id="citizenPassword">
 					<label class="required-field"> Enter your password</label><input type="password"
-						name="password" id="password"
+						name="password" id="citizenPassword"
 						placeholder="Enter your password." required><br>
 			
 				</div>
 				<div class="col1" id="confirmPassword">
 					<label class="required-field"> Confirm your password</label><input type="password"
-						name="password1" id="password1"
+						name="password1" id="citizenPassword1"
 						placeholder="Enter your password." required><br>
 	
 				</div>
 				<div class="col1" id="dob">
 					<label class="required-field"> Enter your Date of Birth</label><input type="text"
 						name="dateOfBirth" id="dateOfBirth"
-						placeholder="Enter your Date of Birth.(YYYY-MMM-DD)" required><br>
+						placeholder="Enter your Date of Birth.(YYYY-MM-DD)" required><br>
 				</div>
 				<div class="col1">
 					<label class="required-field">Select gender</label>
@@ -104,7 +104,7 @@
 				<div class="col1" id="phoneNumber">
 					<label class="required-field"> Enter your Phone Number</label><input type="text"
 						name="phone" id="phone" placeholder="Enter your Phone Number."
-						required pattern="[0-9]{10}"><br>
+						required><br>
 					
 				</div>
 				<div class="col1" id="emailId">
@@ -119,43 +119,48 @@
 						required> <input type="text" name="state" id="state"
 						placeholder="Enter your state" required> <input
 						type="text" name="pincode" id="pincode"
-						placeholder="Enter your pincode" required pattern="[0-9]{6}">
+						placeholder="Enter your pincode" required >
 
 			
 				</div>
 				<div class="col1" >
 					<label for="profession" class="required-field">Choose a profession:</label> <select
-							name="profession" id="professon" required>
-							<c:forEach items="${profession}" var="profession">
+							name="profession" id="profession" required >
+							<option value="" id="select">Select</option>
+							<c:forEach items="${professionList}" var="profession">
 								<option value="${profession.professionId}">${profession.professionName}</option>
 							</c:forEach>
 						</select>
 				</div>
 				<div class="col1">
 						<label for="incomeGroup" class="required-field">Choose a income group:</label> <select
-							name="incomeGroup" required>
-							<c:forEach items="${incomeGroup}" var="incomeGroup">
+							name="incomeGroup" required >
+							<option value="" id="select">Select</option>
+							<c:forEach items="${incomeGroupList}" var="incomeGroup">
 								<option value="${incomeGroup.incomeGroupId}">${incomeGroup.incomeGroupName}</option>
 							</c:forEach>
 						</select>
 					</div>
 				<div class="col1">
-					<label class="required-field"> Enter your Aadhar Number</label><input type="text"
-						name="adharNumber" id="adharNumber"
+					<label class="required-field"> Enter your Aadhar Number</label><input type="number"
+						name="adharNumber" id="aadhar"
 						placeholder="Enter your Aadhar Number." required><br>
 			
 				</div>
 				<div class="col1">
 					<label class="required-field"> Enter your PAN Number</label><input type="text"
-						name="pancardNumber" id="pancardNumber"
-						placeholder="Enter your PAN Number." required
-						pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"><br>
+						name="pancardNumber" id="pan"
+						placeholder="Enter your PAN Number." required 
+						><br>
 				</div>
 
 				<div class="col1">
 					<label>
 						<button type="submit">Submit</button>
 					</label>
+				</div>
+				<div class="error">
+				<ul id="val"></ul>
 				</div>
 
 			</form>
