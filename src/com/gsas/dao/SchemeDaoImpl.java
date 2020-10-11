@@ -415,7 +415,8 @@ public class SchemeDaoImpl implements SchemeDao{
 			ps.setLong(1, seq);
 			ps.setLong(2, schemeApplicant.getSchemeVO().getSchemeId());
 			ps.setLong(3, schemeApplicant.getLoginVO().getLoginId());
-			ps.setLong(4, schemeApplicant.getBankVO().getBankId());
+			//ps.setLong(4, schemeApplicant.getBankVO().getBankId());
+			ps.setLong(4, 1);
 			ps.setLong(5, schemeApplicant.getAccountNumber());
 			ps.setString(6, schemeApplicant.getTypeOfAccount());
 			ps.setString(7, schemeApplicant.getIfsc());
@@ -428,18 +429,19 @@ public class SchemeDaoImpl implements SchemeDao{
 			connection.close();
 			
 		}catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
 			throw new DatabaseException(e.getMessage());
 		}
 	}
 
 	@Override
-	public List<DocumentVO> getSchemeDocumentsList(Long scheme_id) throws DatabaseException {
+	public List<DocumentVO> getSchemeDocumentsList(Long schemeId) throws DatabaseException {
 		List<DocumentVO> documentList=new ArrayList<>();
 		try {
 			Connection connection = DBUtility.getConnection();
 			
 			PreparedStatement selectStatement = connection.prepareStatement("SELECT document_id, document_name FROM scheme_documents s INNER JOIN document d ON s.document_ref = d.document_id WHERE scheme_ref=?");
-			selectStatement.setLong(1, scheme_id);
+			selectStatement.setLong(1, schemeId);
 			ResultSet resultSet = selectStatement.executeQuery();
 			
 			while(resultSet.next()) {
@@ -456,13 +458,14 @@ public class SchemeDaoImpl implements SchemeDao{
 	}
 
 	@Override
-	public List<BankVO> getSchemeBankList(Long scheme_id) throws DatabaseException {
+	public List<BankVO> getSchemeBankList(Long schemeId) throws DatabaseException {
 		List<BankVO> bankList=new ArrayList<>();
 		try {
 			Connection connection = DBUtility.getConnection();
-			
+			System.out.println("Here:"+schemeId);
 			PreparedStatement selectStatement = connection.prepareStatement("SELECT bank_id, bank_name FROM scheme_banks s INNER JOIN bank b ON s.bank_ref=b.bank_id WHERE scheme_ref=?");
-			selectStatement.setLong(1, scheme_id);
+			selectStatement.setLong(1, schemeId);
+			System.out.println("Here!:"+schemeId);
 			ResultSet resultSet = selectStatement.executeQuery();
 			
 			while(resultSet.next()) {

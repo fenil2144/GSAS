@@ -148,9 +148,9 @@ public class CitizenDaoImpl implements CitizenDao {
 				citizenDetailsVO.setEmail(resultSet.getString("email"));
 				citizenDetailsVO.setPhone(resultSet.getLong("phone"));
 				citizenDetailsVO.setAddressVO(addressVO);
-				citizenDetailsVO.setIncomeGroup(new IncomeGroupVO(resultSet.getLong("income_group_ref ")));
-				citizenDetailsVO.setProfession(new ProfessionVO(resultSet.getLong("profession_ref ")));
-				citizenDetailsVO.setAdharNumber(resultSet.getLong("adhar_number"));
+				citizenDetailsVO.setIncomeGroup(new IncomeGroupVO(resultSet.getLong("income_group_ref")));
+				citizenDetailsVO.setProfession(new ProfessionVO(resultSet.getLong("profession_ref")));
+				citizenDetailsVO.setAdharNumber(resultSet.getLong("aadhar_number"));
 				citizenDetailsVO.setPancardNumber(resultSet.getString("pancard_number"));
 				citizenDetailsVO.setLoginVO(loginVO);
 				
