@@ -42,8 +42,8 @@ public class viewSchemesEmployeeServlet extends HttpServlet {
 		try {
 			if(loginVO != null) {
 				System.out.println("In here.");
-				if(loginVO.isEmployee() == true) {						//If employee is already logged in
-					schemeList = schemeService.getAllScheme();	//return list of all schemes
+				if(loginVO.isEmployee() == true) {					//If employee is already logged in
+					schemeList = schemeService.getAllScheme();		//return list of all schemes
 					request.setAttribute("schemeList",schemeList);
 					rd = request.getRequestDispatcher("schemeManagement.jsp");
 					rd.forward(request, response);
