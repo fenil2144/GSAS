@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.gsas.exception.DatabaseException;
+import com.gsas.exception.InvalidSequenceException;
 import com.gsas.exception.SchemeNotFoundException;
 import com.gsas.model.BankVO;
 import com.gsas.model.DocumentVO;
@@ -25,7 +26,7 @@ public class SchemeDaoImpl implements SchemeDao{
 	private Connection connection;
 
 	@Override
-	public void addScheme(SchemeVO scheme) throws DatabaseException {
+	public void addScheme(SchemeVO scheme) throws DatabaseException, InvalidSequenceException {
 		try {
 			connection = DBUtility.getConnection();
 			PreparedStatement sequenceStatement = connection.prepareStatement("values(next value for scheme_seq)");
@@ -35,8 +36,9 @@ public class SchemeDaoImpl implements SchemeDao{
 				seq = rs.getLong(1);
 			} 
 			if(seq == 0) {
-				//Need to throw an error
+				
 				System.out.println("Error in sequence number");
+				throw new InvalidSequenceException();
 			}
 
 //			

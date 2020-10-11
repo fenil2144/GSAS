@@ -11,6 +11,8 @@ import java.util.List;
 import com.gsas.exception.AuthenticationException;
 import com.gsas.exception.CitizenNotFoundException;
 import com.gsas.exception.DatabaseException;
+import com.gsas.exception.DuplicateUserException;
+import com.gsas.exception.InvalidSequenceException;
 import com.gsas.exception.SchemeNotFoundException;
 import com.gsas.model.AddressVO;
 import com.gsas.model.CitizenDetailsVO;
@@ -25,7 +27,7 @@ public class CitizenDaoImpl implements CitizenDao {
 	private Connection connection;
 
 @Override
-	public void registerCitizen(CitizenDetailsVO citizenDetailsVO) {
+	public void registerCitizen(CitizenDetailsVO citizenDetailsVO) throws DatabaseException, InvalidSequenceException {
 		try {
 			connection = DBUtility.getConnection();
 			PreparedStatement sequenceStatement = connection.prepareStatement("values(next value for citizen_seq)");
@@ -35,8 +37,8 @@ public class CitizenDaoImpl implements CitizenDao {
 				seq = rs.getLong(1);
 			} 
 			if(seq == 0) {
-				//Need to throw an error
 				System.out.println("Error in sequence number");
+				throw new InvalidSequenceException();
 			}
 			//citizen_credential
 			PreparedStatement preparedStatement = connection.prepareStatement("insert into login_credential values(?,?,?,?)");
@@ -78,6 +80,7 @@ public class CitizenDaoImpl implements CitizenDao {
 			
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
+			throw new DatabaseException(e.getMessage());
 		}
 }
 	@Override
@@ -289,6 +292,34 @@ public class CitizenDaoImpl implements CitizenDao {
 			throw new DatabaseException(e.getMessage());
 		}
 		return appliedSchemeList;
+	}
+	@Override
+	public boolean isCitizenUnique(CitizenDetailsVO citizenDetailsVO) throws DatabaseException {
+		boolean isUnique = true;
+		
+		try {
+			Connection connection = DBUtility.getConnection();
+			
+			PreparedStatement selectStatement = connection.prepareStatement("SELECT * FROM citizen_master c INNER JOIN login_credential l ON c.citizen_ref = l.user_name WHERE user_name = ? OR aadhar_number = ? OR pancard_number= ?");
+					
+			selectStatement.setString(1, citizenDetailsVO.getLoginVO().getUserName());
+			selectStatement.setLong(2, citizenDetailsVO.getAdharNumber());
+			selectStatement.setString(3, citizenDetailsVO.getPancardNumber());
+			
+			ResultSet resultSet = selectStatement.executeQuery();
+			if(resultSet.next()) {
+				isUnique = false;
+			}
+			
+			resultSet.close();
+			selectStatement.close();
+			connection.close();
+
+		} catch(SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+			throw new DatabaseException(e.getMessage());
+		}
+		return isUnique;
 	}
 
 

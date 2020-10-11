@@ -21,22 +21,20 @@ import com.gsas.utility.LayerType;
 import com.gsas.utility.ObjectFactory;
 
 /**
- * Servlet implementation class EditCitizenDetailsServlet
+ * Servlet implementation class AddCitizenServlet
  */
-@WebServlet("/EditCitizenDetailsServlet")
-public class EditCitizenDetailsServlet extends HttpServlet {
+@WebServlet("/AddCitizenServlet")
+public class AddCitizenServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+       
 
-    public EditCitizenDetailsServlet() {
+    public AddCitizenServlet() {
         super();
     }
 
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		CitizenService citizenService = (CitizenService) ObjectFactory.getInstance(LayerType.CITIZEN_SERVICE);
 		CommonService commonService = (CommonService) ObjectFactory.getInstance(LayerType.COMMON_SERVICE);
-
 		RequestDispatcher requestDispatcher = null;
 		HttpSession session = request.getSession();
 		LoginVO loginVO = (LoginVO) session.getAttribute("loginVO");
@@ -44,12 +42,8 @@ public class EditCitizenDetailsServlet extends HttpServlet {
 			try {
 				if(loginVO != null) {		//Citizen must be Logged In in order to perform Edit Operation
 					if(loginVO.isEmployee() == false) {	
-						CitizenDetailsVO citizenDetailsVO = citizenService.getCitizenDetails(loginVO.getLoginId());
-						request.setAttribute("citizenDetailsVO", citizenDetailsVO);
-						request.setAttribute("incomeGroupList",commonService.getAllIncomeGroups());
-						request.setAttribute("professionList",commonService.getAllProfessions());
 						
-						requestDispatcher = request.getRequestDispatcher("editCitizenDetails.jsp");
+						requestDispatcher = request.getRequestDispatcher("viewSchemesCitizenServlet");
 						requestDispatcher.forward(request, response);
 					}
 					else {													//If employee is logged in
@@ -58,17 +52,21 @@ public class EditCitizenDetailsServlet extends HttpServlet {
 					}
 				}
 				else {
-					request.setAttribute("err","Please Login First");
-					requestDispatcher = request.getRequestDispatcher("citizenLogin.jsp");
+					request.setAttribute("incomeGroupList",commonService.getAllIncomeGroups());
+					request.setAttribute("professionList",commonService.getAllProfessions());
+					
+					
+					requestDispatcher = request.getRequestDispatcher("registerCitizen.jsp");
 					requestDispatcher.forward(request, response);
 				}
 				
-			} catch (CitizenNotFoundException | DataNotFoundException | DatabaseException e) {
+			} catch (DataNotFoundException | DatabaseException e) {
+				e.printStackTrace();
 				requestDispatcher = request.getRequestDispatcher("citizenLogin.jsp");
 				request.setAttribute("err", e.getMessage());
 				requestDispatcher.forward(request, response);
 			} 
-		
 	}
+
 
 }

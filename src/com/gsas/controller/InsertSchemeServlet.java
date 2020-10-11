@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.gsas.exception.DatabaseException;
+import com.gsas.exception.InvalidSequenceException;
 import com.gsas.model.IncomeGroupVO;
 import com.gsas.model.LoginVO;
 import com.gsas.model.MinistryVO;
@@ -88,7 +89,7 @@ public class InsertSchemeServlet extends HttpServlet {
 				rd.forward(request, response);
 			}
 			
-		} catch (DatabaseException e) {
+		} catch (DatabaseException | InvalidSequenceException e) {
 			rd = request.getRequestDispatcher("AddSchemeServlet");
 			request.setAttribute("err", e.getMessage());
 			rd.forward(request, response);

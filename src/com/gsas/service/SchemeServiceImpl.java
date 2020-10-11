@@ -3,14 +3,17 @@ package com.gsas.service;
 import java.time.LocalDate;
 import java.util.List;
 
-
+import com.gsas.dao.CommonDao;
 import com.gsas.dao.SchemeDao;
+import com.gsas.exception.DataNotFoundException;
 import com.gsas.exception.DatabaseException;
+import com.gsas.exception.InvalidSequenceException;
 import com.gsas.exception.SchemeNotFoundException;
 import com.gsas.model.BankVO;
 import com.gsas.model.CitizenDetailsVO;
 import com.gsas.model.DocumentVO;
-import com.gsas.model.SchemeApplicantDocumentsVO;
+import com.gsas.model.IncomeGroupVO;
+import com.gsas.model.ProfessionVO;
 import com.gsas.model.SchemeApplicantVO;
 import com.gsas.model.SchemeEligibilityVO;
 import com.gsas.model.SchemeVO;
@@ -19,14 +22,16 @@ import com.gsas.utility.ObjectFactory;
 
 public class SchemeServiceImpl implements SchemeService {
 	private SchemeDao schemeDao = null;
+	private CommonDao commonDao = null;
 	
 	public SchemeServiceImpl() {
 		schemeDao = (SchemeDao) ObjectFactory.getInstance(LayerType.SCHEME_DAO);
+		commonDao = (CommonDao) ObjectFactory.getInstance(LayerType.COMMON_DAO);
 		
 	}
 
 	@Override
-	public void addScheme(SchemeVO scheme) throws DatabaseException {
+	public void addScheme(SchemeVO scheme) throws DatabaseException, InvalidSequenceException {
 		schemeDao.addScheme(scheme);
 
 	}
@@ -68,7 +73,7 @@ public class SchemeServiceImpl implements SchemeService {
 	}
 	
 	@Override
-	public String validate(SchemeEligibilityVO schemeEligibilityVO, CitizenDetailsVO citizenDetailsVO){
+	public String validate(SchemeEligibilityVO schemeEligibilityVO, CitizenDetailsVO citizenDetailsVO) throws DataNotFoundException, DatabaseException{
 
 	//Age Validation
 	//Getting the age of citizen
@@ -82,17 +87,43 @@ public class SchemeServiceImpl implements SchemeService {
 		return "Age criteria is not satisfied";
 	}
 	//Income Group Validation
-	if(schemeEligibilityVO.getIncomeGroupVO().getIncomeGroupId() != citizenDetailsVO.getIncomeGroup().getIncomeGroupId()) {
-		return "Income Group not matched";
+	List<IncomeGroupVO> incomeGroupList = commonDao.getAllIncomeGroups();
+	String incomeGroupName  = null;
+	for(IncomeGroupVO incomeGroupVO : incomeGroupList) {
+		if(incomeGroupVO.getIncomeGroupId() == schemeEligibilityVO.getIncomeGroupVO().getIncomeGroupId()) {
+			incomeGroupName = incomeGroupVO.getIncomeGroupName();
+		}
+	}
+	if(incomeGroupName.equalsIgnoreCase("Any")) {
+		
+	}
+	else {
+		
+		if(schemeEligibilityVO.getIncomeGroupVO().getIncomeGroupId() != citizenDetailsVO.getIncomeGroup().getIncomeGroupId()) {
+			return "Income Group not matched";
+		}
 	}
 	//Gender Validation
 	if(schemeEligibilityVO.getGender() != citizenDetailsVO.getGender()) {
 		return "Scheme eligible only for "+schemeEligibilityVO.getGender()+" , you can't apply";
 	}
 	//Profession Validation
-	if(schemeEligibilityVO.getProfessionVO().getProfessionId() != citizenDetailsVO.getProfession().getProfessionId()) {
-		return "Profession not matched";
+	List<ProfessionVO> professionList = commonDao.getAllProfessions();
+	String professionName  = null;
+	for(ProfessionVO professionVO : professionList) {
+		if(professionVO.getProfessionId() == schemeEligibilityVO.getProfessionVO().getProfessionId()) {
+			professionName = professionVO.getProfessionName();
+		}
 	}
+	if(professionName.equalsIgnoreCase("Any")) {
+		
+	}
+	else {
+		if(schemeEligibilityVO.getProfessionVO().getProfessionId() != citizenDetailsVO.getProfession().getProfessionId()) {
+			return "Profession not matched";
+		}
+	}
+
 	return "All criteria validated successfully";
 	}
 
