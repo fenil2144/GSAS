@@ -60,16 +60,21 @@
                     <div class="row">
 				
 				
-				<input type="hidden" name="schemeId" value="${schemeApplicantVO.schemeVO.schemeId }">
+				<input type="hidden" name="schemeId" value="${schemeVO.schemeId}">
+				${schemeVO.schemeId}
 					<div class="column">
 						<div class="card">
 							
-							<h2>${schemeApplicantVO.schemeVO.schemeName } </h2>
-							<img src="${schemeApplicantVO.schemeVO.imagePath }" class=".cardImage">
-							<p>${schemeApplicantVO.schemeVO.summary }</p>
+							<h2>${schemeVO.schemeName} </h2>
+							<img src="${schemeVO.imagePath}" class=".cardImage">
+							<p>${schemeVO.summary}</p>
 							<p>
-								${schemeApplicantVO.reason }
+								${schemeVO.description}
 							</p>
+							<p>
+								${schemeVO.startDate}
+							</p>
+							
 
 						</div>
 						</div>
@@ -77,23 +82,22 @@
 					</div>   
 					<form method="POST" action="ApplySchemeDocumentServlet">                
 					 <div class="col1">
-                        <label for="bank">Choose a bank:</label>
-
-                        <select name="bank" id="bank">
-                        	<option value="select" id="select">Select</option>
-                            <option value="hsbc">HSBC</option>
-                            <option value="icic">ICICI</option>
-                            <option value="hdfc">HDFC</option>
-                        </select>
-                    </div>
+						<label for="bank">Choose a bank:</label> <select
+							name="bank">
+							<option value="">Select</option>
+							<c:forEach items="${schemeVO.bankList}" var="bank">
+							${bank.bankId}
+							${bank.bankName}
+								<option value="${bank.bankId}">${bank.bankName}</option>
+							</c:forEach>
+						</select>
+					</div>
                     
                     <div class="col1">
                         <input type="number" name="accountNumber" id="accountNumber" placeholder="Enter Account Number" required><br>
                     </div>
                     
-                    <div class="col1">
-                        <input type="text" name="bankName" id="bankName" placeholder="Enter Bank" required><br>
-                    </div>
+                   
                     
                     <div class="col1">
                         <input type="text" name="typeOfAccount" id="typeOfAccount" placeholder="Enter Type of Account" required><br>
@@ -106,9 +110,14 @@
                      <div class="col1">
                         <input type="text" name="ifsc" id="ifsc" placeholder="Enter IFSC Code" required><br>
                     </div>
-                     <div class="col1"> 
-                        Upload supporting documents <input type="file" id="files" name="files" multiple >
-                    </div>
+                    <div class="col1">
+						<label for="documents">Upload documents:</label><br> 
+							<c:forEach items="${schemeVO.documentList}" var="documents">
+								<label for="${documents.documentId}">${documents.documentName}</label>
+								<input type="file" name="${documents.documentId}" id="${documents.documentId}">
+							</c:forEach>
+						
+					</div>
                     
                     <div class="col1">
                         <button type="submit" id="submit" > Save </button>

@@ -259,10 +259,10 @@ public class CitizenDaoImpl implements CitizenDao {
 		try {
 			Connection connection = DBUtility.getConnection();
 			
-			PreparedStatement selectStatement = connection.prepareStatement("SELECT scheme_id,scheme_name,summary,description,image_path,approved_status,reason FROM scheme_master s INNER JOIN scheme_applicant a ON s.scheme_id = a.scheme_ref WHERE citizen_ref = ? AND approved_status = ? and status = ?");
+			PreparedStatement selectStatement = connection.prepareStatement("SELECT scheme_id,scheme_name,summary,description,image_path,approved_status,reason FROM scheme_master s INNER JOIN scheme_applicant a ON s.scheme_id = a.scheme_ref WHERE citizen_ref = ? AND approved_status = false and status = true");
 			selectStatement.setLong(1, citizenId);
-			selectStatement.setBoolean(2, approvedStatus);
-			selectStatement.setBoolean(3, true);
+//			selectStatement.setBoolean(2, approvedStatus);
+//			selectStatement.setBoolean(3, true);
 			
 			ResultSet resultSet = selectStatement.executeQuery();
 			while(resultSet.next()) {

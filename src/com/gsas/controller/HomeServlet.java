@@ -9,11 +9,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import com.gsas.exception.DatabaseException;
 import com.gsas.exception.SchemeNotFoundException;
-import com.gsas.model.LoginVO;
 import com.gsas.model.SchemeVO;
 import com.gsas.service.SchemeService;
 import com.gsas.utility.LayerType;

@@ -47,7 +47,7 @@
 
 	<div class="main">
 		<div class="main1">
-			<form method="POST" action="InsertSchemeServlet">
+			<form method="POST" action="InsertSchemeServlet" enctype="multipart/form-data">
 				<div class="col1">
 					<label class="required-field">Enter scheme name</label> <input type="text"
 						name="schemeName" id="schemeName" placeholder="Enter scheme name"
@@ -68,11 +68,13 @@
 
 				</div>
 				<div class="col1">
-					<label for="ministry" class="required-field">Choose a ministry:</label> <select
-						name="ministry" id="ministry" required>
-						<option value="select" id="select">Select</option>
+					<label for="ministry" class="required-field">Choose a ministry:</label> 
+					<select name="ministry" id="ministry" required>
+						<option value="select" >Select</option>
 						<c:forEach items="${ministryList}" var="ministry">
 							<option value="${ministry.ministryId}">${ministry.ministryName}</option>
+							${ministry.ministryId}
+							${ministry.ministryName}
 						</c:forEach>
 					</select>
 				</div>
