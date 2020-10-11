@@ -95,7 +95,7 @@ public class EditSchemeServlet extends HttpServlet {
 				rd.forward(request, response);
 			}
 		}catch(DatabaseException | DataNotFoundException | SchemeNotFoundException e) {
-			rd = request.getRequestDispatcher("viewAllSchemes.jsp");
+			rd = request.getRequestDispatcher("schemeManagement.jsp");
 			e.printStackTrace();
 			request.setAttribute("err", e.getMessage());
 			rd.forward(request, response);

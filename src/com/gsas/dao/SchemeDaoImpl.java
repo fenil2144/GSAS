@@ -230,6 +230,7 @@ public class SchemeDaoImpl implements SchemeDao{
 					bankVO = new BankVO();
 					bankVO.setBankId(getSchemeResultset.getLong("bank_id"));
 					bankVO.setBankName(getSchemeResultset.getString("bank_name"));
+					System.out.println(bankVO.toString());
 					bankList.add(bankVO);
 				}
 				schemeVO.setBankList(bankList);
