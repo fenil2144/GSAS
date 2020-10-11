@@ -37,10 +37,10 @@
                 <h2> Menu </h2>
             </div>
             <div class="content" id="first">
-                <a href="index.jsp">Logout</a>
+                <a href="LogoutServlet">Logout</a>
             </div>
             <div class="content">
-             <a href="schemeManagementPage.jsp">Add more Schemes</a>
+             <a href="viewSchemesEmployeeServlet">Add more Schemes</a>
             </div>
             
      </div>
@@ -48,21 +48,21 @@
         <div class="main">
 		<div class="main1">
 			<form method="POST" action="UpdateSchemeServlet">
-			<input type="hidden" name="schemeId" id="schemeId" value="${SchemeVO.schemeId }">
+			<input type="hidden" name="schemeId" id="schemeId" value="${schemeVO.schemeId}">
 				<div class="col1">
 					<label class="required-field">Enter scheme name</label> <input type="text"
-						name="schemeName" id="schemeName" placeholder="Enter scheme name" value="${SchemeVO.schemeName }"
-						required>
+						name="schemeName" id="schemeName" value="${schemeVO.schemeName}" placeholder="Enter scheme name" required>
+						<p>${schemeVO.schemeName}</p>
 				</div>
 				<div class="col1">
 					<label class="required-field"> Summary of the scheme </label><textarea rows="4" cols="30"
-							id="summary" name="summary" required>Enter your summary..</textarea>
+							id="summary" name="summary" required>${schemeVO.summary}</textarea>
 					
 
 				</div>
 				<div class="col1">
 					<label class="required-field">Description of the scheme </label><textarea rows="4"
-							cols="50" id="description" name="descritption"  required>Enter your description..</textarea>
+							cols="50" id="description" name="descritption"  required>${schemeVO.description}</textarea>
 				</div>
 				<div class="col1">
 					<label class="required-field">Upload Image </label><input type="file" id="image" name="image" value="${SchemeVO.imagePath }" required>
@@ -87,18 +87,18 @@
 				</div>
 				<div class="col1">
 					<label for="startDate" class="required-field">Enter start date</label> <input type="text"
-						name="startDate" id="startDate" value="${SchemeVO.startDate }" placeholder="Enter date in format(YYYY-MM-DD)" required><br>
+						name="startDate" id="startDate" value="${schemeVO.startDate}" placeholder="Enter date in format(YYYY-MM-DD)" required><br>
 
 				</div>
 				<div class="col1">Select eligibility criteria</div>
 				<div class="section">
 					<div class="eligibilityCol">
 						<label>Enter minimum age</label> <input type="number"
-							name="minAge" id="minAge" placeholder="Enter min age" value="${SchemeEligibilityVO.minAge }"><br>
+							name="minAge" id="minAge" placeholder="Enter min age" value="${schemeVO.schemeEligibilityVO.minAge }"><br>
 					</div>
 					<div class="eligibilityCol">
 						<label>Enter maximum age</label> <input type="number"
-							name="maxAge" id="maxAge" placeholder="Enter max age" value="${SchemeEligibilityVO.maxAge }"><br>
+							name="maxAge" id="maxAge" placeholder="Enter max age" value="${schemeVO.schemeEligibilityVO.maxAge }"><br>
 					</div>
 
 					<div class="col1">
@@ -116,11 +116,11 @@
 					</div>
 					<div class="genderCol">
 
-						<input type="radio" id="male" name="gender" value="${SchemeEligibilityVO.gender }">
+						<input type="radio" id="male" name="gender" value="${schemeVO.schemeEligibilityVO.gender }">
 						<label for="male"> Male</label><br> <input type="radio"
-							id="female" name="gender"  value="${SchemeEligibilityVO.gender }"> <label
+							id="female" name="gender"  value="${schemeVO.schemeEligibilityVO.gender }"> <label
 							for="female"> Female</label><br> <input type="radio"
-							id="other" name="gender"  value="${SchemeEligibilityVO.gender }"> <label
+							id="other" name="gender"  value="${schemeVO.schemeEligibilityVO.gender }"> <label
 							for="other"> Other</label><br>
 
 
@@ -181,7 +181,7 @@
  
 
         <div class="footer">
-            <h2>Footer</h2>
+            <p>Coordinated by: Team Agastya</p>
         </div>
     
     </body>

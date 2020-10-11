@@ -10,12 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.gsas.exception.CitizenNotFoundException;
 import com.gsas.exception.DataNotFoundException;
 import com.gsas.exception.DatabaseException;
-import com.gsas.model.CitizenDetailsVO;
 import com.gsas.model.LoginVO;
-import com.gsas.service.CitizenService;
 import com.gsas.service.CommonService;
 import com.gsas.utility.LayerType;
 import com.gsas.utility.ObjectFactory;

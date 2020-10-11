@@ -75,9 +75,9 @@ public class CitizenRegistrationServlet extends HttpServlet {
 			request.setAttribute("message", "Citizen Registered Successfully with User Name: "+loginVO.getUserName());
 			requestDispatcher = request.getRequestDispatcher("citizenLogin.jsp");
 			}
-			else {
-				request.setAttribute("err", "Citizen Registered Successfully with User Name: "+loginVO.getUserName());
-			}
+			/*else {
+				request.setAttribute("err", "Citizen cannot be registered with User Name: "+loginVO.getUserName());
+			}*/
 				
 		} catch (DatabaseException | InvalidSequenceException | DuplicateUserException e) {
 			request.setAttribute("err", e.getMessage());

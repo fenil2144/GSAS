@@ -26,24 +26,33 @@
 		<div class="heading">
 			<h2>Menu</h2>
 		</div>
-		<div class="content" id="first">
-			<a href="employeeLogin.jsp">Employee Login</a>
+		<div class="content">
+			<a href="index.jsp">Home Page</a>
 		</div>
 		<div class="content">
 			<a href="citizenLogin.jsp">Citizen Login</a>
 		</div>
 		<div class="content">
-			<a href="registerCitizen.jsp">Citizen Register</a>
+			<a href=AddCitizenServlet>Citizen Register</a>
 		</div>
 
 	</div>
 
 	<div class="main">
+		<div class="message">
 		<c:if test="${message != null}">
-			<p>
+			<h3>
 				<c:out value="${message}" />
-			<p>
+			</h3>
 		</c:if>
+		</div>
+		<div class="error">
+		<c:if test="${err != null}">
+			<h3>
+				<c:out value="${err}" />
+			</h3>
+		</c:if>
+		</div>
 		<div class="main1">
 			<form method="post" action="EmployeeLoginServlet">
 				<div class="col1">
@@ -68,7 +77,7 @@
 
 
 
-	<div class="footer">
+	<div class="footerOther">
 		<p>Coordinated by: Team Agastya</p>
 	</div>
 
