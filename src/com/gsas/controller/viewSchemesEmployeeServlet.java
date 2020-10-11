@@ -59,7 +59,7 @@ public class viewSchemesEmployeeServlet extends HttpServlet {
 				rd.forward(request, response);
 			}
 		}catch(SchemeNotFoundException | DatabaseException e) {
-			rd = request.getRequestDispatcher("viewAllSchemes.jsp");
+			rd = request.getRequestDispatcher("schemeManagement.jsp");
 			request.setAttribute("err", e.getMessage());
 			e.printStackTrace();
 			rd.forward(request, response);

@@ -31,10 +31,10 @@
 			<a href="citizenLogin.jsp">Citizen Login</a>
 		</div>
 		<div class="content">
-			<a href="listSchemes.jsp">List Schemes</a>
+			<a href="index.jsp">List Schemes</a>
 		</div>
 		<div class="content">
-			<a href="registerCitizen.jsp">Citizen Register</a>
+			<a href="AddCitizenServlet">Citizen Register</a>
 		</div>
 
 	</div>
@@ -70,7 +70,7 @@
 
 
 
-	<div class="footer">
+	<div class="footerOther">
 		<h2>Footer</h2>
 	</div>
 

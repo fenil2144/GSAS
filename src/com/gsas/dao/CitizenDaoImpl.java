@@ -148,9 +148,9 @@ public class CitizenDaoImpl implements CitizenDao {
 				citizenDetailsVO.setEmail(resultSet.getString("email"));
 				citizenDetailsVO.setPhone(resultSet.getLong("phone"));
 				citizenDetailsVO.setAddressVO(addressVO);
-				citizenDetailsVO.setIncomeGroup(new IncomeGroupVO(resultSet.getLong("income_group_ref ")));
-				citizenDetailsVO.setProfession(new ProfessionVO(resultSet.getLong("profession_ref ")));
-				citizenDetailsVO.setAdharNumber(resultSet.getLong("adhar_number"));
+				citizenDetailsVO.setIncomeGroup(new IncomeGroupVO(resultSet.getLong("income_group_ref")));
+				citizenDetailsVO.setProfession(new ProfessionVO(resultSet.getLong("profession_ref")));
+				citizenDetailsVO.setAdharNumber(resultSet.getLong("aadhar_number"));
 				citizenDetailsVO.setPancardNumber(resultSet.getString("pancard_number"));
 				citizenDetailsVO.setLoginVO(loginVO);
 				
@@ -301,7 +301,7 @@ public class CitizenDaoImpl implements CitizenDao {
 		try {
 			Connection connection = DBUtility.getConnection();
 			
-			PreparedStatement selectStatement = connection.prepareStatement("SELECT * FROM citizen_master c INNER JOIN login_credential l ON c.citizen_ref = l.user_name WHERE user_name = ? OR aadhar_number = ? OR pancard_number= ?");
+			PreparedStatement selectStatement = connection.prepareStatement("SELECT * FROM citizen_master c INNER JOIN login_credential l ON c.citizen_ref = l.login_id WHERE user_name = ? OR aadhar_number = ? OR pancard_number= ?");
 					
 			selectStatement.setString(1, citizenDetailsVO.getLoginVO().getUserName());
 			selectStatement.setLong(2, citizenDetailsVO.getAdharNumber());

@@ -55,7 +55,7 @@ public class EmployeeLoginServlet extends HttpServlet {
 			
 		} catch (AuthenticationException | DatabaseException e) {
 			e.printStackTrace();
-			rd = request.getRequestDispatcher("loginFailure.jsp");
+			rd = request.getRequestDispatcher("employeeLogin.jsp");
 			request.setAttribute("err", e.getMessage());
 			rd.forward(request, response);
 		}

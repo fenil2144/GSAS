@@ -9,9 +9,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.gsas.exception.DatabaseException;
 import com.gsas.exception.SchemeNotFoundException;
+import com.gsas.model.LoginVO;
 import com.gsas.model.SchemeVO;
 import com.gsas.service.SchemeService;
 import com.gsas.utility.LayerType;
@@ -22,7 +24,7 @@ import com.gsas.utility.ObjectFactory;
  */
 @WebServlet("/HomeServlet")
 public class HomeServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -32,31 +34,31 @@ public class HomeServlet extends HttpServlet {
     }
 
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		SchemeService schemeService = (SchemeService) ObjectFactory.getInstance(LayerType.SCHEME_SERVICE);
-		RequestDispatcher rd = null;
-		List<SchemeVO> schemeList = null;
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        SchemeService schemeService = (SchemeService) ObjectFactory.getInstance(LayerType.SCHEME_SERVICE);
+        RequestDispatcher rd = null;
+        List<SchemeVO> schemeList = null;
 
 
-		
-		try {
-				schemeList = schemeService.getAllScheme();		//return list of all schemes
-				request.setAttribute("schemeList",schemeList);
-				rd = request.getRequestDispatcher("home.jsp");
-				rd.forward(request, response);
-															
-				
-		}catch(SchemeNotFoundException | DatabaseException e) {
-			rd = request.getRequestDispatcher("home.jsp");
-			request.setAttribute("err", e.getMessage());
-			e.printStackTrace();
-			rd.forward(request, response);
-		}
-	}
+        
+        try {
+                schemeList = schemeService.getAllScheme();      //return list of all schemes
+                request.setAttribute("schemeList",schemeList);
+                rd = request.getRequestDispatcher("home.jsp");
+                rd.forward(request, response);
+                                                            
+                
+        }catch(SchemeNotFoundException | DatabaseException e) {
+            rd = request.getRequestDispatcher("home.jsp");
+            request.setAttribute("err", e.getMessage());
+            e.printStackTrace();
+            rd.forward(request, response);
+        }
+    }
 
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
-	}
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request, response);
+    }
 
 }

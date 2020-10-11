@@ -37,7 +37,7 @@
 			<h2>Menu</h2>
 		</div>
 		<div class="content" id="first">
-			<a href="index.jsp">Logout</a>
+			<a href="LogoutServlet">Logout</a>
 		</div>
 		<div class="content">
 			<a href="viewSchemesEmployeeServlet">Add more Schemes</a>
@@ -70,6 +70,7 @@
 				<div class="col1">
 					<label for="ministry" class="required-field">Choose a ministry:</label> <select
 						name="ministry" id="ministry" required>
+						<option value="select" id="select">Select</option>
 						<c:forEach items="${ministryList}" var="ministry">
 							<option value="${ministry.ministryId}">${ministry.ministryName}</option>
 						</c:forEach>
@@ -77,6 +78,7 @@
 				</div>
 				<div class="col1">
 					<label for="sector" class="required-field">Choose a sector:</label> <select name="sector" id="sector" required>
+						<option value="select" id="select">Select</option>
 						<c:forEach items="${sectorList}" var="sector">
 							<option value="${sector.sectorId}">${sector.sectorName}</option>
 						</c:forEach>
@@ -101,6 +103,7 @@
 					<div class="col1">
 						<label for="profession">Choose a profession:</label> <select
 							name="profession">
+							<option value="select" id="select">Select</option>
 							<c:forEach items="${professionList}" var="profession">
 								<option value="${profession.professionId}">${profession.professionName}</option>
 							</c:forEach>
@@ -124,6 +127,7 @@
 					<div class="col1">
 						<label for="incomeGroup">Choose a income group:</label> <select
 							name="incomeGroup">
+							<option value="select" id="select">Select</option>
 							<c:forEach items="${incomeGroupList}" var="incomeGroup">
 								<option value="${incomeGroup.incomeGroupId}">${incomeGroup.incomeGroupName}</option>
 							</c:forEach>
@@ -183,7 +187,7 @@
 
 
 	<div class="footer">
-		<h2>Footer</h2>
+		<p>Coordinated by: Team Agastya</p>
 	</div>
 
 

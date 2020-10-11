@@ -9,6 +9,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="css\common.css" rel="stylesheet">
 <link href="css\form.css" rel="stylesheet">
+<style>
+.main1 {
+	width: 600px;
+	height: auto;
+	border: 1px solid red;
+	padding: 20px;
+	text-align: center;
+	align-self: center;
+}
+</style>
 </head>
 <body>
 	<script src="JS\navigation.js">
@@ -26,7 +36,7 @@
 			<h2>Menu</h2>
 		</div>
 		<div class="content" id="first">
-			<a href="index.jsp">Logout</a>
+			<a href="LogoutServlet">Logout</a>
 		</div>
 
 	</div>
@@ -34,50 +44,40 @@
 	<div class="main">
 		<div class="main1">
 			<div class="row">
-				<form method="post" action="EditSchemeServlet">
-					<c:forEach items="${schemeList}" var="scheme">
-						<input type="hidden" name="schemeId" value="${scheme.schemeId }" id="schemeId">
-						<p>${scheme.schemeId }</p>
-						<div class="column">
-							<div class="card">
+				<!--  <form method="post" action="EditSchemeServlet">-->
+				<c:forEach items="${schemeList}" var="scheme">
+					<input type="hidden" name="schemeId" value="${scheme.schemeId}"
+						id="schemeId">
+					<div class="column">
+						<div class="card">
 
-								<h2>${scheme.schemeName }</h2>
-								<img src="${scheme.imagePath }" class=".cardImage">
-								<p>${scheme.summary }</p>
-								<p>
-									<button type="submit" id="${scheme.schemeId }">Edit
+							<h2>${scheme.schemeName }</h2>
+							<img src="${scheme.imagePath }" class=".cardImage">
+							<p>${scheme.summary }</p>
+							<p>
+								<c:url value="GSAS/EditSchemeServlet" var="editURL">
+									<c:param name="schemeId" value="${scheme.schemeId}" />
+									
+								</c:url>
+								
+								<a href="/<c:out value="${editURL}"/>">
+									<button type="submit" id="${scheme.schemeId}">Edit
 										Scheme</button>
-								</p>
+								</a>
+								
+							</p>
 
 
-							</div>
+
 						</div>
-					</c:forEach>
-				</form>
+					</div>
+				</c:forEach>
+				<!--  </form>-->
 
 			</div>
 		</div>
 
-		<!-- <form method="post" action="EditSchemeServlet">
-            
-            	<c:forEach items="${schemeList}" var="scheme">
-            	<input type="hidden" name="schemeId" value="${scheme.schemeId }">
-					<div class="column">
-						<div class="card">
-							
-							<h2>${scheme.schemeName } </h2>
-							<img src="${scheme.imagePath }" class=".cardImage">
-							<p>${scheme.summary }</p>
-							<p>
-								<button type="submit" id="${scheme.schemeId }">Edit Scheme</button>
-							</p>
 
-						</div>
-						</div>
-							</c:forEach>
-                </form>
-                
-            </div>-->
 		<div class="add">
 
 			<form method="post" action="AddSchemeServlet">
@@ -97,7 +97,7 @@
 
 
 	<div class="footer">
-		<h2>Footer</h2>
+		<p>Coordinated by: Team Agastya</p>
 	</div>
 
 </body>
