@@ -17,16 +17,16 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		LoginVO loginVO = null;
 		try {
 			Connection connection = DBUtility.getConnection();
-			PreparedStatement fetchStatement = connection.prepareStatement("select * from loginVO where username = ? and password = ? where is_employee=?");
+			PreparedStatement fetchStatement = connection.prepareStatement("select * from login_credential where user_name = ? and password = ? and is_employee=true");
 			fetchStatement.setString(1, userName);
 			fetchStatement.setString(2, password);
-			fetchStatement.setBoolean(3, true);
+			
 			
 			ResultSet resultSet = fetchStatement.executeQuery();
 			if(resultSet.next()) {
 				loginVO = new LoginVO();
 				loginVO.setLoginId(resultSet.getLong("login_id"));
-				loginVO.setUserName(resultSet.getString("username"));
+				loginVO.setUserName(resultSet.getString("user_name"));
 				loginVO.setPassword(resultSet.getString("password"));
 				loginVO.setEmployee(resultSet.getBoolean("is_employee"));
 			}
@@ -37,6 +37,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 				throw new AuthenticationException("Sorry username or Password is Incorrect");
 			} 
 		} catch(SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
 			throw new DatabaseException("Something Went Wrong");
 		}
 		return loginVO;

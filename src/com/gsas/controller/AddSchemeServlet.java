@@ -72,7 +72,7 @@ public class AddSchemeServlet extends HttpServlet {
 					request.setAttribute("bankList", bankList);
 					
 					
-					rd = request.getRequestDispatcher("AddScheme.jsp");
+					rd = request.getRequestDispatcher("addScheme.jsp");
 					rd.forward(request, response);
 				}
 				else {													//If user is already logged in
@@ -91,6 +91,15 @@ public class AddSchemeServlet extends HttpServlet {
 			rd.forward(request, response);
 		} 
 	}
+
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(req, resp);
+	}
+	
+	
 
 
 

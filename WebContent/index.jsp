@@ -25,9 +25,6 @@
              <a href="citizenLogin.jsp">Citizen Login</a>
             </div>
             <div class="content">
-            <a href="listSchemes.jsp">List Schemes</a>
-            </div>
-            <div class="content">
             <a href="registerCitizen.jsp">Citizen Register</a>
             </div>
             
@@ -49,7 +46,8 @@
             </div>
 
         <div class="footer">
-            <h2>Footer</h2>
+            <p> Coordinated by: Team Agastya
+            </p>
         </div>
         
     

@@ -41,7 +41,7 @@ public class ApplySchemeServlet extends HttpServlet {
 		CitizenService citizenService = (CitizenService) ObjectFactory.getInstance(LayerType.CITIZEN_SERVICE);
 		HttpSession session = request.getSession();
 		RequestDispatcher requestDispatcher = null;
-		LoginVO loginVO = (LoginVO) session.getAttribute("citizenVO");
+		LoginVO loginVO = (LoginVO) session.getAttribute("loginVO");
 		try {
 
 			if(loginVO != null) {
@@ -50,7 +50,7 @@ public class ApplySchemeServlet extends HttpServlet {
 					SchemeApplicantVO schemeApplicant = new SchemeApplicantVO();
 					SchemeVO schemeVO = schemeService.getSchemeDetails(Long.parseLong(request.getParameter("schemeId"))); // get scheme from schemeID
 					SchemeEligibilityVO schemeEligibilityVO = schemeVO.getSchemeEligibilityVO(); //get Eligibility of that scheme
-					CitizenDetailsVO citizenDetails = citizenService.getCitizenDetails(loginVO.getLoginId()); //get citizenDetails from citizenId						
+					CitizenDetailsVO citizenDetails = citizenService.getCitizenDetails(loginVO.getLoginId()); //get citizenDetails from citizenId	
 	
 					
 					schemeVO.setBankList(schemeService.getSchemeBankList(Long.getLong(request.getParameter("schemeId"))));
@@ -82,7 +82,7 @@ public class ApplySchemeServlet extends HttpServlet {
 						schemeApplicant.setApprovedStatus(false);
 						schemeService.addRejectedSchemeApplicant(schemeApplicant);
 					}
-					requestDispatcher = request.getRequestDispatcher("viewSchemesCitizenServlet");
+					requestDispatcher = request.getRequestDispatcher("applyScheme.jsp");
 					request.setAttribute("err",schemeApplicant.getReason());
 					requestDispatcher.forward(request, response);
 				}else {													//If employee is already logged in
@@ -98,6 +98,7 @@ public class ApplySchemeServlet extends HttpServlet {
 			
 			}
 		} catch (DatabaseException | SchemeNotFoundException | NumberFormatException | CitizenNotFoundException e) {
+			e.printStackTrace();
 			requestDispatcher = request.getRequestDispatcher("viewSchemesCitizenServlet");
 			request.setAttribute("err", e.getMessage());
 			requestDispatcher.forward(request, response);

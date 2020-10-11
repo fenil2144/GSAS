@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,41 +54,40 @@
 
 	<div class="main">
 		<div class="main1">
+			
 			<form method="POST" action="CitizenRegistrationServlet">
-				<div class="col1">
-					<label> Enter your Name<input type="text" name="firstName"
+				<div class="col1" id="name">
+					<label class="required-field"> Enter your Name</label><input type="text" name="firstName"
 						id="firstName" placeholder="First Name" required><input
 						type="text" name="middleName" id="middleName"
 						placeholder="Middle Name"><input type="text"
 						name="lastName" id="lastName" placeholder="Last Name" required>
-					</label>
+					
 				</div>
-				<div class="col1">
-					<label> Username<input type="text"
+				<div class="col1" id="citizenUsername">
+					<label class="required-field"> Enter your username</label><input type="text"
 						name="username" id="username"
-						placeholder="Enter your Username" required><br>
-					</label>
+						placeholder="Enter your username." required><br>
 				</div>
-				<div class="col1">
-					<label> Enter your password<input type="password"
-						name="password" id="citizenPassword"
+				<div class="col1" id="citizenPassword">
+					<label class="required-field"> Enter your password</label><input type="password"
+						name="password" id="password"
 						placeholder="Enter your password." required><br>
-					</label>
+			
 				</div>
-				<div class="col1">
-					<label> Confirm your password<input type="password"
-						name="citizenPassword1" id="citizenPassword1"
+				<div class="col1" id="confirmPassword">
+					<label class="required-field"> Confirm your password</label><input type="password"
+						name="password1" id="password1"
 						placeholder="Enter your password." required><br>
-					</label>
+	
 				</div>
-				<div class="col1">
-					<label> Enter your Date of Birth<input type="text"
+				<div class="col1" id="dob">
+					<label class="required-field"> Enter your Date of Birth</label><input type="text"
 						name="dateOfBirth" id="dateOfBirth"
-						placeholder="Enter your Date of Birth.(YYYY-MM-DD)" required><br>
-					</label>
+						placeholder="Enter your Date of Birth.(YYYY-MMM-DD)" required><br>
 				</div>
 				<div class="col1">
-					<label>Select gender</label>
+					<label class="required-field">Select gender</label>
 
 				</div>
 				<div class="col1" id="col2">
@@ -102,60 +101,60 @@
 
 
 				</div>
-				<div class="col1">
-					<label> Enter your Phone Number<input type="text"
-						name="phone" id="phone"
-						placeholder="Enter your Phone Number." required
-						pattern="[0-9]{10}"><br>
-					</label>
+				<div class="col1" id="phoneNumber">
+					<label class="required-field"> Enter your Phone Number</label><input type="text"
+						name="phone" id="phone" placeholder="Enter your Phone Number."
+						required pattern="[0-9]{10}"><br>
+					
 				</div>
-				<div class="col1">
-					<label> Enter your Email ID<input type="email" name="email"
+				<div class="col1" id="emailId">
+					<label class="required-field"> Enter your Email ID</label><input type="email" name="email"
 						placeholder="Enter your Email ID." required><br>
-					</label>
+
 				</div>
-				<div class="col1">
-					<label> Enter your Address<input type="text" name="street"
+				<div class="col1" id="address">
+					<label class="required-field"> Enter your Address</label><input type="text" name="street"
 						id="street" placeholder="Enter your street" required> <input
 						type="text" name="city" id="city" placeholder="Enter your city"
 						required> <input type="text" name="state" id="state"
 						placeholder="Enter your state" required> <input
-						type="number" name="pincode" id="pincode"
+						type="text" name="pincode" id="pincode"
 						placeholder="Enter your pincode" required pattern="[0-9]{6}">
 
-					</label>
+			
+				</div>
+				<div class="col1" >
+					<label for="profession" class="required-field">Choose a profession:</label> <select
+							name="profession" id="professon" required>
+							<c:forEach items="${profession}" var="profession">
+								<option value="${profession.professionId}">${profession.professionName}</option>
+							</c:forEach>
+						</select>
 				</div>
 				<div class="col1">
-					<label> Enter your Profession<input type="text"
-						name="profession" placeholder="Enter your Profession." required><br>
-					</label>
-				</div>
+						<label for="incomeGroup" class="required-field">Choose a income group:</label> <select
+							name="incomeGroup" required>
+							<c:forEach items="${incomeGroup}" var="incomeGroup">
+								<option value="${incomeGroup.incomeGroupId}">${incomeGroup.incomeGroupName}</option>
+							</c:forEach>
+						</select>
+					</div>
 				<div class="col1">
-				<label for="cars">Choose a income group:</label> 
-				<select name="incomeGroup" id="incomeGroup">
-					<option value="bpl">BPL</option>
-					<option value="lower">Lower</option>
-					<option value="middle">Middle</option>
-					<option value="any">Any</option>
-				</select>
-				</div>
-				<div class="col1">
-					<label> Enter your Aadhar Number<input type="text"
+					<label class="required-field"> Enter your Aadhar Number</label><input type="text"
 						name="adharNumber" id="adharNumber"
 						placeholder="Enter your Aadhar Number." required><br>
-					</label>
+			
 				</div>
 				<div class="col1">
-					<label> Enter your PAN Number<input type="text"
+					<label class="required-field"> Enter your PAN Number</label><input type="text"
 						name="pancardNumber" id="pancardNumber"
 						placeholder="Enter your PAN Number." required
 						pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"><br>
-					</label>
 				</div>
 
 				<div class="col1">
 					<label>
-						<button type="submit" >Submit</button>	<!-- onclick="navigateLogin()" -->
+						<button type="submit">Submit</button>
 					</label>
 				</div>
 
