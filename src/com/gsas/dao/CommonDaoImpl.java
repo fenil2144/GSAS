@@ -134,7 +134,7 @@ public class CommonDaoImpl implements CommonDao {
 			while(resultSet.next()) {
 				incomeGroupVO = new IncomeGroupVO();
 				incomeGroupVO.setIncomeGroupId(resultSet.getLong("income_group_id"));
-				incomeGroupVO.setIncomeGroupName(resultSet.getString("income_group_name "));
+				incomeGroupVO.setIncomeGroupName(resultSet.getString("income_group_name"));
 
 				incomeGroupList.add(incomeGroupVO);
 			}

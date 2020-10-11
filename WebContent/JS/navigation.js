@@ -25,3 +25,10 @@ function navigateLogin() {
 function addScheme() {
     location.replace("addScheme.jsp")
     }
+
+function applyScheme() {
+    location.replace("applyScheme.jsp")
+    }
+function redirectServlet(){
+	
+}

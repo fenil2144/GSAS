@@ -77,7 +77,7 @@ public class EditSchemeServlet extends HttpServlet {
 					bankList = commonService.getAllBanks();
 					request.setAttribute("bankList", bankList);
 					
-					SchemeVO schemeVO = schemeService.getSchemeDetails(Long.parseLong(request.getParameter("scheme_id")));
+					SchemeVO schemeVO = schemeService.getSchemeDetails(Long.parseLong(request.getParameter("schemeId")));
 					
 					
 					rd = request.getRequestDispatcher("editScheme.jsp");
@@ -95,10 +95,19 @@ public class EditSchemeServlet extends HttpServlet {
 			}
 		}catch(DatabaseException | DataNotFoundException | SchemeNotFoundException e) {
 			rd = request.getRequestDispatcher("viewAllSchemes.jsp");
+			e.printStackTrace();
 			request.setAttribute("err", e.getMessage());
 			rd.forward(request, response);
 		} 
 	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(req, resp);
+	}
+	
+	
 
 
 }

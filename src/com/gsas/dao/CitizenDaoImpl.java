@@ -119,9 +119,10 @@ public class CitizenDaoImpl implements CitizenDao {
 						
 			connection = DBUtility.getConnection();
 			PreparedStatement preparedStatement = connection.prepareStatement("select * from citizen_master d inner join login_credential c "
-					+ "on d.citizen_ref = c.citizen_id inner join citizen_address a"
+					+ "on d.citizen_ref = c.login_id inner join citizen_address a"
 					+ " on a.address_id = d.address_ref where citizen_ref=?");
 
+			preparedStatement.setLong(1, citizenId);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			while(resultSet.next()){
 				LoginVO loginVO = new LoginVO();
@@ -221,7 +222,7 @@ public class CitizenDaoImpl implements CitizenDao {
 		try {
 			Connection connection = DBUtility.getConnection();
 			
-			PreparedStatement selectStatement = connection.prepareStatement("SELECT scheme_id,scheme_name,summary,description,image_path,STATUS FROM scheme_master WHERE scheme_id NOT IN (SELECT scheme_ref FROM scheme_applicant WHERE citizen_ref = ? and status = ?");
+			PreparedStatement selectStatement = connection.prepareStatement("SELECT scheme_id,scheme_name,summary,description,image_path,STATUS FROM scheme_master WHERE scheme_id NOT IN (SELECT scheme_ref FROM scheme_applicant WHERE citizen_ref = ? and status = ?)");
 			selectStatement.setLong(1, citizenId);
 			selectStatement.setBoolean(2, true);
 			
@@ -240,9 +241,9 @@ public class CitizenDaoImpl implements CitizenDao {
 			resultSet.close();
 			selectStatement.close();	
 			connection.close();
-			if(notAppliedSchemeList.isEmpty()) {
+			/*if(notAppliedSchemeList.isEmpty()) {
 				throw new SchemeNotFoundException("Scheme Not Found");
-			}
+			}*/
 		} catch(SQLException | ClassNotFoundException e) {
 
 			throw new DatabaseException(e.getMessage());
@@ -284,9 +285,9 @@ public class CitizenDaoImpl implements CitizenDao {
 			resultSet.close();
 			selectStatement.close();
 			connection.close();
-			if(appliedSchemeList.isEmpty()) {
+			/*if(appliedSchemeList.isEmpty()) {
 				throw new SchemeNotFoundException("Scheme Not Found");
-			}
+			}*/
 		} catch(SQLException | ClassNotFoundException e) {
 
 			throw new DatabaseException(e.getMessage());

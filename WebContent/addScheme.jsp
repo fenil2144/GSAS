@@ -1,156 +1,191 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title></title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="css\common.css" rel="stylesheet">
-        <link href="css\form.css" rel="stylesheet">
-        <style>
-            .main1{
-                width: 600px;
-                height: 100%;
-                 border: 1px solid red;
-                /*border-radius: 5px;
-                background-color: brown;*/
-                padding: 20px;
-                text-align: center;
-                align-self: center;
-                opacity: 0.8;
-            }
-        </style>
-            </head>
-    <body>
-    <script src="JS\navigation.js"></script>
-        <div class="header">
-            <h1>Add Scheme</h1>
-            
-        </div>
-        <div class="sidenav">
-        <div class="image">
-                <img src="logo\logo.jpeg">
-            </div>
-            
-            <div class="heading">
-                <h2> Menu </h2>
-            </div>
-            <div class="content" id="first">
-                <a href="index.jsp">Logout</a>
-            </div>
-            <div class="content">
-             <a href="schemeManagement.jsp">Add more Schemes</a>
-            </div>
-            
-     </div>
-     
-        <div class="main">
-            <div class="main1">
-                <form method="POST" action="">
-                    <div class="col1">
-                        <input type="text" name="sname" id="sname" placeholder="Enter scheme name" required><br>
-                    </div>
-                    <div class="col1">
-                        <textarea rows="4" cols="30" id="summary" name="summary" required>Enter your summary..</textarea>
+<head>
+<title></title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="css\common.css" rel="stylesheet">
+<link href="css\form.css" rel="stylesheet">
+<style>
+.main1 {
+	width: 600px;
+	height: auto;
+	border: 1px solid red;
+	padding: 20px;
+	text-align: center;
+	align-self: center;
+}
 
-                    </div>
-                    <div class="col1">
-                        <textarea rows="4" cols="50" id="description" name="descritption" required>Enter your description..</textarea>
-                    </div>
-                    <div class="col1">
-                        Upload Image <input type="file" id="image" name="image" >
 
-                    </div>
-                    <div class="col1">
-                        <label for="ministry">Choose a ministry:</label>
+</style>
+</head>
+<body>
+	<script src="JS\navigation.js"></script>
+	<div class="header">
+		<h1>Add Scheme</h1>
 
-                        <select name="ministry" id="ministry">
-                            <option value="finance">Finance</option>
-                            <option value="saab">Agriculture</option>
-                            <option value="mercedes">Education</option>
-                            <option value="audi">Textile</option>
-                        </select>
-                    </div>
-                    <div class="col1">
-                        <label for="sector">Choose a sector:</label>
+	</div>
+	<div class="sidenav">
+		<div class="image">
+			<img src="logo\logo.jpeg">
+		</div>
 
-                        <select name="sector" id="sector">
-                            <option value="pension">Pension</option>
-                            <option value="childCare">Child Care</option>
-                            <option value="agriculture">Agriculture</option>
-                            <option value="education">Education</option>
-                        </select>
-                    </div>
-                    <div class="col1">
-                        <label for="startDate">Enter start date</label>
-                        <input type="date" name="startDate" id="startDate" required><br>
+		<div class="heading">
+			<h2>Menu</h2>
+		</div>
+		<div class="content" id="first">
+			<a href="index.jsp">Logout</a>
+		</div>
+		<div class="content">
+			<a href="viewSchemesEmployeeServlet">Add more Schemes</a>
+		</div>
 
-                    </div>
-                    <div class="col1">
-                        <label>Select eligibility criteria</label>
+	</div>
 
-                    </div>
-                    <div class="col1" id="col2">
-                        <!--<button type="submit" id="submit" value="submit" onclick="add(col2)">Add eligibility criteria.</button>-->
-                        
-                        <input type="checkbox" id="govt" name="govt" value="govt">
-                        <label for="govt"> Government</label><br>
-                        <input type="checkbox" id="pvt" name="pvt" value="pvt">
-                        <label for="pvt"> Private</label><br>
-                        <input type="checkbox" id="farmer" name="farmer" value="farmer">
-                        <label for="farmer"> Farmer</label><br>
+	<div class="main">
+		<div class="main1">
+			<form method="POST" action="InsertSchemeServlet">
+				<div class="col1">
+					<label class="required-field">Enter scheme name</label> <input type="text"
+						name="schemeName" id="schemeName" placeholder="Enter scheme name"
+						required>
+				</div>
+				<div class="col1">
+					<label class="required-field"> Summary of the scheme </label><textarea rows="4" cols="30"
+							id="summary" name="summary" required>Enter your summary..</textarea>
+					
 
-                        
-                    </div>
-                    <div class="col1">
-                       <label>Choose Documents</label>
+				</div>
+				<div class="col1">
+					<label class="required-field">Description of the scheme </label><textarea rows="4"
+							cols="50" id="description" name="descritption" required>Enter your description..</textarea>
+				</div>
+				<div class="col1">
+					<label class="required-field">Upload Image </label><input type="file" id="imagePath" name="imagePath" required>
 
-                    </div>
-                    <div class="col1" id="col2">
-                       
-                        
-                        <input type="checkbox" id="panCard" name="panCard" value="panCard">
-                        <label for="panCard"> Pan Card</label><br>
-                        <input type="checkbox" id="passport" name="passport" value="passport">
-                        <label for="passport"> Passport</label><br>
-                        <input type="checkbox" id="aadharCard" name="aadharCard" value="aadharCard">
-                        <label for="aadharCard"> HDFC</label><br>
+				</div>
+				<div class="col1">
+					<label for="ministry" class="required-field">Choose a ministry:</label> <select
+						name="ministry" id="ministry" required>
+						<c:forEach items="${ministryList}" var="ministry">
+							<option value="${ministry.ministryId}">${ministry.ministryName}</option>
+						</c:forEach>
+					</select>
+				</div>
+				<div class="col1">
+					<label for="sector" class="required-field">Choose a sector:</label> <select name="sector" id="sector" required>
+						<c:forEach items="${sectorList}" var="sector">
+							<option value="${sector.sectorId}">${sector.sectorName}</option>
+						</c:forEach>
+					</select>
+				</div>
+				<div class="col1">
+					<label for="startDate" class="required-field">Enter start date</label> <input type="text"
+						name="startDate" id="startDate" placeholder="Enter date in format(YYYY-MM-DD)" required><br>
 
-                        
-                    </div>
-                    <div class="col1">
-                        <label>Choose Bank</label>
+				</div>
+				<div class="col1">Select eligibility criteria</div>
+				<div class="section">
+					<div class="eligibilityCol">
+						<label>Enter minimum age</label> <input type="number"
+							name="minAge" id="minAge" placeholder="Enter min age"><br>
+					</div>
+					<div class="eligibilityCol">
+						<label>Enter maximum age</label> <input type="number"
+							name="maxAge" id="maxAge" placeholder="Enter max age"><br>
+					</div>
 
-                    </div>
-                    <div class="col1" id="col2">
-                       
-                        
-                        <input type="checkbox" id="HSBC" name="HSBC" value="HSBC">
-                        <label for="HSBC"> HSBC</label><br>
-                        <input type="checkbox" id="ICICI" name="ICICI" value="ICICI">
-                        <label for="pvt"> ICICI</label><br>
-                        <input type="checkbox" id="HDFC" name="HDFC" value="HDFC">
-                        <label for="HDFC"> HDFC</label><br>
+					<div class="col1">
+						<label for="profession">Choose a profession:</label> <select
+							name="profession">
+							<c:forEach items="${professionList}" var="profession">
+								<option value="${profession.professionId}">${profession.professionName}</option>
+							</c:forEach>
+						</select>
+					</div>
+					<div class="gender">
+						<label>Select gender</label>
 
-                        
-                    </div>
-                    <div class="col1">
-                        <button type="submit" id="submit" > Submit </button>
-                        <button type="button" id="button" onclick="navigateBack()"> Back </button>
-                    </div>
-                    
-                </form>
+					</div>
+					<div class="genderCol">
 
-            </div>
-        </div>
-        
- 
+						<input type="radio" id="male" name="gender" value="male">
+						<label for="male"> Male</label><br> <input type="radio"
+							id="female" name="gender" value="female"> <label
+							for="female"> Female</label><br> <input type="radio"
+							id="other" name="gender" value="others"> <label
+							for="other"> Other</label><br>
 
-        <div class="footer">
-            <h2>Footer</h2>
-        </div>
 
-    
-    </body>
+					</div>
+					<div class="col1">
+						<label for="incomeGroup">Choose a income group:</label> <select
+							name="incomeGroup">
+							<c:forEach items="${incomeGroupList}" var="incomeGroup">
+								<option value="${incomeGroup.incomeGroupId}">${incomeGroup.incomeGroupName}</option>
+							</c:forEach>
+						</select>
+					</div>
+				</div>
+				<div class="col1">
+					<label class="required-field">Choose Documents</label>
+
+				</div>
+				<div class="documentsCol" id="documentsCol">
+
+
+					<input type="checkbox" id="panCard" name="panCard" value="panCard">
+					<label for="panCard"> Pan Card</label><br> <input
+						type="checkbox" id="passport" name="passport" value="passport">
+					<label for="passport"> Passport</label><br> <input
+						type="checkbox" id="aadharCard" name="aadharCard"
+						value="aadharCard"> <label for="aadharCard">
+						Aadhar Card</label><br>
+
+
+				</div>
+				<div class="col1">
+					<label class="required-field">Choose Bank</label>
+
+				</div>
+				<div class="bankCol" id="bankCol">
+
+
+					<input type="checkbox" id="HSBC" name="HSBC" value="HSBC">
+					<label for="HSBC"> HSBC</label><br> <input type="checkbox"
+						id="ICICI" name="ICICI" value="ICICI"> <label for="pvt">
+						ICICI</label><br> <input type="checkbox" id="HDFC" name="HDFC"
+						value="HDFC"> <label for="HDFC"> HDFC</label><br>
+
+
+				</div>
+				<div class="col1">
+					
+					<button type="submit" id="submit">Submit</button>
+					
+				</div>
+				
+
+			</form>
+			<c:if test="${message != null}">
+				<p>
+					<c:out value="${message}" />
+				<p>
+			</c:if>
+			
+
+		</div>
+	</div>
+
+
+
+	<div class="footer">
+		<h2>Footer</h2>
+	</div>
+
+
+</body>
 </html>

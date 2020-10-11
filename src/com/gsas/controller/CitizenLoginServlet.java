@@ -36,7 +36,7 @@ public class CitizenLoginServlet extends HttpServlet {
 			session.setAttribute("loginVO", loginVO);
 			
 			
-			rd = request.getRequestDispatcher("viewAllSchemes.jsp");
+			rd = request.getRequestDispatcher("viewSchemesCitizenServlet");
 			rd.forward(request, response);
 			
 		} catch (AuthenticationException e) {

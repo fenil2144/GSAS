@@ -200,7 +200,7 @@ public class SchemeDaoImpl implements SchemeDao{
 				
 				//Fetching Scheme Eligibility
 				long schemeEligibilityId = resultSet.getLong("scheme_eligibility_ref");
-				PreparedStatement getSchemeDetailsStatement = connection.prepareStatement("select * from scheme_elegibility s inner join income_group i on s.income_group_ref = i.income_group_id inner join profession p on s.profession_ref = p.profession_id  where scheme_elegibility_id = ?");
+				PreparedStatement getSchemeDetailsStatement = connection.prepareStatement("select * from scheme_eligibility s inner join income_group i on s.income_group_ref = i.income_group_id inner join profession p on s.profession_ref = p.profession_id  where scheme_eligibility_id = ?");
 				getSchemeDetailsStatement.setLong(1, schemeEligibilityId);
 				ResultSet getSchemeResultset = getSchemeDetailsStatement.executeQuery();
 				
@@ -220,7 +220,7 @@ public class SchemeDaoImpl implements SchemeDao{
 				}
 				schemeVO.setStatus(resultSet.getBoolean("status"));
 				
-				getSchemeDetailsStatement = connection.prepareStatement("select * from scheme_banks inner join bank b on s.bank_ref = b.bank_id where scheme_ref = ?");
+				getSchemeDetailsStatement = connection.prepareStatement("select * from scheme_banks s inner join bank b on s.bank_ref = b.bank_id where scheme_ref = ?");
 				getSchemeDetailsStatement.setLong(1, schemeEligibilityId);
 				getSchemeResultset = getSchemeDetailsStatement.executeQuery();
 				
@@ -234,7 +234,7 @@ public class SchemeDaoImpl implements SchemeDao{
 				}
 				schemeVO.setBankList(bankList);
 				
-				getSchemeDetailsStatement = connection.prepareStatement("select * from scheme_documents s inner join documents d on s.document_ref = d.document_id where scheme_ref = ?");
+				getSchemeDetailsStatement = connection.prepareStatement("select * from scheme_documents s inner join document d on s.document_ref = d.document_id where scheme_ref = ?");
 				getSchemeDetailsStatement.setLong(1, schemeEligibilityId);
 				getSchemeResultset = getSchemeDetailsStatement.executeQuery();
 				
@@ -262,6 +262,7 @@ public class SchemeDaoImpl implements SchemeDao{
 			}
 		} catch (ClassNotFoundException | SQLException e) {
 			
+			e.printStackTrace();
 			throw new DatabaseException("Something Went Wrong");
 		}
 
@@ -276,13 +277,13 @@ public class SchemeDaoImpl implements SchemeDao{
 		try {
 			Connection connection = DBUtility.getConnection();
 			
-			PreparedStatement selectStatement = connection.prepareStatement("select scheme_id,name,summary,description,image_path,status from scheme_master");
+			PreparedStatement selectStatement = connection.prepareStatement("select scheme_id,scheme_name,summary,description,image_path,status from scheme_master");
 			
 			ResultSet resultSet = selectStatement.executeQuery();
 			while(resultSet.next()) {
 				SchemeVO schemeVO = new SchemeVO();
 				schemeVO.setSchemeId(resultSet.getLong("scheme_id"));
-				schemeVO.setSchemeName(resultSet.getString("name"));
+				schemeVO.setSchemeName(resultSet.getString("scheme_name"));
 				schemeVO.setSummary(resultSet.getString("summary"));
 				schemeVO.setDescription(resultSet.getString("description"));
 				schemeVO.setImagePath(resultSet.getString("image_path"));

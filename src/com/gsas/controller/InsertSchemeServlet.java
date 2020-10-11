@@ -59,7 +59,7 @@ public class InsertSchemeServlet extends HttpServlet {
 					SectorVO sectorVO = new SectorVO(Long.parseLong(request.getParameter("sector")));
 					schemeVO.setSectorVO(sectorVO);
 					
-					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 					formatter = formatter.withLocale( Locale.ENGLISH );  // Locale specifies human language for translating, and cultural norms for lowercase/uppercase and abbreviations and such. Example: Locale.US or Locale.CANADA_FRENCH
 					LocalDate date = LocalDate.parse(request.getParameter("startDate"), formatter);
 					schemeVO.setStartDate(date);

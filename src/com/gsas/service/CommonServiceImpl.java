@@ -20,7 +20,7 @@ public class CommonServiceImpl implements CommonService {
 	
 
 	public CommonServiceImpl() {
-		commonDao = (CommonDao) ObjectFactory.getInstance(LayerType.CITIZEN_DAO);
+		commonDao = (CommonDao) ObjectFactory.getInstance(LayerType.COMMON_DAO);
 	}
 
 	@Override
