@@ -187,13 +187,13 @@ public class SchemeServiceImpl implements SchemeService {
 	}
 
 	@Override
-	public List<DocumentVO> getSchemeDocumentsList(Long scheme_id) throws DatabaseException {
-		return schemeDao.getSchemeDocumentsList(scheme_id);
+	public List<DocumentVO> getSchemeDocumentsList(Long schemeId) throws DatabaseException {
+		return schemeDao.getSchemeDocumentsList(schemeId);
 	}
 
 	@Override
-	public List<BankVO> getSchemeBankList(Long scheme_id) throws DatabaseException {
-		return schemeDao.getSchemeBankList(scheme_id);
+	public List<BankVO> getSchemeBankList(Long schemeId) throws DatabaseException {
+		return schemeDao.getSchemeBankList(schemeId);
 	}
 
 }
