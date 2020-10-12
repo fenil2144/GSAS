@@ -59,17 +59,10 @@ public class ApplySchemeDocumentServlet extends HttpServlet {
 					
 					SchemeApplicantDocumentsVO schemeApplicantDocuments =  null;
 					SchemeApplicantVO schemeApplicantVO = new SchemeApplicantVO();
-					List<SchemeApplicantDocumentsVO> applicantDocumentsdocList = new ArrayList<>();
+
+					List<SchemeApplicantDocumentsVO> applicantDocumentsdocList = new ArrayList<SchemeApplicantDocumentsVO>();
 					
-					//SchemeVO schemeVO = schemeService.getSchemeDetails(Long.parseLong(request.getParameter("schemeId"))); // get scheme from schemeID
-					
-//					request.setParameter("schemeVO",schemeVO);
-//					request.setParameter("scheme_banks",schemeVO.getBankList());
-//					request.getParameter("scheme_documents",schemeVO.getDocumentList());
-					
-					//schemeApplicantVO Object
-					System.out.println("Scheme id===>");
-					//System.out.println(Long.parseLong(request.getParameter("SCHEMEID")));
+
 					schemeApplicantVO.setSchemeVO(new SchemeVO(Long.parseLong(request.getParameter("schemeId"))));
 					schemeApplicantVO.setLoginVO(loginVO);
 					schemeApplicantVO.setBankVO(new BankVO(Long.parseLong(request.getParameter("bank").trim())));
@@ -79,52 +72,40 @@ public class ApplySchemeDocumentServlet extends HttpServlet {
 					schemeApplicantVO.setBranch(request.getParameter("branch"));
 					
 					String fileName = null;
-                    List<DocumentVO> documentList = schemeService.getSchemeDocumentsList(Long.parseLong(request.getParameter("schemeId")));
-                    for(DocumentVO documentVO : documentList) {
-                        schemeApplicantDocuments =  new SchemeApplicantDocumentsVO();
-                        schemeApplicantDocuments.setDocumentVO(documentVO);
-                        
-                        //Document Upload
-                        Part part = request.getPart(String.valueOf(documentVO.getDocumentId()));
-                        InputStream inputStream = part.getInputStream();
+					List<DocumentVO> documentList = schemeService.getSchemeDocumentsList(Long.parseLong(request.getParameter("schemeId")));
+					for(DocumentVO documentVO : documentList) {
+						schemeApplicantDocuments =  new SchemeApplicantDocumentsVO();
+						schemeApplicantDocuments.setDocumentVO(documentVO);
+						
+						      //Document Upload
+			            Part part = request.getPart(String.valueOf(documentVO.getDocumentId()));
+			            InputStream inputStream = part.getInputStream();
 
-                        // get filename to use on the server
-                        fileName = new File(FileName.extractFileName(part)).getName();
-                        FileOutputStream os = new FileOutputStream ("~/Users/sukrita/Documents/Documents/Training/GSAS/WebContent/documents/"+fileName);
-                        
-                        // write bytes taken from uploaded file to target file
-                        int ch = inputStream.read();
-                        while (ch != -1) {
-                             os.write(ch);
-                             ch = inputStream.read();
-                        }
-                        os.close();
-                        
-                        schemeApplicantDocuments.setDocumentPath("~/Users/sukrita/Documents/Documents/Training/GSAS/WebContent/documents/"+fileName);
-                        applicantDocumentsdocList.add(schemeApplicantDocuments);
+			            // get filename to use on the server
+			            fileName = new File(extractFileName(part)).getName();
+			            FileOutputStream os = new FileOutputStream ("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\documents\\"+fileName);
+			            
+			            // write bytes taken from uploaded file to target file
+			            int ch = inputStream.read();
+			            while (ch != -1) {
+			                 os.write(ch);
+			                 ch = inputStream.read();
+			            }
+			            os.close();
+						
+						schemeApplicantDocuments.setDocumentPath("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\documents\\"+fileName);
+						applicantDocumentsdocList.add(schemeApplicantDocuments);
 
                     }
                     schemeApplicantVO.setApplicantDocumentsList(applicantDocumentsdocList);
                     
                     System.out.println(schemeApplicantVO.toString());
                     
-					//schemeApplicantVO.setApplicantDocumentsList(applicantDocumentsdocList);
-					
-					//validating documents and bank
-//					for(SchemeApplicantDocumentsVO items : schemeApplicantVO.getApplicantDocumentsList()) {
-//					schemeApplicantDocuments.setDocumentVO(new DocumentVO(Long.parseLong(request.getParameter("docId"))));
-//					schemeApplicantDocuments.setDocumentPath(request.getParameter("docPath"));
-//					applicantDocumentsdocList.add(schemeApplicantDocuments);
-//					}
-					
-					//schemeApplicantVO = schemeService.validate(schemeApplicantVO.getSchemeVO(), schemeApplicantVO.getBankVO(), applicantDocumentsdocList, schemeApplicantVO);
-					System.out.println("Approved status: "+schemeApplicantVO.isApprovedStatus());
-                    if(schemeApplicantVO.isApprovedStatus() == false){  
-                    	System.out.println("FALSE in if");
+
+            if(schemeApplicantVO.isApprovedStatus() == false){  
 						request.setAttribute("err",schemeApplicantVO.getReason());
 					} 
 					else {
-						// fill scheme_applicant table with status=true and store document
 						
 						System.out.println("TRUE in else");
 						request.setAttribute("message","You have successfully applied for the scheme "+schemeApplicantVO.getSchemeVO().getSchemeName());
@@ -132,7 +113,7 @@ public class ApplySchemeDocumentServlet extends HttpServlet {
 					}
 					requestDispatcher = request.getRequestDispatcher("viewSchemesCitizenServlet");
 					requestDispatcher.forward(request, response);
-				}else {													//If employee is already logged in
+				}else {													//If employee inputStream already logged in
 					requestDispatcher = request.getRequestDispatcher("viewSchemesEmployeeServlet");
 					requestDispatcher.forward(request, response);
 				}
@@ -152,5 +133,14 @@ public class ApplySchemeDocumentServlet extends HttpServlet {
 		}
 		
 	}
-
+	 private String extractFileName(Part part) {
+	        String contentDisp = part.getHeader("content-disposition");
+	        String[] items = contentDisp.split(";");
+	        for (String s : items) {
+	            if (s.trim().startsWith("filename")) {
+	                return s.substring(s.indexOf("=") + 2, s.length()-1);
+	            }
+	        }
+	        return "";
+	    }
 }

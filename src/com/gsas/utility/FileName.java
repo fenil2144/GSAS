@@ -3,9 +3,6 @@ package com.gsas.utility;
 import javax.servlet.http.Part;
 
 public class FileName {
-	
-	
-	
 	 public static String extractFileName(Part part) {
 	       String contentDisp = part.getHeader("content-disposition");
 	       String[] items = contentDisp.split(";");
@@ -16,5 +13,4 @@ public class FileName {
 	       }
 	       return "";
 	   }
-
 }

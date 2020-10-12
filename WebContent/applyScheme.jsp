@@ -90,6 +90,7 @@
 						
 							
 					</div>   
+
 					<form method="POST" action="ApplySchemeDocumentServlet" enctype="multipart/form-data" onsubmit="validateAccount(event1)">                 
 					 <div class="col1">
 					 <input type="hidden" name="schemeId" value="${schemeVO.schemeId}">

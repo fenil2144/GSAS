@@ -41,8 +41,8 @@ public class SchemeDaoImpl implements SchemeDao{
 				System.out.println("Error in sequence number");
 				throw new InvalidSequenceException();
 			}
-
-//			
+			connection.setAutoCommit(false);		//Imlementing Transaction
+			
 			//Add into Scheme eligibility table
 			PreparedStatement selectStatement = connection.prepareStatement("insert into scheme_eligibility values(?,?,?,?,?,?)");
 			selectStatement.setLong(1, seq);//scheme eligibility ID
@@ -108,8 +108,9 @@ public class SchemeDaoImpl implements SchemeDao{
 				selectStatement.setLong(3, bank.getBankId());
 				selectStatement.executeUpdate();
 			}
-			
+
 			connection.commit();	//Committing the changes.
+
 			selectStatement.close();
 			connection.close();
 
@@ -206,6 +207,7 @@ public class SchemeDaoImpl implements SchemeDao{
 				selectStatement.setLong(3, bank.getBankId());
 				selectStatement.executeUpdate();
 			}
+
 			connection.commit();	//Committing the changes.
 			selectStatement.close();
 			connection.close();
@@ -434,6 +436,7 @@ public class SchemeDaoImpl implements SchemeDao{
 				
 			}
 			connection.commit();
+
 			insertStatement.close();
 			connection.close();
 			
