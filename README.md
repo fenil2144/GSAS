@@ -21,6 +21,19 @@ Employee can add scheme image and citizen can upload the documents. The images a
 
 <br/>
 
+**Note** : Create 3 folders namely JSON, Documents and images in web-content folder.
+
+## Set Paths of folder
+```
+Set your local repository paths in:
+1. InsertSchemeServlet.java
+2. UpdateSchemeServlet.java
+3. ApplySchemeDocuments.java
+4. InsertSchemeJsonServlet
+```
+
+<br/>
+
 **Note** : Create folder to upload images outside workspace.
 
 ## Add Apache Derby database credentials
@@ -77,6 +90,7 @@ C:.
 │               │       EmployeeLoginServlet.class
 │               │       HomeServlet.class
 │               │       InsertSchemeServlet.class
+|               |       InsertSchemeJsonServlet.class
 │               │       LoginServlet.class
 │               │       LogoutServlet.class
 │               │       UpdateCitizenDetailsServlet.class
@@ -149,6 +163,7 @@ C:.
 │           │       EmployeeLoginServlet.java
 │           │       HomeServlet.java
 │           │       InsertSchemeServlet.java
+|           |       InsertSchemeJsonServlet.java
 │           │       LoginServlet.java
 │           │       LogoutServlet.java
 │           │       UpdateCitizenDetailsServlet.java
