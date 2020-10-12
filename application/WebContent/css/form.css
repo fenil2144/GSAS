@@ -1,0 +1,153 @@
+@charset "ISO-8859-1";
+
+.main {
+    margin-left: 20%;
+    padding-left: 170px;
+    padding-top: 20px;
+    padding-bottom: 100px;
+}
+.required-field::after {
+    content: "*";
+    color: red;
+}
+
+.main1 {
+    margin-left: 10%;
+    width: 600px;
+    height: 400px;
+    border: 1px solid #a30000;
+    padding: 20px;
+    text-align: left;
+    align-self: left;
+    opacity: 0.8;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 1px solid #a30000;
+    text-align: left;
+    align-self: left;
+}
+
+input[type=checkbox], [type=radio] {
+    margin: 0;
+    padding: 0;
+    float: left;
+    align-content: left;
+    text-align: left;
+    align-self: left;
+    width: 10%;
+}
+
+.col1 {
+    padding-top: 50px;
+    align-self: left;
+    text-align: left;
+}
+
+button {
+    width: 20%;
+    padding: 12px 20px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    background-color: #a30000;
+    text-align:center;
+    display:block;
+    color: white;
+}
+
+
+
+.add {
+    padding : 10px;
+    margin-left: 10%;
+    width: 100%;
+}
+
+input, textarea, select, .genderCol,.documentsCol,.bankCol {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 1px solid #a30000;
+    text-align: left;
+    align-self: left;
+}
+
+.eligibilityCol {
+    padding-top: 20px;
+    align-self: left;
+    text-align: left;
+}
+
+.section {
+    width: auto;
+    height: 100%;
+    border: 1px solid #a30000;
+    /*border-radius: 5px;
+                background-color: brown;*/
+    text-align: center;
+    align-self: center;
+    opacity: 0.8;
+    padding: 12px 20px;
+    margin: 8px 0;
+}
+
+.profession, .gender, .incomeGroup {
+    padding-top: 25px;
+    align-self: left;
+    text-align: left;
+}
+
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  margin-left: 10%;
+  text-align: center;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.price {
+  color: grey;
+  font-size: 22px;
+}
+
+.card button {
+  border: none;
+  outline: 0;
+  padding: 12px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+}
+
+.card button:hover {
+  opacity: 0.7;
+}
+.column {
+  float: left;
+  width: 50%;
+  padding: 0 10px;
+}
+
+/* Remove extra left and right margins, due to padding */
+.row {margin: 0 -5px;}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.cardImage{
+  width:150px;
+  height:150px;
+}
