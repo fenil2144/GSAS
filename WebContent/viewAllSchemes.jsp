@@ -53,24 +53,32 @@
             <div class="main1">
 			<h1>Schemes</h1>
 			<div class="row">
-			<form action="ApplySchemeServlet">
+			
 				
-				<c:forEach items="${notAppliedSchemeList}" var="notAppliedSchemeList">
-				<input type="hidden" name="schemeId" value="${notAppliedSchemeList.schemeId }">
+				<c:forEach items="${notAppliedSchemeList}" var="notAppliedScheme">
+				<input type="hidden" name="schemeId" value="${notAppliedScheme.schemeId }">
 					<div class="column">
 						<div class="card">
 							
-							<h2>${notAppliedSchemeList.schemeName } </h2>
-							<img src="${notAppliedSchemeList.imagePath }" class=".cardImage">
-							<p>${notAppliedSchemeList.summary }</p>
+							<h2>${notAppliedScheme.schemeName } </h2>
+							<img src="${notAppliedScheme.imagePath }" class=".cardImage">
+							<p>${notAppliedScheme.summary }</p>
 							<p>
-								<button type="submit">Apply</button>
+								<c:url value="GSAS/ApplySchemeServlet" var="editURL">
+									<c:param name="schemeId" value="${notAppliedScheme.schemeId}" />
+									
+								</c:url>
+								
+								<a href="/<c:out value="${editURL}"/>">
+									<button type="submit" id="${notAppliedScheme.schemeId}">Apply
+										Scheme</button>
+								</a>
+								
 							</p>
-
 						</div>
 						</div>
 							</c:forEach>
-							</form>
+							
 					</div>
 					</div>
                 <div class="main1">
@@ -78,13 +86,13 @@
                     <div class="row">
 				
 				<c:forEach items="${acceptedSchemeList}" var="acceptedSchemeList">
-				<input type="hidden" name="schemeId" value="${acceptedSchemeList.schemeId }">
+				<input type="hidden" name="schemeId" value="${acceptedSchemeList.schemeId}">
 					<div class="column">
 						<div class="card">
 							
-							<h2>${acceptedSchemeList.schemeName } </h2>
-							<img src="${acceptedSchemeList.imagePath }" class=".cardImage">
-							<p>${acceptedSchemeList.summary }</p>
+							<h2>${acceptedSchemeList.schemeName} </h2>
+							<img src="${acceptedSchemeList.imagePath}" class=".cardImage">
+							<p>${acceptedSchemeList.summary}</p>
 
 						</div>
 						</div>
@@ -92,20 +100,20 @@
 							
 					</div>
                 </div>
-                <div class="main1">
+                <%-- <div class="main1">
                     <h1> Rejected Schemes</h1>
                     <div class="row">
 				
 				<c:forEach items="${rejectedSchemeList}" var="schemeApplicantVO">
-				<input type="hidden" name="schemeId" value="${schemeApplicantVO.schemeVO.schemeId }">
+				<input type="hidden" name="schemeId" value="${schemeApplicantVO.schemeVO.schemeId}">
 					<div class="column">
 						<div class="card">
 							
-							<h2>${schemeApplicantVO.schemeVO.schemeName } </h2>
-							<img src="${schemeApplicantVO.schemeVO.imagePath }" class=".cardImage">
-							<p>${schemeApplicantVO.schemeVO.summary }</p>
+							<h2>${schemeApplicantVO.schemeVO.schemeName} </h2>
+							<img src="${schemeApplicantVO.schemeVO.imagePath}" class=".cardImage">
+							<p>${schemeApplicantVO.schemeVO.summary}</p>
 							<p>
-								${schemeApplicantVO.reason }
+								${schemeApplicantVO.reason}
 							</p>
 
 						</div>
@@ -114,14 +122,14 @@
 							
 					</div>
                 </div>
-
+ --%>
             
         </div>
         
  
 
         <div class="footer">
-            <h2>Footer</h2>
+            <h2>Coordinated by: Team Agastya</h2>
         </div>
         
     

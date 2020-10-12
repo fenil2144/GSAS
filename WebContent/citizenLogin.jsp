@@ -71,7 +71,7 @@
 
 
 	<div class="footerOther">
-		<h2>Footer</h2>
+		<h2>Coordinated by: Team Agastya</h2>
 	</div>
 
 

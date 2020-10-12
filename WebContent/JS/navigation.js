@@ -33,107 +33,56 @@ function redirectServlet(){
 	
 }
 
-
-
-
-
-function validatePassword() {
+function validate(){
+    
     var password = document.getElementById("citizenPassword").value;
     var retype=document.getElementById("citizenPassword1").value;
-    if (password.length <= 6) {
-        alert( "Password should be more that 6 characters");
-    }
-    
-    if(password!=retype){
-        alert("pass not same");
-    }
-    return false;
-}
-function validateAdhaar(){
     var aadhar =document.getElementById("aadhar").value;
-    var aob=/^\d{12}$/;
-    if(aob.test(aadhar)){
-        return "";
-    }else{
-        return "Adhaar Number should be of 12 digits";
-    }
-    return "";
-}
-function validatePhone(){
+    var aadharCheck=/^\d{12}$/;
     var phone =document.getElementById("phone").value;
-    var check=/^\d{10}$/;
-    if(check.test(phone)){
-        return "";
-    }else{
-        return "Phone Number should be of 10 digits";
-    }
-    return "";
-}
-function validatePan(){
+    var phoneCheck=/^\d{10}$/;
     var pan=document.getElementById("pan").value;
-    var regpan = /^([A-Z]){5}([0-9]){4}([A-Z]){1}?$/;
-
-    if(!regpan.test(pan)){
-        return "Invalid Pan Number";
+    var panCheck = /^([A-Z]){5}([0-9]){4}([A-Z]){1}?$/;
+    
+    status=false;
+    if(password.length<=6){
+        alert( "Password should be more than 6 characters!" );
+        status =false;
+    }else{
+        status=true;
     }
-    // if(regpan.test(pan)){
-    //     return "";
-    // }else{
-    //     return "Invalid Pan Number";
-    // }
-    //return "";
-}
-// function validate(){
-//     var result ="";
-//     result+=validatePassword();
-//     result+=validateAdhaar();
-//     //alert("asd");
-//     if(result ==""){
-//         return true;
-//     }
-//     alert(result);
-// }
-function validate(){
-    //var result="";
-    //val.innerText="";
-    var f1=false;
-    var f2=false;
-    var f3=false;
-    var f4=false;
-    document.getElementById("val").innerHTML="";
-    if(validatePassword().localeCompare("")!=0){
-        let li=document.createElement('li');
-        li.innerText=validatePassword();
-        //alert(validatePassword());
-        f1=true;
-        document.getElementById("val").appendChild(li);
-        //val.appendChild(li);
-        
+    if(password.localeCompare(retype)!=0){
+        alert("Password and confirm password should be same");
+        status=false;
+    }else{
+        status=true;
+    }
+    if(aadharCheck.test(aadhar)){
+        status=true;
+    }else{
+        alert("Adhaar Number should be of 12 digits");
+        status=false;
     }
 
-//    if(validateAdhaar().localeCompare("")!=0){
-//        let li=document.createElement('li');
-//        li.innerText=validateAdhaar();
-//        f2=true;
-//        document.getElementById("val").appendChild(li);
-//        //val.appendChild(li);
-//        
-//    }
-//    if(validatePhone().localeCompare("")!=0){
-//        let li=document.createElement('li');
-//        li.innerText=validatePhone();
-//        f3=true;
-//        document.getElementById("val").appendChild(li);
-//        //val.appendChild(li);
-//        
-//    }
-//    if(validatePan().localeCompare(""!=0)){
-//        let li=document.createElement('li');
-//        li.innerText=validatePan();
-//        f4=true;
-//        document.getElementById("val").appendChild(li);
-//        //val.appendChild(li);
-//    }
+    if(phoneCheck.test(phone)){
+        status=true;
+    }else{
+        alert("Phone Number should be of 10 digits");
+        status=false;
+    }
 
+    if(panCheck.test(pan)){
+        status=true;
+    }else{
+        alert("Invalid Pan Number");
+        status=false;
+    }
+    return status;
 
 }
+
+
+
+
+
+
