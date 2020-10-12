@@ -160,7 +160,7 @@ public class CitizenDaoImpl implements CitizenDao {
 			preparedStatement.close();
 			connection.close();
 			if(citizenDetailsVO == null) {
-				throw new CitizenNotFoundException("Sorry username or Password is Incorrect");
+				throw new CitizenNotFoundException("Sorry, Citizen Details Not Found");
 			}
 			
 		} catch (ClassNotFoundException | SQLException e) {
@@ -222,7 +222,7 @@ public class CitizenDaoImpl implements CitizenDao {
 		try {
 			Connection connection = DBUtility.getConnection();
 			
-			PreparedStatement selectStatement = connection.prepareStatement("SELECT scheme_id,scheme_name,summary,description,image_path,STATUS FROM scheme_master WHERE scheme_id NOT IN (SELECT scheme_ref FROM scheme_applicant WHERE citizen_ref = ? and status = ?)");
+			PreparedStatement selectStatement = connection.prepareStatement("SELECT scheme_id,scheme_name,summary,description,image_path,STATUS FROM scheme_master WHERE scheme_id NOT IN (SELECT scheme_ref FROM scheme_applicant WHERE login_ref = ? and status = ?)");
 			selectStatement.setLong(1, citizenId);
 			selectStatement.setBoolean(2, true);
 			
@@ -259,7 +259,7 @@ public class CitizenDaoImpl implements CitizenDao {
 		try {
 			Connection connection = DBUtility.getConnection();
 			
-			PreparedStatement selectStatement = connection.prepareStatement("SELECT scheme_id,scheme_name,summary,description,image_path,approved_status,reason FROM scheme_master s INNER JOIN scheme_applicant a ON s.scheme_id = a.scheme_ref WHERE citizen_ref = ? AND approved_status = false and status = true");
+			PreparedStatement selectStatement = connection.prepareStatement("SELECT scheme_id,scheme_name,summary,description,image_path,approved_status,reason FROM scheme_master s INNER JOIN scheme_applicant a ON s.scheme_id = a.scheme_ref WHERE login_ref = ? AND approved_status = false and status = true");
 			selectStatement.setLong(1, citizenId);
 //			selectStatement.setBoolean(2, approvedStatus);
 //			selectStatement.setBoolean(3, true);

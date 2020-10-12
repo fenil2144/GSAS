@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -22,6 +23,8 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import com.gsas.exception.DatabaseException;
 import com.gsas.exception.InvalidSequenceException;
+import com.gsas.model.BankVO;
+import com.gsas.model.DocumentVO;
 import com.gsas.model.IncomeGroupVO;
 import com.gsas.model.LoginVO;
 import com.gsas.model.MinistryVO;
@@ -58,21 +61,21 @@ public class InsertSchemeServlet extends HttpServlet {
 					schemeVO.setSchemeName(request.getParameter("schemeName"));
 					schemeVO.setSummary(request.getParameter("summary"));
 					schemeVO.setDescription(request.getParameter("description"));
-
+					System.out.println("in --"+request.getParameter("schemeName"));
 					
 					
-					ServletFileUpload upload=new ServletFileUpload(new DiskFileItemFactory());
-                    
-                    List<FileItem> images=upload.parseRequest(request);//To store of list  files FileItem datatype is used 
-                    
-                        String name=images.get(0).getName();//gets the name of file  
-                        try{name=name.substring(name.lastIndexOf("\\")+1);}catch(Exception e){}//this will give the name of file it removes stuffs like c:\downloads and gives the name
+//					ServletFileUpload upload=new ServletFileUpload(new DiskFileItemFactory());
+//                    
+//                    List<FileItem> images=upload.parseRequest(request);//To store of list  files FileItem datatype is used 
+//                    
+//                        String name=images.get(0).getName();//gets the name of file  
+//                        try{name=name.substring(name.lastIndexOf("\\")+1);}catch(Exception e){}//this will give the name of file it removes stuffs like c:\downloads and gives the name
+//
+//                        //System.out.println(name);
+//                        images.get(0).write(new File("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\images"+name));//create folder imagescheme where image of the  will be stored
+//                        //images folder created in local computer and write function writes into that folder
 
-                        //System.out.println(name);
-                        images.get(0).write(new File("C:\\Users\\Sunrise\\eclipse-workspace\\GSAS\\WebContent\\images"+name));//create folder imagescheme where image of the  will be stored
-                        //images folder created in local computer and write function writes into that folder
-
-                schemeVO.setImagePath("C:\\Users\\Sunrise\\eclipse-workspace\\GSAS\\WebContent\\images"+ name);
+                schemeVO.setImagePath("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\images");
 					System.out.println(request.getParameter("ministry"));
 					System.out.println(request.getParameter("sector"));
 					MinistryVO ministryVO = new MinistryVO(Long.parseLong(request.getParameter("ministry")));
@@ -95,6 +98,20 @@ public class InsertSchemeServlet extends HttpServlet {
 					schemeVO.setSchemeEligibilityVO(schemeEligibilityVO);
 					schemeVO.setStatus(true);
 					
+					String[] documentIdList = request.getParameterValues("document");
+					List<DocumentVO> documentList = new ArrayList<DocumentVO>();
+					for(String documentId : documentIdList) {
+						documentList.add(new DocumentVO(Long.parseLong(documentId)));
+					}
+					schemeVO.setDocumentList(documentList);
+					
+					String[] bankIdList = request.getParameterValues("bank");
+					List<BankVO> bankList = new ArrayList<BankVO>();
+					for(String bankId : bankIdList) {
+						bankList.add(new BankVO(Long.parseLong(bankId)));
+					}
+					schemeVO.setBankList(bankList);
+					
 					schemeService.addScheme(schemeVO);
 					request.setAttribute("message","Scheme Added Successfully!");
 					rd = request.getRequestDispatcher("AddSchemeServlet");
@@ -111,7 +128,7 @@ public class InsertSchemeServlet extends HttpServlet {
 				rd.forward(request, response);
 			}
 			
-		} catch (DatabaseException | InvalidSequenceException | FileUploadException e) {
+		} catch (DatabaseException | InvalidSequenceException  e) {
 			rd = request.getRequestDispatcher("AddSchemeServlet");
 			request.setAttribute("err", e.getMessage());
 			rd.forward(request, response);

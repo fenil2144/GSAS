@@ -18,7 +18,7 @@ import com.gsas.model.SchemeVO;
 public interface SchemeService {
 	
 	public void addScheme(SchemeVO scheme) throws DatabaseException, InvalidSequenceException;
-	public void updateScheme(SchemeVO scheme) throws DatabaseException;
+	public void updateScheme(SchemeVO scheme) throws DatabaseException, InvalidSequenceException;
 	public SchemeVO getSchemeDetails(Long schemeId) throws SchemeNotFoundException, DatabaseException;
 	public List<SchemeVO> getAllScheme() throws SchemeNotFoundException, DatabaseException;
 	//public SchemeApplicantVO validate(SchemeVO scheme, BankVO bank, List<SchemeApplicantDocumentsVO> docList, SchemeApplicantVO schemeApplicant);

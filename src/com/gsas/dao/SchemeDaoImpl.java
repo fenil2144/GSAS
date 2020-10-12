@@ -26,14 +26,14 @@ public class SchemeDaoImpl implements SchemeDao{
 	private Connection connection;
 
 	@Override
-	public void addScheme(SchemeVO scheme) throws DatabaseException, InvalidSequenceException {
+	public void addScheme(SchemeVO schemeVO) throws DatabaseException, InvalidSequenceException {
 		try {
 			connection = DBUtility.getConnection();
 			PreparedStatement sequenceStatement = connection.prepareStatement("values(next value for scheme_seq)");
-			ResultSet rs = sequenceStatement.executeQuery();
+			ResultSet resultSet = sequenceStatement.executeQuery();
 			long seq = 0;
-			if(rs.next()) {
-				seq = rs.getLong(1);
+			if(resultSet.next()) {
+				seq = resultSet.getLong(1);
 			} 
 			if(seq == 0) {
 				
@@ -45,11 +45,11 @@ public class SchemeDaoImpl implements SchemeDao{
 			//Add into Scheme eligibility table
 			PreparedStatement selectStatement = connection.prepareStatement("insert into scheme_eligibility values(?,?,?,?,?,?)");
 			selectStatement.setLong(1, seq);//scheme eligibility ID
-			selectStatement.setInt(2, scheme.getSchemeEligibilityVO().getMaxAge());
-			selectStatement.setInt(3, scheme.getSchemeEligibilityVO().getMinAge());
-			selectStatement.setLong(4, scheme.getSchemeEligibilityVO().getIncomeGroupVO().getIncomeGroupId());//income_group_ref
-			selectStatement.setString(5, scheme.getSchemeEligibilityVO().getGender());
-			selectStatement.setLong(6, scheme.getSchemeEligibilityVO().getProfessionVO().getProfessionId());//profession_ref
+			selectStatement.setInt(2, schemeVO.getSchemeEligibilityVO().getMinAge());
+			selectStatement.setInt(3, schemeVO.getSchemeEligibilityVO().getMaxAge());
+			selectStatement.setLong(4, schemeVO.getSchemeEligibilityVO().getIncomeGroupVO().getIncomeGroupId());//income_group_ref
+			selectStatement.setString(5, schemeVO.getSchemeEligibilityVO().getGender());
+			selectStatement.setLong(6, schemeVO.getSchemeEligibilityVO().getProfessionVO().getProfessionId());//profession_ref
 			selectStatement.executeUpdate();
 			
 
@@ -57,32 +57,53 @@ public class SchemeDaoImpl implements SchemeDao{
 			//Add into Scheme Table
 			selectStatement = connection.prepareStatement("insert into scheme_master values(?,?,?,?,?,?,?,?,?,?)");
 			selectStatement.setLong(1, seq);//scheme id
-			selectStatement.setString(2, scheme.getSchemeName());
-			selectStatement.setString(3, scheme.getSummary());
-			selectStatement.setString(4, scheme.getDescription());
-			selectStatement.setString(5, scheme.getImagePath());
-			selectStatement.setLong(6, scheme.getMinistryVO().getMinistryId());//ministry ref
-			selectStatement.setLong(7, scheme.getSectorVO().getSectorId());//sector ref
-			selectStatement.setDate(8, java.sql.Date.valueOf(scheme.getStartDate()));
-			selectStatement.setLong(9, scheme.getSchemeEligibilityVO().getSchemeEligibilityId());//scheme Eligibility ref
-			selectStatement.setBoolean(10, scheme.isStatus());
+			selectStatement.setString(2, schemeVO.getSchemeName());
+			selectStatement.setString(3, schemeVO.getSummary());
+			selectStatement.setString(4, schemeVO.getDescription());
+			selectStatement.setString(5, schemeVO.getImagePath());
+			selectStatement.setLong(6, schemeVO.getMinistryVO().getMinistryId());//ministry ref
+			selectStatement.setLong(7, schemeVO.getSectorVO().getSectorId());//sector ref
+			selectStatement.setDate(8, java.sql.Date.valueOf(schemeVO.getStartDate()));
+			selectStatement.setLong(9, seq);//scheme Eligibility ref
+			selectStatement.setBoolean(10, schemeVO.isStatus());
 			selectStatement.executeUpdate();
 			
 			
-			
-			List<DocumentVO> documentList=scheme.getDocumentList();
+			sequenceStatement = connection.prepareStatement("values(next value for document_seq)");
+			long documentSeq = 0;
+ 
+			List<DocumentVO> documentList=schemeVO.getDocumentList();
 			for(DocumentVO doc : documentList ) {
+				resultSet = sequenceStatement.executeQuery();
+				if(resultSet.next()) {
+					documentSeq = resultSet.getLong(1);
+				} 
+				if(documentSeq == 0) {
+					System.out.println("Error in sequence number");
+					throw new InvalidSequenceException();
+				}
 				selectStatement = connection.prepareStatement("insert into scheme_documents values(?,?,?)");
-				selectStatement.setLong(1, seq);
-				selectStatement.setLong(2, scheme.getSchemeId());
+				selectStatement.setLong(1, documentSeq);
+				selectStatement.setLong(2, seq);
 				selectStatement.setLong(3, doc.getDocumentId());
 				selectStatement.executeUpdate();
 			}
-			List<BankVO> bankList=scheme.getBankList();
+			
+			sequenceStatement = connection.prepareStatement("values(next value for bank_seq)");
+			long banktSeq = 0;
+			List<BankVO> bankList=schemeVO.getBankList();
 			for(BankVO bank : bankList) {
+				resultSet = sequenceStatement.executeQuery();
+				if(resultSet.next()) {
+					banktSeq = resultSet.getLong(1);
+				} 
+				if(banktSeq == 0) {
+					System.out.println("Error in sequence number");
+					throw new InvalidSequenceException();
+				}
 				selectStatement = connection.prepareStatement("insert into scheme_banks values(?,?,?)");
-				selectStatement.setLong(1, seq);
-				selectStatement.setLong(2, scheme.getSchemeId());
+				selectStatement.setLong(1, banktSeq);
+				selectStatement.setLong(2, seq);
 				selectStatement.setLong(3, bank.getBankId());
 				selectStatement.executeUpdate();
 			}
@@ -92,13 +113,14 @@ public class SchemeDaoImpl implements SchemeDao{
 			connection.close();
 
 		}catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
 			throw new DatabaseException(e.getMessage());
 		}
 		
 	}
 
 	@Override
-	public void editScheme(SchemeVO scheme) throws DatabaseException {
+	public void editScheme(SchemeVO scheme) throws DatabaseException, InvalidSequenceException {
 		try {
 			Connection connection = DBUtility.getConnection();
 			PreparedStatement selectStatement = connection.prepareStatement("update scheme_eligibility set min_age=?, max_age=?, income_group_ref=?, gender=?, profession_ref=? where scheme_eligibility_id=?");
@@ -107,9 +129,9 @@ public class SchemeDaoImpl implements SchemeDao{
 			selectStatement.setLong(3, scheme.getSchemeEligibilityVO().getIncomeGroupVO().getIncomeGroupId());
 			selectStatement.setString(4, scheme.getSchemeEligibilityVO().getGender());
 			selectStatement.setLong(5, scheme.getSchemeEligibilityVO().getProfessionVO().getProfessionId());
-			selectStatement.setLong(6, scheme.getSchemeId());
+			selectStatement.setLong(6, scheme.getSchemeEligibilityVO().getSchemeEligibilityId());
 			
-			selectStatement = connection.prepareStatement("update scheme_master set name=?, summary=?, description=?, image_path=?, ministry_ref=?, sector_ref=?, start_date=?, scheme_eligibility_ref=?, status=? where scheme_id=?");
+			selectStatement = connection.prepareStatement("update scheme_master set scheme_name=?, summary=?, description=?, image_path=?, ministry_ref=?, sector_ref=?, start_date=?, scheme_eligibility_ref=?, status=? where scheme_id=?");
 			selectStatement.setString(1, scheme.getSchemeName());
 			selectStatement.setString(2, scheme.getSummary());
 			selectStatement.setString(3, scheme.getDescription());
@@ -120,51 +142,74 @@ public class SchemeDaoImpl implements SchemeDao{
 			selectStatement.setLong(8, scheme.getSchemeEligibilityVO().getSchemeEligibilityId());
 			selectStatement.setBoolean(9, scheme.isStatus());
 			selectStatement.setLong(10, scheme.getSchemeId());
+			System.out.println(scheme.toString());
 			selectStatement.executeUpdate();
+			System.out.println(selectStatement);
 			
 			PreparedStatement sequenceStatement = connection.prepareStatement("values(next value for scheme_seq)");
-			ResultSet rs = sequenceStatement.executeQuery();
+			ResultSet resultSet = sequenceStatement.executeQuery();
 			long seq = 0;
-			if(rs.next()) {
-				seq = rs.getLong(1);
+			if(resultSet.next()) {
+				seq = resultSet.getLong(1);
 			} 
 			if(seq == 0) {
 				//Need to throw an error
 				System.out.println("Error in sequence number");
 			}
 			
-			selectStatement = connection.prepareStatement("delete FROM scheme_documents_id where scheme_ref=?");
+			selectStatement = connection.prepareStatement("delete FROM scheme_documents where scheme_ref=?");
 			selectStatement.setLong(1, scheme.getSchemeId());
 			selectStatement.executeUpdate();
 			
+			sequenceStatement = connection.prepareStatement("values(next value for document_seq)");
+			long documentSeq = 0;
+ 
 			List<DocumentVO> documentList=scheme.getDocumentList();
 			for(DocumentVO doc : documentList ) {
+				resultSet = sequenceStatement.executeQuery();
+				if(resultSet.next()) {
+					documentSeq = resultSet.getLong(1);
+				} 
+				if(documentSeq == 0) {
+					System.out.println("Error in sequence number");
+					throw new InvalidSequenceException();
+				}
 				selectStatement = connection.prepareStatement("insert into scheme_documents values(?,?,?)");
-				selectStatement.setLong(1, seq);
+				selectStatement.setLong(1, documentSeq);
 				selectStatement.setLong(2, scheme.getSchemeId());
 				selectStatement.setLong(3, doc.getDocumentId());
 				selectStatement.executeUpdate();
 			}
 			
-			selectStatement = connection.prepareStatement("delete FROM scheme_bank where scheme_ref=?");
+			selectStatement = connection.prepareStatement("delete FROM scheme_banks where scheme_ref=?");
 			selectStatement.setLong(1, scheme.getSchemeId());
 			selectStatement.executeUpdate();
 			
+			sequenceStatement = connection.prepareStatement("values(next value for bank_seq)");
+			long bankSeq = 0;
 			List<BankVO> bankList=scheme.getBankList();
 			for(BankVO bank : bankList) {
+				resultSet = sequenceStatement.executeQuery();
+				if(resultSet.next()) {
+					bankSeq = resultSet.getLong(1);
+				} 
+				if(bankSeq == 0) {
+					System.out.println("Error in sequence number");
+					throw new InvalidSequenceException();
+				}
 				selectStatement = connection.prepareStatement("insert into scheme_banks values(?,?,?)");
-				selectStatement.setLong(1, seq);
+				selectStatement.setLong(1, bankSeq);
 				selectStatement.setLong(2, scheme.getSchemeId());
 				selectStatement.setLong(3, bank.getBankId());
 				selectStatement.executeUpdate();
 			}
-			
-			
+
 			selectStatement.close();
 			connection.close();
 			
 			
 		}catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
 			throw new DatabaseException(e.getMessage());
 		}
 		
@@ -206,6 +251,7 @@ public class SchemeDaoImpl implements SchemeDao{
 				
 				while(getSchemeResultset.next()) {
 					SchemeEligibilityVO schemeEligibilityVO = new SchemeEligibilityVO();
+					schemeEligibilityVO.setSchemeEligibilityId(getSchemeResultset.getLong("scheme_eligibility_id"));
 					schemeEligibilityVO.setMinAge(getSchemeResultset.getInt("min_age"));
 					schemeEligibilityVO.setMaxAge(getSchemeResultset.getInt("max_age"));
 					schemeEligibilityVO.setGender(getSchemeResultset.getString("gender"));
@@ -225,7 +271,7 @@ public class SchemeDaoImpl implements SchemeDao{
 				getSchemeResultset = getSchemeDetailsStatement.executeQuery();
 				
 				BankVO bankVO = null;
-				List<BankVO> bankList = null;
+				List<BankVO> bankList = new ArrayList<BankVO>();
 				while(getSchemeResultset.next()) {
 					bankVO = new BankVO();
 					bankVO.setBankId(getSchemeResultset.getLong("bank_id"));
@@ -239,7 +285,7 @@ public class SchemeDaoImpl implements SchemeDao{
 				getSchemeResultset = getSchemeDetailsStatement.executeQuery();
 				
 				DocumentVO documentVO = null;
-				List<DocumentVO> documentList = null;
+				List<DocumentVO> documentList = new ArrayList<DocumentVO>();;
 				
 				while(getSchemeResultset.next()) {
 					documentVO = new DocumentVO();
@@ -350,10 +396,10 @@ public class SchemeDaoImpl implements SchemeDao{
 		try {
 			Connection connection = DBUtility.getConnection();
 			PreparedStatement sequenceStatement = connection.prepareStatement("values(next value for scheme_seq)");
-			ResultSet rs = sequenceStatement.executeQuery();
+			ResultSet resultSet = sequenceStatement.executeQuery();
 			long seq = 0;
-			if(rs.next()) {
-				seq = rs.getLong(1);
+			if(resultSet.next()) {
+				seq = resultSet.getLong(1);
 			} 
 			if(seq == 0) {
 				//Need to throw an error
@@ -402,10 +448,10 @@ public class SchemeDaoImpl implements SchemeDao{
 		try {
 			Connection connection = DBUtility.getConnection();
 			PreparedStatement sequenceStatement = connection.prepareStatement("values(next value for scheme_seq)");
-			ResultSet rs = sequenceStatement.executeQuery();
+			ResultSet resultSet = sequenceStatement.executeQuery();
 			long seq = 0;
-			if(rs.next()) {
-				seq = rs.getLong(1);
+			if(resultSet.next()) {
+				seq = resultSet.getLong(1);
 			} 
 			if(seq == 0) {
 				//Need to throw an error

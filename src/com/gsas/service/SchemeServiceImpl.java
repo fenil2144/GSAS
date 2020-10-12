@@ -37,7 +37,7 @@ public class SchemeServiceImpl implements SchemeService {
 	}
 
 	@Override
-	public void updateScheme(SchemeVO scheme) throws DatabaseException {
+	public void updateScheme(SchemeVO scheme) throws DatabaseException, InvalidSequenceException {
 		schemeDao.editScheme(scheme);
 
 	}

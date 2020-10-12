@@ -35,7 +35,6 @@ public class CommonDaoImpl implements CommonDao {
 			while(resultSet.next()) {
 				ministryVO = new MinistryVO();
 				ministryVO.setMinistryId(resultSet.getLong("ministry_id"));
-				System.out.println(ministryVO.getMinistryId());
 				ministryVO.setMinistryName(resultSet.getString("ministry_name"));
 
 				ministryList.add(ministryVO);

@@ -3,6 +3,8 @@ package com.gsas.controller;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.RequestDispatcher;
@@ -14,6 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.gsas.exception.DatabaseException;
+import com.gsas.exception.InvalidSequenceException;
+import com.gsas.model.BankVO;
+import com.gsas.model.DocumentVO;
 import com.gsas.model.IncomeGroupVO;
 import com.gsas.model.LoginVO;
 import com.gsas.model.MinistryVO;
@@ -46,11 +51,11 @@ public class UpdateSchemeServlet extends HttpServlet {
 			if(loginVO != null) {
 				if(loginVO.isEmployee() == true) {						//If employee is already logged in
 					SchemeVO schemeVO = new SchemeVO();
-					schemeVO.setSchemeId(Long.parseLong(request.getParameter("scheme_id")));
+					schemeVO.setSchemeId(Long.parseLong(request.getParameter("schemeId")));
 					schemeVO.setSchemeName(request.getParameter("schemeName"));
 					schemeVO.setSummary(request.getParameter("summary"));
 					schemeVO.setDescription(request.getParameter("description"));
-					schemeVO.setImagePath(request.getParameter("imagePath"));
+					schemeVO.setImagePath("dummyLink");
 					
 					MinistryVO ministryVO = new MinistryVO(Long.parseLong(request.getParameter("ministry")));
 					schemeVO.setMinistryVO(ministryVO);
@@ -58,12 +63,14 @@ public class UpdateSchemeServlet extends HttpServlet {
 					SectorVO sectorVO = new SectorVO(Long.parseLong(request.getParameter("sector")));
 					schemeVO.setSectorVO(sectorVO);
 					
-					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 					formatter = formatter.withLocale( Locale.ENGLISH );  // Locale specifies human language for translating, and cultural norms for lowercase/uppercase and abbreviations and such. Example: Locale.US or Locale.CANADA_FRENCH
 					LocalDate date = LocalDate.parse(request.getParameter("startDate"), formatter);
 					schemeVO.setStartDate(date);
 					
 					SchemeEligibilityVO schemeEligibilityVO = new SchemeEligibilityVO();
+					schemeEligibilityVO.setSchemeEligibilityId(Long.parseLong(request.getParameter("schemeEligibilityId")));
+					System.out.println(Long.parseLong(request.getParameter("schemeEligibilityId")));
 					schemeEligibilityVO.setMinAge(Integer.parseInt(request.getParameter("minAge")));
 					schemeEligibilityVO.setMaxAge(Integer.parseInt(request.getParameter("maxAge")));
 					schemeEligibilityVO.setGender(request.getParameter("gender"));
@@ -71,6 +78,20 @@ public class UpdateSchemeServlet extends HttpServlet {
 					schemeEligibilityVO.setProfessionVO(new ProfessionVO(Long.parseLong(request.getParameter("profession"))));
 					schemeVO.setSchemeEligibilityVO(schemeEligibilityVO);
 					schemeVO.setStatus(true);
+					
+					String[] documentIdList = request.getParameterValues("document");
+					List<DocumentVO> documentList = new ArrayList<DocumentVO>();
+					for(String documentId : documentIdList) {
+						documentList.add(new DocumentVO(Long.parseLong(documentId)));
+					}
+					schemeVO.setDocumentList(documentList);
+					
+					String[] bankIdList = request.getParameterValues("bank");
+					List<BankVO> bankList = new ArrayList<BankVO>();
+					for(String bankId : bankIdList) {
+						bankList.add(new BankVO(Long.parseLong(bankId)));
+					}
+					schemeVO.setBankList(bankList);
 					
 					schemeService.updateScheme(schemeVO);
 					request.setAttribute("message","Scheme Updated Successfully!");
@@ -88,11 +109,12 @@ public class UpdateSchemeServlet extends HttpServlet {
 				rd.forward(request, response);
 			}
 			
-		} catch (DatabaseException e) {
-			rd = request.getRequestDispatcher("viewAllScheme");
+		} catch (DatabaseException | InvalidSequenceException e) {
+			e.printStackTrace();
+			rd = request.getRequestDispatcher("viewSchemesEmployeeServlet");
 			request.setAttribute("err", e.getMessage());
 			rd.forward(request, response);
-		}
+		} 
 	}
 
 }

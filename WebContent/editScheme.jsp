@@ -49,23 +49,23 @@
 		<div class="main1">
 			<form method="POST" action="UpdateSchemeServlet">
 			<input type="hidden" name="schemeId" id="schemeId" value="${schemeVO.schemeId}">
+			<input type="hidden" name="schemeEligibilityId" id="schemeEligibilityId" value="${schemeVO.schemeEligibilityVO.schemeEligibilityId}">
 				<div class="col1">
 					<label class="required-field">Enter scheme name</label> <input type="text"
 						name="schemeName" id="schemeName" value="${schemeVO.schemeName}" placeholder="Enter scheme name" required>
 						<p>${schemeVO.schemeName}</p>
 				</div>
 				<div class="col1">
-					<label class="required-field"> Summary of the scheme </label><textarea rows="4" cols="30"
-							id="summary" name="summary" required>${schemeVO.summary}</textarea>
-					
+					<label class="required-field"> Summary of the scheme </label>
+						<textarea rows="4" cols="30" +id="summary" name="summary" required>${schemeVO.summary}</textarea>
 
 				</div>
 				<div class="col1">
 					<label class="required-field">Description of the scheme </label><textarea rows="4"
-							cols="50" id="description" name="descritption"  required>${schemeVO.description}</textarea>
+							cols="50" id="description" name="description"  required>${schemeVO.description}</textarea>
 				</div>
 				<div class="col1">
-					<label class="required-field">Upload Image </label><input type="file" id="image" name="image" value="${SchemeVO.imagePath }" required>
+					<label class="required-field">Upload Image </label><input type="file" id="image" name="image" value="${schemeVO.imagePath}" required>
 
 				</div>
 				<div class="col1">
@@ -73,15 +73,16 @@
 						name="ministry" required>
 						<option value="select">Select</option>
 						<c:forEach items="${ministryList}" var="ministry">
-							<option value="${ministry.ministryId}">${ministry.ministryName}</option>
+							<option value="${ministry.ministryId}" <c:if test="${ministry.ministryId eq schemeVO.ministryVO.ministryId}">selected="selected"</c:if>>${ministry.ministryName}</option>
 						</c:forEach>
 					</select>
 				</div>
 				<div class="col1">
-					<label for="sector" class="required-field">Choose a sector:</label> <select name="sector" required>
+					<label for="sector" class="required-field">Choose a sector:</label> 
+					<select name="sector" required>
 						<option value="select">Select</option>
 						<c:forEach items="${sectorList}" var="sector">
-							<option value="${sector.sectorId}">${sector.sectorName}</option>
+							<option value="${sector.sectorId}" <c:if test="${sector.sectorId eq schemeVO.sectorVO.sectorId}">selected="selected"</c:if>>${sector.sectorName}</option>
 						</c:forEach>
 					</select>
 				</div>
@@ -106,7 +107,7 @@
 							name="profession">
 							<option value="select">Select</option>
 							<c:forEach items="${professionList}" var="profession">
-								<option value="${profession.professionId}">${profession.professionName}</option>
+								<option value="${profession.professionId}" <c:if test="${profession.professionId eq schemeVO.schemeEligibilityVO.professionVO.professionId}">selected="selected"</c:if>>${profession.professionName}</option>
 							</c:forEach>
 						</select>
 					</div>
@@ -116,13 +117,12 @@
 					</div>
 					<div class="genderCol">
 
-						<input type="radio" id="male" name="gender" value="${schemeVO.schemeEligibilityVO.gender }">
-						<label for="male"> Male</label><br> <input type="radio"
-							id="female" name="gender"  value="${schemeVO.schemeEligibilityVO.gender }"> <label
-							for="female"> Female</label><br> <input type="radio"
-							id="other" name="gender"  value="${schemeVO.schemeEligibilityVO.gender }"> <label
-							for="other"> Other</label><br>
-
+						<input type="radio" id="male" name="gender" <c:if test="${schemeVO.schemeEligibilityVO.gender eq 'male'}">checked="checked"</c:if> >
+						<label for="male"> Male</label><br> 
+							<input type="radio"	id="female" name="gender" <c:if test="${schemeVO.schemeEligibilityVO.gender eq 'female'}">checked="checked"</c:if> > <label
+							for="female"> Female</label><br> 
+							<input type="radio"	id="other" name="gender"  <c:if test="${schemeVO.schemeEligibilityVO.gender eq 'both'}">checked="checked"</c:if> > 
+							<label for="both"> Both</label><br>
 
 					</div>
 					<div class="col1">
@@ -130,7 +130,7 @@
 							name="incomeGroup">
 							<option value="select">Select</option>
 							<c:forEach items="${incomeGroupList}" var="incomeGroup">
-								<option value="${incomeGroup.incomeGroupId}">${incomeGroup.incomeGroupName}</option>
+								<option value="${incomeGroup.incomeGroupId}" <c:if test="${incomeGroup.incomeGroupId eq schemeVO.schemeEligibilityVO.incomeGroupVO.incomeGroupId}">selected="selected"</c:if>>${incomeGroup.incomeGroupName}</option>
 							</c:forEach>
 						</select>
 					</div>
@@ -140,15 +140,19 @@
 
 				</div>
 				<div class="documentsCol" id="documentsCol">
+					<c:forEach items="${documentList}" var="document">
+						<input type="checkbox" id="document" name="document" value="${document.documentId}">
+						<label for="document">${document.documentName}</label><br> 
+						
+					</c:forEach>
 
-
-					<input type="checkbox" id="panCard" name="panCard" value="panCard">
+<!-- 					<input type="checkbox" id="panCard" name="panCard" value="panCard">
 					<label for="panCard"> Pan Card</label><br> <input
 						type="checkbox" id="passport" name="passport" value="passport">
 					<label for="passport"> Passport</label><br> <input
 						type="checkbox" id="aadharCard" name="aadharCard"
 						value="aadharCard"> <label for="aadharCard">
-						Aadhar Card</label><br>
+						Aadhar Card</label><br> -->
 
 
 				</div>
@@ -157,13 +161,16 @@
 
 				</div>
 				<div class="bankCol" id="bankCol">
+					<c:forEach items="${bankList}" var="bank">
+						<input type="checkbox" id="bank" name="bank" value="${bank.bankId}">
+						<label for="bank">${bank.bankName}</label><br> 
+					</c:forEach>
 
-
-					<input type="checkbox" id="HSBC" name="HSBC" value="HSBC">
+<!-- 					<input type="checkbox" id="HSBC" name="HSBC" value="HSBC">
 					<label for="HSBC"> HSBC</label><br> <input type="checkbox"
 						id="ICICI" name="ICICI" value="ICICI"> <label for="pvt">
 						ICICI</label><br> <input type="checkbox" id="HDFC" name="HDFC"
-						value="HDFC"> <label for="HDFC"> HDFC</label><br>
+						value="HDFC"> <label for="HDFC"> HDFC</label><br> -->
 
 
 				</div>

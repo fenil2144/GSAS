@@ -64,7 +64,7 @@
 							<img src="${notAppliedScheme.imagePath }" class=".cardImage">
 							<p>${notAppliedScheme.summary }</p>
 							<p>
-								<c:url value="GSAS/ApplySchemeServlet" var="editURL">
+								<c:url value="GovernmentSchemesApplicationSystem/ApplySchemeServlet" var="editURL">
 									<c:param name="schemeId" value="${notAppliedScheme.schemeId}" />
 									
 								</c:url>
