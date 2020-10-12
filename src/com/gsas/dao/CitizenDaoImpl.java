@@ -253,8 +253,8 @@ public class CitizenDaoImpl implements CitizenDao {
 	}
 	
 	@Override
-	public List<SchemeVO> getAppliedSchemeList(long citizenId,boolean approvedStatus) throws SchemeNotFoundException, DatabaseException {
-		List<SchemeVO> appliedSchemeList = new ArrayList<SchemeVO>();
+	public List<SchemeApplicantVO> getAppliedSchemeList(long citizenId,boolean approvedStatus) throws SchemeNotFoundException, DatabaseException {
+		List<SchemeApplicantVO> appliedSchemeList = new ArrayList<SchemeApplicantVO>();
 		
 		try {
 			Connection connection = DBUtility.getConnection();
@@ -272,14 +272,14 @@ public class CitizenDaoImpl implements CitizenDao {
 				schemeVO.setSummary(resultSet.getString("summary"));
 				schemeVO.setDescription(resultSet.getString("description"));
 				schemeVO.setImagePath(resultSet.getString("image_path"));
-				schemeVO.setStatus(resultSet.getBoolean("approved_status"));
+				schemeVO.setStatus(true);
 				
 				SchemeApplicantVO schemeApplicantVO = new SchemeApplicantVO();
 				schemeApplicantVO.setReason(resultSet.getString("reason"));
 				
 				schemeApplicantVO.setSchemeVO(schemeVO);
 				
-				appliedSchemeList.add(schemeVO);
+				appliedSchemeList.add(schemeApplicantVO);
 			}
 			
 			resultSet.close();

@@ -11,6 +11,7 @@ import com.gsas.exception.InvalidSequenceException;
 import com.gsas.exception.SchemeNotFoundException;
 import com.gsas.model.CitizenDetailsVO;
 import com.gsas.model.LoginVO;
+import com.gsas.model.SchemeApplicantVO;
 import com.gsas.model.SchemeVO;
 import com.gsas.utility.LayerType;
 import com.gsas.utility.ObjectFactory;
@@ -57,7 +58,7 @@ public class CitizenServiceImpl implements CitizenService {
 	}
 
 	@Override
-	public List<SchemeVO> getAppliedSchemeList(long citizenId, boolean approvedStatus) throws SchemeNotFoundException, DatabaseException {
+	public List<SchemeApplicantVO> getAppliedSchemeList(long citizenId, boolean approvedStatus) throws SchemeNotFoundException, DatabaseException {
 		return citizenDao.getAppliedSchemeList(citizenId, approvedStatus);
 	}
 

@@ -10,6 +10,7 @@ import com.gsas.exception.InvalidSequenceException;
 import com.gsas.exception.SchemeNotFoundException;
 import com.gsas.model.CitizenDetailsVO;
 import com.gsas.model.LoginVO;
+import com.gsas.model.SchemeApplicantVO;
 import com.gsas.model.SchemeVO;
 
 public interface CitizenService {
@@ -18,6 +19,6 @@ public interface CitizenService {
 	public CitizenDetailsVO getCitizenDetails(long citizenId) throws CitizenNotFoundException;
 	public void updateCitizenDetails(CitizenDetailsVO citizenDetailsVO);
 	public List<SchemeVO> getNotAppliedSchemeList(long citizenId) throws SchemeNotFoundException, DatabaseException;
-	public List<SchemeVO> getAppliedSchemeList(long citizenId, boolean approvedStatus) throws SchemeNotFoundException, DatabaseException;
+	public List<SchemeApplicantVO> getAppliedSchemeList(long citizenId, boolean approvedStatus) throws SchemeNotFoundException, DatabaseException;
 	public boolean isCitizenUnique(CitizenDetailsVO citizenDetailsVO) throws DatabaseException, DuplicateUserException;
 }

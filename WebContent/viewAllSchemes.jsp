@@ -60,7 +60,7 @@
 						<div class="card">
 							
 							<h2>${notAppliedSchemeList.schemeName } </h2>
-							<img src="${notAppliedSchemeList.imagePath }" class=".cardImage">
+							<img src="${notAppliedSchemeList.imagePath }" class="cardImage">
 							<p>${notAppliedSchemeList.summary }</p>
 							<p>
 								<button type="submit">Apply</button>
@@ -82,7 +82,7 @@
 						<div class="card">
 							
 							<h2>${acceptedSchemeList.schemeName } </h2>
-							<img src="${acceptedSchemeList.imagePath }" class=".cardImage">
+							<img src="${acceptedSchemeList.imagePath }" class="cardImage">
 							<p>${acceptedSchemeList.summary }</p>
 
 						</div>
@@ -96,12 +96,12 @@
                     <div class="row">
 				
 			<c:forEach items="${rejectedSchemeList}" var="schemeApplicantVO">
-			<!-- 	<input type="hidden" name="schemeId" value="${schemeApplicantVO.schemeVO.schemeId}">-->
+			 	<input type="hidden" name="schemeId" value="${schemeApplicantVO.schemeVO.schemeId}">
 					<div class="column">
 						<div class="card">
 							
 							<h2>${schemeApplicantVO.schemeVO.schemeName } </h2>
-							<img src="${schemeApplicantVO.schemeVO.imagePath }" class=".cardImage">
+							<img src="${schemeApplicantVO.schemeVO.imagePath }" class="cardImage">
 							<p>${schemeApplicantVO.schemeVO.summary }</p>
 							<p>
 								${schemeApplicantVO.reason }
@@ -109,7 +109,7 @@
 
 						</div>
 						</div>
-							</c:forEach>
+			</c:forEach>
 							
 					</div>
                 </div> 

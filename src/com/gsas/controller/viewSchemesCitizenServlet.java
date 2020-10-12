@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import com.gsas.exception.DatabaseException;
 import com.gsas.exception.SchemeNotFoundException;
 import com.gsas.model.LoginVO;
+import com.gsas.model.SchemeApplicantVO;
 import com.gsas.model.SchemeVO;
 import com.gsas.service.CitizenService;
 import com.gsas.utility.LayerType;
@@ -36,8 +37,8 @@ public class viewSchemesCitizenServlet extends HttpServlet {
         CitizenService citizenService = (CitizenService) ObjectFactory.getInstance(LayerType.CITIZEN_SERVICE);
         RequestDispatcher rd = null;
         List<SchemeVO> notAppliedSchemeList = null;
-        List<SchemeVO> acceptedSchemeList = null;
-        List<SchemeVO> rejectedSchemeList = null;
+        List<SchemeApplicantVO> acceptedSchemeList = null;
+        List<SchemeApplicantVO> rejectedSchemeList = null;
 
         HttpSession session = request.getSession();
         LoginVO loginVO = (LoginVO) session.getAttribute("loginVO");
