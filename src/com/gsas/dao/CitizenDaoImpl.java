@@ -30,6 +30,7 @@ public class CitizenDaoImpl implements CitizenDao {
 	public void registerCitizen(CitizenDetailsVO citizenDetailsVO) throws DatabaseException, InvalidSequenceException {
 		try {
 			connection = DBUtility.getConnection();
+			connection.setAutoCommit(false);	//Implementing Transaction
 			PreparedStatement sequenceStatement = connection.prepareStatement("values(next value for citizen_seq)");
 			ResultSet rs = sequenceStatement.executeQuery();
 			long seq = 0;
@@ -75,6 +76,7 @@ public class CitizenDaoImpl implements CitizenDao {
 			preparedStatement.setString(13, citizenDetailsVO.getPancardNumber());
 			preparedStatement.setLong(14, seq); //citizen_ref FK (citizen_credential)
 			preparedStatement.executeUpdate();
+			connection.commit();	//Committing the changes.
 			preparedStatement.close();
 			connection.close();
 			
@@ -173,7 +175,7 @@ public class CitizenDaoImpl implements CitizenDao {
 	public void updateCitizenDetails(CitizenDetailsVO citizenDetailsVO) {
 		try {
 			connection = DBUtility.getConnection();
-			
+			connection.setAutoCommit(false);	//Implementing Transaction
 			//Update citizen_credential
 			PreparedStatement updateStatement = connection.prepareStatement("update login_credential set user_name=?,password=? where citizen_id=?");
 			updateStatement.setString(1, citizenDetailsVO.getLoginVO().getUserName());
@@ -209,6 +211,7 @@ public class CitizenDaoImpl implements CitizenDao {
 			updateStatement.executeUpdate();
 
 			updateStatement.close();
+			connection.commit();	//Committing the changes.
 			connection.close();
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
@@ -245,7 +248,8 @@ public class CitizenDaoImpl implements CitizenDao {
 				throw new SchemeNotFoundException("Scheme Not Found");
 			}*/
 		} catch(SQLException | ClassNotFoundException e) {
-
+			
+			e.printStackTrace();
 			throw new DatabaseException(e.getMessage());
 		}
 		return notAppliedSchemeList;
@@ -289,7 +293,8 @@ public class CitizenDaoImpl implements CitizenDao {
 				throw new SchemeNotFoundException("Scheme Not Found");
 			}*/
 		} catch(SQLException | ClassNotFoundException e) {
-
+			
+			e.printStackTrace();
 			throw new DatabaseException(e.getMessage());
 		}
 		return appliedSchemeList;

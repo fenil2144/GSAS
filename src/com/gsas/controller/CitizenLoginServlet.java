@@ -27,27 +27,6 @@ public class CitizenLoginServlet extends HttpServlet {
         super();
     }
 
-<<<<<<< HEAD
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        CitizenService citizenService = (CitizenService) ObjectFactory.getInstance(LayerType.CITIZEN_SERVICE);
-        RequestDispatcher rd = null;
-        try {
-            LoginVO loginVO = citizenService.Authenticate(request.getParameter("username"), request.getParameter("password"));
-            HttpSession session = request.getSession();
-            session.setAttribute("loginVO", loginVO);
-            
-            
-            rd = request.getRequestDispatcher("viewSchemesCitizenServlet");
-            rd.forward(request, response);
-            
-        } catch (AuthenticationException e) {
-        	e.printStackTrace();
-            rd = request.getRequestDispatcher("loginFailure.jsp");
-            request.setAttribute("err", e.getMessage());
-            rd.forward(request, response);
-        }
-    }
-=======
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		CitizenService citizenService = (CitizenService) ObjectFactory.getInstance(LayerType.CITIZEN_SERVICE);
 		RequestDispatcher rd = null;
@@ -67,6 +46,5 @@ public class CitizenLoginServlet extends HttpServlet {
 			rd.forward(request, response);
 		}
 	}
->>>>>>> upstream/master
 
 }

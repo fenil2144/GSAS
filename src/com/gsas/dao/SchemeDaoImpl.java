@@ -29,6 +29,7 @@ public class SchemeDaoImpl implements SchemeDao{
 	public void addScheme(SchemeVO schemeVO) throws DatabaseException, InvalidSequenceException {
 		try {
 			connection = DBUtility.getConnection();
+			connection.setAutoCommit(false);	//Implementing Transaction
 			PreparedStatement sequenceStatement = connection.prepareStatement("values(next value for scheme_seq)");
 			ResultSet resultSet = sequenceStatement.executeQuery();
 			long seq = 0;
@@ -108,7 +109,7 @@ public class SchemeDaoImpl implements SchemeDao{
 				selectStatement.executeUpdate();
 			}
 			
-			
+			connection.commit();	//Committing the changes.
 			selectStatement.close();
 			connection.close();
 
@@ -123,6 +124,8 @@ public class SchemeDaoImpl implements SchemeDao{
 	public void editScheme(SchemeVO scheme) throws DatabaseException, InvalidSequenceException {
 		try {
 			Connection connection = DBUtility.getConnection();
+			connection.setAutoCommit(false);	//Implementing Transaction
+
 			PreparedStatement selectStatement = connection.prepareStatement("update scheme_eligibility set min_age=?, max_age=?, income_group_ref=?, gender=?, profession_ref=? where scheme_eligibility_id=?");
 			selectStatement.setInt(1, scheme.getSchemeEligibilityVO().getMinAge());
 			selectStatement.setInt(2, scheme.getSchemeEligibilityVO().getMaxAge());
@@ -203,7 +206,7 @@ public class SchemeDaoImpl implements SchemeDao{
 				selectStatement.setLong(3, bank.getBankId());
 				selectStatement.executeUpdate();
 			}
-
+			connection.commit();	//Committing the changes.
 			selectStatement.close();
 			connection.close();
 			
@@ -271,16 +274,11 @@ public class SchemeDaoImpl implements SchemeDao{
 				getSchemeResultset = getSchemeDetailsStatement.executeQuery();
 				
 				BankVO bankVO = null;
-<<<<<<< HEAD
-				List<BankVO> bankList = new ArrayList<>();
-=======
 				List<BankVO> bankList = new ArrayList<BankVO>();
->>>>>>> upstream/master
 				while(getSchemeResultset.next()) {
 					bankVO = new BankVO();
 					bankVO.setBankId(getSchemeResultset.getLong("bank_id"));
 					bankVO.setBankName(getSchemeResultset.getString("bank_name"));
-					System.out.println(bankVO.toString());
 					bankList.add(bankVO);
 				}
 				schemeVO.setBankList(bankList);
@@ -290,11 +288,7 @@ public class SchemeDaoImpl implements SchemeDao{
 				getSchemeResultset = getSchemeDetailsStatement.executeQuery();
 				
 				DocumentVO documentVO = null;
-<<<<<<< HEAD
-				List<DocumentVO> documentList = new ArrayList<>();
-=======
 				List<DocumentVO> documentList = new ArrayList<DocumentVO>();;
->>>>>>> upstream/master
 				
 				while(getSchemeResultset.next()) {
 					documentVO = new DocumentVO();
@@ -390,7 +384,7 @@ public class SchemeDaoImpl implements SchemeDao{
 				throw new SchemeNotFoundException("Schemes Not Found");
 			}
 		} catch(SQLException | ClassNotFoundException e) {
-
+			e.printStackTrace();
 			throw new DatabaseException(e.getMessage());
 		}
 		return schemeList;
@@ -404,6 +398,8 @@ public class SchemeDaoImpl implements SchemeDao{
 			throws DatabaseException {
 		try {
 			Connection connection = DBUtility.getConnection();
+			connection.setAutoCommit(false);	//Implementing Transaction
+
 			PreparedStatement sequenceStatement = connection.prepareStatement("values(next value for scheme_seq)");
 			ResultSet resultSet = sequenceStatement.executeQuery();
 			long seq = 0;
@@ -437,12 +433,13 @@ public class SchemeDaoImpl implements SchemeDao{
 				insertStatement.execute();
 				
 			}
-			
+			connection.commit();
 			insertStatement.close();
 			connection.close();
 			
 
 		}catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
 			throw new DatabaseException(e.getMessage());
 		}
 		
@@ -484,6 +481,7 @@ public class SchemeDaoImpl implements SchemeDao{
 			connection.close();
 			
 		}catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
 			throw new DatabaseException(e.getMessage());
 		}
 	}
@@ -506,6 +504,7 @@ public class SchemeDaoImpl implements SchemeDao{
 			}
 			
 		}catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
 			throw new DatabaseException(e.getMessage());
 		}
 		return documentList;
@@ -529,6 +528,7 @@ public class SchemeDaoImpl implements SchemeDao{
 			}
 			
 		}catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
 			throw new DatabaseException(e.getMessage());
 		}
 		return bankList;

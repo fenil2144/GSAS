@@ -1,10 +1,10 @@
 package com.gsas.controller;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -19,10 +19,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -39,6 +37,7 @@ import com.gsas.model.SchemeEligibilityVO;
 import com.gsas.model.SchemeVO;
 import com.gsas.model.SectorVO;
 import com.gsas.service.SchemeService;
+import com.gsas.utility.FileName;
 import com.gsas.utility.LayerType;
 import com.gsas.utility.ObjectFactory;
 
@@ -63,23 +62,28 @@ public class InsertSchemeJsonServlet extends HttpServlet {
 			if(loginVO != null) {
 				if(loginVO.isEmployee() == true) {
 					
-					ServletFileUpload upload=new ServletFileUpload(new DiskFileItemFactory());
+					String fileName = null;
 					
-					List<FileItem> images=upload.parseRequest(request);//To store of list  files FileItem datatype is used 
-					
-						String name=images.get(0).getName();//gets the name of file  
-						try{name=name.substring(name.lastIndexOf("\\")+1);}catch(Exception e){}//this will give the name of file it removes stuffs like c:\downloads and gives the name
+		            Part part = request.getPart("imagePath");
+		            InputStream is = part.getInputStream();
 
-						//System.out.println(name);
-						images.get(0).write(new File("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\json"+name));//create folder imagescheme where image of the  will be stored
-					    //images folder created in local computer and write function writes into that folder
-				
+		            // get filename to use on the server
+		            fileName = new File(FileName.extractFileName(part)).getName();
+		            FileOutputStream os = new FileOutputStream ("~/Users/sukrita/Documents/Documents/Training/GSAS/WebContent/documents/"+fileName);
+		            
+		            // write bytes taken from uploaded file to target file
+		            int ch = is.read();
+		            while (ch != -1) {
+		                 os.write(ch);
+		                 ch = is.read();
+		            }
+		            os.close();				
 					//Creating a JSONParser object
 				      JSONParser jsonParser = new JSONParser();
 				      
 	      
 				         //Parsing the contents of the JSON file
-				         JSONObject jsonObject = (JSONObject) jsonParser.parse(new FileReader("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\json"+name));
+				         JSONObject jsonObject = (JSONObject) jsonParser.parse(new FileReader("~/Users/sukrita/Documents/Documents/Training/GSAS/WebContent/documents/"+fileName));
 				         //Retrieving the array
 				         JSONArray jsonArray = (JSONArray) jsonObject.get("scheme_data");
 			
@@ -92,38 +96,36 @@ public class InsertSchemeJsonServlet extends HttpServlet {
 							schemeVO.setSummary((String) record.get("summary"));
 							schemeVO.setDescription((String) record.get("description"));
 							
+							schemeVO.setImagePath((String) record.get("imagePath"));
 							
-
-							schemeVO.setImagePath("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\images"+ name);
-							
-							MinistryVO ministryVO = new MinistryVO(Long.parseLong(request.getParameter("ministry")));
+							MinistryVO ministryVO = new MinistryVO(Long.parseLong((String) record.get("ministry")));
 							schemeVO.setMinistryVO(ministryVO);
 							
-							SectorVO sectorVO = new SectorVO(Long.parseLong(request.getParameter("sector")));
+							SectorVO sectorVO = new SectorVO(Long.parseLong((String) record.get("sector")));
 							schemeVO.setSectorVO(sectorVO);
 							
 							DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 							formatter = formatter.withLocale( Locale.ENGLISH );  // Locale specifies human language for translating, and cultural norms for lowercase/uppercase and abbreviations and such. Example: Locale.US or Locale.CANADA_FRENCH
-							LocalDate date = LocalDate.parse(request.getParameter("startDate"), formatter);
+							LocalDate date = LocalDate.parse((String) record.get("startDate"), formatter);
 							schemeVO.setStartDate(date);
 							
 							SchemeEligibilityVO schemeEligibilityVO = new SchemeEligibilityVO();
-							schemeEligibilityVO.setMinAge(Integer.parseInt(request.getParameter("minAge")));
-							schemeEligibilityVO.setMaxAge(Integer.parseInt(request.getParameter("maxAge")));
-							schemeEligibilityVO.setGender(request.getParameter("gender"));
-							schemeEligibilityVO.setIncomeGroupVO(new IncomeGroupVO(Long.parseLong(request.getParameter("incomeGroup"))));
-							schemeEligibilityVO.setProfessionVO(new ProfessionVO(Long.parseLong(request.getParameter("profession"))));
+							schemeEligibilityVO.setMinAge(Integer.parseInt((String) record.get("minAge")));
+							schemeEligibilityVO.setMaxAge(Integer.parseInt((String) record.get("maxAge")));
+							schemeEligibilityVO.setGender(request.getParameter((String) record.get("gender")));
+							schemeEligibilityVO.setIncomeGroupVO(new IncomeGroupVO(Long.parseLong((String) record.get("incomeGroup"))));
+							schemeEligibilityVO.setProfessionVO(new ProfessionVO(Long.parseLong((String) record.get("profession"))));
 							schemeVO.setSchemeEligibilityVO(schemeEligibilityVO);
-							schemeVO.setStatus(true);
-							
-							String[] documentIdList = request.getParameterValues("document");
+							schemeVO.setStatus(Boolean.parseBoolean((String) record.get("status")));
+
+							String[] documentIdList = (String[]) record.get("document");
 							List<DocumentVO> documentList = new ArrayList<DocumentVO>();
 							for(String documentId : documentIdList) {
 								documentList.add(new DocumentVO(Long.parseLong(documentId)));
 							}
 							schemeVO.setDocumentList(documentList);
 							
-							String[] bankIdList = request.getParameterValues("bank");
+							String[] bankIdList = (String[]) record.get("bank");
 							List<BankVO> bankList = new ArrayList<BankVO>();
 							for(String bankId : bankIdList) {
 								bankList.add(new BankVO(Long.parseLong(bankId)));
@@ -135,34 +137,12 @@ public class InsertSchemeJsonServlet extends HttpServlet {
 							rd = request.getRequestDispatcher("AddSchemeServlet");
 							rd.forward(request, response);
 				            
-				            
-				            
-				            int scheme_eligibility_id = Integer.parseInt((String) record.get("SEID"));//fetches scheme eligibility id from json file
-				            int minage = Integer.parseInt((String) record.get("MINAGE"));//fetches minage  from json file
-				            int maxage = Integer.parseInt((String) record.get("MAXAGE"));//fetches max age  id from json file
-				            int incid = Integer.parseInt((String) record.get("INCID"));//fetches scheme income group id from json file
-				            String gen = (String) record.get("GEN");//fetches  gender from json file
-				            int pid = Integer.parseInt((String) record.get("PID"));//fetches profession from json file
-				            int scid=Integer.parseInt((String) record.get("SCID"));//fetches scheme eligibility id from json file
-				            String sch_name=(String) record.get("SCH_NAME");//fetches scheme name from json file
-				            String sch_sum=(String) record.get("SCH_SUM");//fetches summary from json file
-				            String sch_des=(String) record.get("SCH_DES");//fetches scheme description from json file
-				            String img_path=(String) record.get("IMG_PATH");//fetch image path from json file
-				            int mid = Integer.parseInt((String) record.get("MID"));//fetches ministry id from json file
-				            int sect_id = Integer.parseInt((String) record.get("SECT_ID"));//fetches sector  id from json file
-				            String d=(String) record.get("DOS");//fetches date of start from json file(1st step)
-				           // long dos = Date.valueOf(d).getTime();//fetches date of start from json file(two step process)				   
-				            boolean status=  (Boolean)record.get("STATUS");//fetches status of scheme file(in json we store boolean as 1 or 0)
-				            int sch_docid=Integer.parseInt((String) record.get("SCH_DOCID"));//fetches scheme document id from json file
-				            int docu_id=Integer.parseInt((String) record.get("DOCU_ID"));//fetches scheme eligibility id from json file
-				            int scheme_bank_id=Integer.parseInt((String) record.get("SCHEME_BANK_ID"));//fetches scheme bank id from json file
-				            int bank_id=Integer.parseInt((String) record.get("BANK_ID"));//fetches scheme bankid from json file
 				         }
 				}
-							else {													//If user is already logged in
-								rd = request.getRequestDispatcher("viewSchemesCitizenServlet");
-								rd.forward(request, response);
-							}
+						else {													//If user is already logged in
+							rd = request.getRequestDispatcher("viewSchemesCitizenServlet");
+							rd.forward(request, response);
+						}
 						}
 						else {
 							request.setAttribute("err","Please Login First");

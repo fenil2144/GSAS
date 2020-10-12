@@ -5,8 +5,8 @@
   box-sizing: border-box;
 }
 body{
-  font-family:'Times New Roman', Times, serif;
   margin:0;
+  font-family:'Times New Roman', Times, serif;
 }
 .header {
     color:  #FFFAFA;
@@ -74,7 +74,7 @@ body{
  
 
   .footer {
-  /* position: fixed; */
+  /*position: fixed; */
   margin: auto;
   clear: both;
   margin-left: 20%;
@@ -83,21 +83,7 @@ body{
   width: 80%;
   text-align: center;
   background-color: #DCDCDC;
-  color:black
-  
-}
-
-.footerOther {
-  position: fixed;
-  margin: auto;
-  clear: both;
-  margin-left: 20%;
-  left: 0;
-  bottom: 0;
-  width: 80%;
-  text-align: center;
-  background-color: #DCDCDC;
-  color:black
+  color:black;
   
 }
 .content{
@@ -143,16 +129,3 @@ body{
    
    
 }
-.message{
-	color:black;
-	text-align: center;
-}
-
-.error{
-	color:red;
-	text-align: center;
-}
-
-
-
-

@@ -49,7 +49,6 @@ public class ApplySchemeServlet extends HttpServlet {
 				if(loginVO.isEmployee() == false) {	
 
 					SchemeApplicantVO schemeApplicant = new SchemeApplicantVO();
-<<<<<<< HEAD
 					SchemeVO schemeVO = schemeService.getSchemeDetails(Long.parseLong(request.getParameter("schemeId"))); // get scheme from
 																									// schemeID
 					SchemeEligibilityVO schemeEligibilityVO = schemeVO.getSchemeEligibilityVO(); // get Eligibility of
@@ -59,13 +58,11 @@ public class ApplySchemeServlet extends HttpServlet {
 																												// from
 																												// citizenId
 					
-					String successMessage="All criteria validated successfuly";
+					String successMessage="All criteria validated successfully";
 					System.out.println(schemeVO.getSchemeName());
 					System.out.println(schemeVO.getSchemeId());
-					schemeVO.setBankList(
-							schemeService.getSchemeBankList(Long.parseLong(request.getParameter("schemeId"))));
-					schemeVO.setDocumentList(
-							schemeService.getSchemeDocumentsList(Long.parseLong(request.getParameter("schemeId"))));
+					schemeVO.setBankList(schemeService.getSchemeBankList(Long.parseLong(request.getParameter("schemeId"))));
+					schemeVO.setDocumentList(schemeService.getSchemeDocumentsList(Long.parseLong(request.getParameter("schemeId"))));
 
 					// schemeApplicant Object
 					schemeApplicant.setSchemeVO(schemeVO);
@@ -81,72 +78,29 @@ public class ApplySchemeServlet extends HttpServlet {
 					// checking if the citizen satisfies basic eligiblity criteria of the scheme
 					schemeApplicant.setReason(schemeService.validate(schemeEligibilityVO, citizenDetails));
 					// on successful validation
-					if (schemeApplicant.getReason().equalsIgnoreCase(successMessage)) {
+					if (schemeApplicant.getReason().equals(successMessage)) {
 						schemeApplicant.setApprovedStatus(true);
+						schemeService.addRejectedSchemeApplicant(schemeApplicant);
 						request.setAttribute("schemeVO", schemeVO);
 						requestDispatcher = request.getRequestDispatcher("applyScheme.jsp");
-						request.setAttribute("err", schemeApplicant.getReason());
+						request.setAttribute("message", schemeApplicant.getReason());
 						requestDispatcher.forward(request, response);
 
-=======
-					SchemeVO schemeVO = schemeService.getSchemeDetails(Long.parseLong(request.getParameter("schemeId"))); // get scheme from schemeID
-					SchemeEligibilityVO schemeEligibilityVO = schemeVO.getSchemeEligibilityVO(); //get Eligibility of that scheme
-					CitizenDetailsVO citizenDetails = citizenService.getCitizenDetails(loginVO.getLoginId()); //get citizenDetails from citizenId	
-	
-					
-					schemeVO.setBankList(schemeService.getSchemeBankList(Long.parseLong(request.getParameter("schemeId"))));
-					schemeVO.setDocumentList(schemeService.getSchemeDocumentsList(Long.parseLong(request.getParameter("schemeId"))));
-					
-					//schemeApplicant Object
-					schemeApplicant.setSchemeVO(schemeVO);
-					schemeApplicant.setLoginVO(loginVO);
-					
-					
-					 schemeApplicant.setBankVO(null);
-					 schemeApplicant.setAccountNumber(0);
-					 schemeApplicant.setTypeOfAccount("savings");
-					 schemeApplicant.setIfsc("HSBC1234567");
-					 schemeApplicant.setBranch("ALwar");
-					 schemeApplicant.setApplicantDocumentsList(null);
-					 
-					
-					//checking if the citizen satisfies basic eligiblity criteria of the scheme
-				    schemeApplicant.setReason(schemeService.validate(schemeEligibilityVO, citizenDetails));					
-					//on successful validation
-				    System.out.println("Outside!");
-					if(!schemeApplicant.getReason().equalsIgnoreCase("All criteria validated successfuly")) {
-						System.out.println("WE are here in true! "+schemeApplicant.getReason());
-						schemeApplicant.setApprovedStatus(true);	
-						request.setAttribute("schemeVO",schemeVO);
-						System.out.println(schemeVO.getDocumentList().size());
-						requestDispatcher = request.getRequestDispatcher("applyScheme.jsp");
-						requestDispatcher.forward(request, response);
-						
->>>>>>> upstream/master
 					}
 					//on failed validation
 					else {
 						schemeApplicant.setApprovedStatus(false);
 						System.out.println("WE are here in false! "+schemeApplicant.getReason());
 						schemeService.addRejectedSchemeApplicant(schemeApplicant);
-<<<<<<< HEAD
 						requestDispatcher = request.getRequestDispatcher("viewSchemesEmployeeServlet");
 						request.setAttribute("err", schemeApplicant.getReason());
 						requestDispatcher.forward(request, response);
 					}
 
-				} else { // If employee is already logged in
-=======
-						request.setAttribute("err",schemeApplicant.getReason());
-						requestDispatcher = request.getRequestDispatcher("viewSchemesCitizenServlet");
-						requestDispatcher.forward(request, response);
-					}
-					System.out.println("Bank: "+schemeVO.getBankList().size());
-					
-					
+										
 					
 				}else {													//If employee is already logged in
->>>>>>> upstream/master
+
 					requestDispatcher = request.getRequestDispatcher("viewSchemesEmployeeServlet");
 					requestDispatcher.forward(request, response);
 				}

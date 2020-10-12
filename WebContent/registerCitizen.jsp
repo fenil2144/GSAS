@@ -53,9 +53,23 @@
 	</div>
 
 	<div class="main">
+	<div class="message">
+        <c:if test="${message != null}">
+            <h3>
+                <c:out value="${message}" />
+            </h3>
+        </c:if>
+        </div>
+        <div class="error">
+        <c:if test="${err != null}">
+            <h3>
+                <c:out value="${err}" />
+            </h3>
+        </c:if>
+        </div>
 		<div class="main1">
 			
-			<form method="POST" action="CitizenRegistrationServlet" onSubmit="return validate()">
+			<form method="POST" action="CitizenRegistrationServlet" onsubmit="validate(event)">
 				<div class="col1" id="name">
 					<label class="required-field"> Enter your Name</label><input type="text" name="firstName"
 						id="firstName" placeholder="First Name" required><input
