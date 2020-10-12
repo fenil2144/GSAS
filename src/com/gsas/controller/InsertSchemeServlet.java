@@ -58,6 +58,7 @@ public class InsertSchemeServlet extends HttpServlet {
 					schemeVO.setSchemeName(request.getParameter("schemeName"));
 					schemeVO.setSummary(request.getParameter("summary"));
 					schemeVO.setDescription(request.getParameter("description"));
+
 					
 					
 					ServletFileUpload upload=new ServletFileUpload(new DiskFileItemFactory());
@@ -115,8 +116,10 @@ public class InsertSchemeServlet extends HttpServlet {
 			request.setAttribute("err", e.getMessage());
 			rd.forward(request, response);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			rd = request.getRequestDispatcher("AddSchemeServlet");
+			request.setAttribute("err", e.getMessage());
+			rd.forward(request, response);
 		}
 	}
 
