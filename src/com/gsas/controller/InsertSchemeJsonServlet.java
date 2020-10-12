@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -28,6 +29,8 @@ import org.json.simple.parser.JSONParser;
 
 import com.gsas.exception.DatabaseException;
 import com.gsas.exception.InvalidSequenceException;
+import com.gsas.model.BankVO;
+import com.gsas.model.DocumentVO;
 import com.gsas.model.IncomeGroupVO;
 import com.gsas.model.LoginVO;
 import com.gsas.model.MinistryVO;
@@ -60,15 +63,25 @@ public class InsertSchemeJsonServlet extends HttpServlet {
 			if(loginVO != null) {
 				if(loginVO.isEmployee() == true) {
 					
+					ServletFileUpload upload=new ServletFileUpload(new DiskFileItemFactory());
+					
+					List<FileItem> images=upload.parseRequest(request);//To store of list  files FileItem datatype is used 
+					
+						String name=images.get(0).getName();//gets the name of file  
+						try{name=name.substring(name.lastIndexOf("\\")+1);}catch(Exception e){}//this will give the name of file it removes stuffs like c:\downloads and gives the name
+
+						//System.out.println(name);
+						images.get(0).write(new File("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\json"+name));//create folder imagescheme where image of the  will be stored
+					    //images folder created in local computer and write function writes into that folder
 				
 					//Creating a JSONParser object
 				      JSONParser jsonParser = new JSONParser();
 				      
 	      
 				         //Parsing the contents of the JSON file
-				         JSONObject jsonObject = (JSONObject) jsonParser.parse(new FileReader("D:/generated.json"));
+				         JSONObject jsonObject = (JSONObject) jsonParser.parse(new FileReader("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\json"+name));
 				         //Retrieving the array
-				         JSONArray jsonArray = (JSONArray) jsonObject.get("players_data");
+				         JSONArray jsonArray = (JSONArray) jsonObject.get("scheme_data");
 			
 				         
 				         for(Object object : jsonArray) {
@@ -76,19 +89,10 @@ public class InsertSchemeJsonServlet extends HttpServlet {
 				            
 							SchemeVO schemeVO = new SchemeVO();
 							schemeVO.setSchemeName((String) record.get("schemeName"));
-							schemeVO.setSummary(request.getParameter("summary"));
-							schemeVO.setDescription(request.getParameter("description"));
+							schemeVO.setSummary((String) record.get("summary"));
+							schemeVO.setDescription((String) record.get("description"));
 							
-							ServletFileUpload upload=new ServletFileUpload(new DiskFileItemFactory());
 							
-								List<FileItem> images=upload.parseRequest(request);//To store of list  files FileItem datatype is used 
-								
-									String name=images.get(0).getName();//gets the name of file  
-									try{name=name.substring(name.lastIndexOf("\\")+1);}catch(Exception e){}//this will give the name of file it removes stuffs like c:\downloads and gives the name
-
-									//System.out.println(name);
-									images.get(0).write(new File("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\images"+name));//create folder imagescheme where image of the  will be stored
-								    //images folder created in local computer and write function writes into that folder
 
 							schemeVO.setImagePath("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\images"+ name);
 							
@@ -111,6 +115,20 @@ public class InsertSchemeJsonServlet extends HttpServlet {
 							schemeEligibilityVO.setProfessionVO(new ProfessionVO(Long.parseLong(request.getParameter("profession"))));
 							schemeVO.setSchemeEligibilityVO(schemeEligibilityVO);
 							schemeVO.setStatus(true);
+							
+							String[] documentIdList = request.getParameterValues("document");
+							List<DocumentVO> documentList = new ArrayList<DocumentVO>();
+							for(String documentId : documentIdList) {
+								documentList.add(new DocumentVO(Long.parseLong(documentId)));
+							}
+							schemeVO.setDocumentList(documentList);
+							
+							String[] bankIdList = request.getParameterValues("bank");
+							List<BankVO> bankList = new ArrayList<BankVO>();
+							for(String bankId : bankIdList) {
+								bankList.add(new BankVO(Long.parseLong(bankId)));
+							}
+							schemeVO.setBankList(bankList);
 							
 							schemeService.addScheme(schemeVO);
 							request.setAttribute("message","Scheme Added Successfully!");

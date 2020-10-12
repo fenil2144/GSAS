@@ -1,3 +1,4 @@
+
 package com.gsas.controller;
 
 import java.io.IOException;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import com.gsas.exception.DatabaseException;
 import com.gsas.exception.SchemeNotFoundException;
 import com.gsas.model.LoginVO;
+import com.gsas.model.SchemeApplicantVO;
 import com.gsas.model.SchemeVO;
 import com.gsas.service.CitizenService;
 import com.gsas.utility.LayerType;
@@ -24,7 +26,7 @@ import com.gsas.utility.ObjectFactory;
  */
 @WebServlet("/viewSchemesCitizenServlet")
 public class viewSchemesCitizenServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
        
 
     public viewSchemesCitizenServlet() {
@@ -32,67 +34,67 @@ public class viewSchemesCitizenServlet extends HttpServlet {
     }
 
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		CitizenService citizenService = (CitizenService) ObjectFactory.getInstance(LayerType.CITIZEN_SERVICE);
-		RequestDispatcher rd = null;
-		List<SchemeVO> notAppliedSchemeList = null;
-		List<SchemeVO> acceptedSchemeList = null;
-		List<SchemeVO> rejectedSchemeList = null;
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        CitizenService citizenService = (CitizenService) ObjectFactory.getInstance(LayerType.CITIZEN_SERVICE);
+        RequestDispatcher rd = null;
+        List<SchemeVO> notAppliedSchemeList = null;
+        List<SchemeApplicantVO> acceptedSchemeList = null;
+        List<SchemeApplicantVO> rejectedSchemeList = null;
 
-		HttpSession session = request.getSession();
-		LoginVO loginVO = (LoginVO) session.getAttribute("loginVO");
-		
-		try {
-			if(loginVO != null) {
-				if(loginVO.isEmployee() == false) {	
-					//If user is already logged in
-					System.out.println("In here.");
-					
-					notAppliedSchemeList = citizenService.getNotAppliedSchemeList(loginVO.getLoginId());			//return list of all schemes
-					request.setAttribute("notAppliedSchemeList", notAppliedSchemeList);
-					
-					acceptedSchemeList = citizenService.getAppliedSchemeList(loginVO.getLoginId(), true);
-					request.setAttribute("acceptedSchemeList", acceptedSchemeList);
-					
-					rejectedSchemeList = citizenService.getAppliedSchemeList(loginVO.getLoginId(), false);
-					request.setAttribute("rejectedSchemeList", rejectedSchemeList);
-					System.out.println(notAppliedSchemeList.size());
-					System.out.println(acceptedSchemeList.size());
-					System.out.println(rejectedSchemeList.size());
+        HttpSession session = request.getSession();
+        LoginVO loginVO = (LoginVO) session.getAttribute("loginVO");
+        
+        try {
+            if(loginVO != null) {
+                if(loginVO.isEmployee() == false) { 
+                    //If user is already logged in
+                    System.out.println("In here.");
+                    
+                    notAppliedSchemeList = citizenService.getNotAppliedSchemeList(loginVO.getLoginId());            //return list of all schemes
+                    request.setAttribute("notAppliedSchemeList", notAppliedSchemeList);
+                    
+                    acceptedSchemeList = citizenService.getAppliedSchemeList(loginVO.getLoginId(), true);
+                    request.setAttribute("acceptedSchemeList", acceptedSchemeList);
+                    
+                    rejectedSchemeList = citizenService.getAppliedSchemeList(loginVO.getLoginId(), false);
+                    request.setAttribute("rejectedSchemeList", rejectedSchemeList);
+                    //System.out.println(notAppliedSchemeList.size());
+                   // System.out.println(acceptedSchemeList.size());
+                   // System.out.println(rejectedSchemeList.size());
 
-					rd = request.getRequestDispatcher("viewAllSchemes.jsp");
-					System.out.println(notAppliedSchemeList.size());
-					System.out.println(acceptedSchemeList.size());
-					System.out.println(rejectedSchemeList.size());
-					rd.forward(request, response);
-			
-				}
-				else {													//If employee is already logged in
-					rd = request.getRequestDispatcher("viewSchemesCitizenServlet");
-					rd.forward(request, response);
-				}
-			}
-			else {
-				
-				rd = request.getRequestDispatcher("citizenlogin.jsp");
-				rd.forward(request, response);
-			}
-		}catch(SchemeNotFoundException | DatabaseException e) {
-			rd = request.getRequestDispatcher("viewAllSchemes.jsp");
-			e.printStackTrace();
-			request.setAttribute("err", e.getMessage());
-			rd.forward(request, response);
-			
-		}
-	}
+                    rd = request.getRequestDispatcher("viewAllSchemes.jsp");
+                    System.out.println(notAppliedSchemeList.size());
+                    System.out.println(acceptedSchemeList.size());
+                    System.out.println(rejectedSchemeList.size());
+                    rd.forward(request, response);
+            
+                }
+                else {                                                  //If employee is already logged in
+                    rd = request.getRequestDispatcher("viewSchemesCitizenServlet");
+                    rd.forward(request, response);
+                }
+            }
+            else {
+                
+                rd = request.getRequestDispatcher("citizenlogin.jsp");
+                rd.forward(request, response);
+            }
+        }catch(SchemeNotFoundException | DatabaseException e) {
+            rd = request.getRequestDispatcher("viewAllSchemes.jsp");
+            e.printStackTrace();
+            request.setAttribute("err", e.getMessage());
+            rd.forward(request, response);
+            
+        }
+    }
 
 
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(req, resp);
-	}
-	
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // TODO Auto-generated method stub
+        doGet(req, resp);
+    }
+    
 
 
 

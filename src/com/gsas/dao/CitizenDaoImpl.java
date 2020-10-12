@@ -160,7 +160,7 @@ public class CitizenDaoImpl implements CitizenDao {
 			preparedStatement.close();
 			connection.close();
 			if(citizenDetailsVO == null) {
-				throw new CitizenNotFoundException("Sorry, Citizen Details Not Found");
+				throw new CitizenNotFoundException("Sorry username or Password is Incorrect");
 			}
 			
 		} catch (ClassNotFoundException | SQLException e) {
@@ -191,7 +191,7 @@ public class CitizenDaoImpl implements CitizenDao {
 			updateStatement.executeUpdate();
 			
 			//Update citizen_details
-			updateStatement = connection.prepareStatement("update citizen_details set first_name=?,middle_name=?,last_name=?,date_of_birth=?,gender=?,email=?,phone=?,address_ref=?,income_group_ref=?,profession_ref =?,adhar_number=?,pancard_number=?,citizen_ref=? where citizen_details_id=?");
+			updateStatement = connection.prepareStatement("update citizen_master set first_name=?,middle_name=?,last_name=?,date_of_birth=?,gender=?,email=?,phone=?,address_ref=?,income_group_ref=?,profession_ref =?,adhar_number=?,pancard_number=?,login_ref=? where citizen_details_id=?");
 			updateStatement.setString(1, citizenDetailsVO.getFirstName());
 			updateStatement.setString(2, citizenDetailsVO.getMiddleName());
 			updateStatement.setString(3, citizenDetailsVO.getLastName());
@@ -253,16 +253,16 @@ public class CitizenDaoImpl implements CitizenDao {
 	}
 	
 	@Override
-	public List<SchemeVO> getAppliedSchemeList(long citizenId,boolean approvedStatus) throws SchemeNotFoundException, DatabaseException {
-		List<SchemeVO> appliedSchemeList = new ArrayList<SchemeVO>();
+	public List<SchemeApplicantVO> getAppliedSchemeList(long citizenId,boolean approvedStatus) throws SchemeNotFoundException, DatabaseException {
+		List<SchemeApplicantVO> appliedSchemeList = new ArrayList<SchemeApplicantVO>();
 		
 		try {
 			Connection connection = DBUtility.getConnection();
 			
-			PreparedStatement selectStatement = connection.prepareStatement("SELECT scheme_id,scheme_name,summary,description,image_path,approved_status,reason FROM scheme_master s INNER JOIN scheme_applicant a ON s.scheme_id = a.scheme_ref WHERE login_ref = ? AND approved_status = false and status = true");
+			PreparedStatement selectStatement = connection.prepareStatement("SELECT scheme_id,scheme_name,summary,description,image_path,approved_status,reason FROM scheme_master s INNER JOIN scheme_applicant a ON s.scheme_id = a.scheme_ref WHERE login_ref = ? AND approved_status = ? and status = ?");
 			selectStatement.setLong(1, citizenId);
-//			selectStatement.setBoolean(2, approvedStatus);
-//			selectStatement.setBoolean(3, true);
+			selectStatement.setBoolean(2, approvedStatus);
+			selectStatement.setBoolean(3, true);
 			
 			ResultSet resultSet = selectStatement.executeQuery();
 			while(resultSet.next()) {
@@ -272,14 +272,14 @@ public class CitizenDaoImpl implements CitizenDao {
 				schemeVO.setSummary(resultSet.getString("summary"));
 				schemeVO.setDescription(resultSet.getString("description"));
 				schemeVO.setImagePath(resultSet.getString("image_path"));
-				schemeVO.setStatus(resultSet.getBoolean("approved_status"));
+				schemeVO.setStatus(true);
 				
 				SchemeApplicantVO schemeApplicantVO = new SchemeApplicantVO();
 				schemeApplicantVO.setReason(resultSet.getString("reason"));
 				
 				schemeApplicantVO.setSchemeVO(schemeVO);
 				
-				appliedSchemeList.add(schemeVO);
+				appliedSchemeList.add(schemeApplicantVO);
 			}
 			
 			resultSet.close();
