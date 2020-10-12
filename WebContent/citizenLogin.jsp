@@ -84,7 +84,7 @@
 
 
 
-	<div class="footerOther">
+	<div class="footer">
 		<h2>Coordinated by: Team Agastya</h2>
 	</div>
 

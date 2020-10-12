@@ -59,8 +59,6 @@ public class ApplySchemeServlet extends HttpServlet {
 																												// citizenId
 					
 					String successMessage="All criteria validated successfully";
-					System.out.println(schemeVO.getSchemeName());
-					System.out.println(schemeVO.getSchemeId());
 					schemeVO.setBankList(schemeService.getSchemeBankList(Long.parseLong(request.getParameter("schemeId"))));
 					schemeVO.setDocumentList(schemeService.getSchemeDocumentsList(Long.parseLong(request.getParameter("schemeId"))));
 
@@ -90,7 +88,6 @@ public class ApplySchemeServlet extends HttpServlet {
 					//on failed validation
 					else {
 						schemeApplicant.setApprovedStatus(false);
-						System.out.println("WE are here in false! "+schemeApplicant.getReason());
 						schemeService.addRejectedSchemeApplicant(schemeApplicant);
 						requestDispatcher = request.getRequestDispatcher("viewSchemesEmployeeServlet");
 						request.setAttribute("err", schemeApplicant.getReason());

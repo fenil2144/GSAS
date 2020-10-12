@@ -83,7 +83,7 @@ public class ApplySchemeDocumentServlet extends HttpServlet {
 
 			            // get filename to use on the server
 			            fileName = new File(extractFileName(part)).getName();
-			            FileOutputStream os = new FileOutputStream ("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\documents\\"+fileName);
+			            FileOutputStream os = new FileOutputStream ("F:\\documents\\"+fileName);
 			            
 			            // write bytes taken from uploaded file to target file
 			            int ch = inputStream.read();
@@ -93,7 +93,7 @@ public class ApplySchemeDocumentServlet extends HttpServlet {
 			            }
 			            os.close();
 						
-						schemeApplicantDocuments.setDocumentPath("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\documents\\"+fileName);
+						schemeApplicantDocuments.setDocumentPath("F:\\documents\\"+fileName);
 						applicantDocumentsdocList.add(schemeApplicantDocuments);
 
                     }

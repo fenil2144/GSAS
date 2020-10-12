@@ -1,6 +1,9 @@
 package com.gsas.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -9,11 +12,13 @@ import java.util.Locale;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import com.gsas.exception.DatabaseException;
 import com.gsas.exception.InvalidSequenceException;
@@ -27,6 +32,7 @@ import com.gsas.model.SchemeEligibilityVO;
 import com.gsas.model.SchemeVO;
 import com.gsas.model.SectorVO;
 import com.gsas.service.SchemeService;
+import com.gsas.utility.FileName;
 import com.gsas.utility.LayerType;
 import com.gsas.utility.ObjectFactory;
 
@@ -34,6 +40,7 @@ import com.gsas.utility.ObjectFactory;
  * Servlet implementation class UpdateSchemeServlet
  */
 @WebServlet("/UpdateSchemeServlet")
+@MultipartConfig
 public class UpdateSchemeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -55,8 +62,26 @@ public class UpdateSchemeServlet extends HttpServlet {
 					schemeVO.setSchemeName(request.getParameter("schemeName"));
 					schemeVO.setSummary(request.getParameter("summary"));
 					schemeVO.setDescription(request.getParameter("description"));
-					schemeVO.setImagePath("dummyLink");
+					String fileName = null;
 					
+		            Part part = request.getPart("imagePath");
+		            InputStream is = part.getInputStream();
+
+		            // get filename to use on the server
+		            fileName = new File(FileName.extractFileName(part)).getName();
+
+		            FileOutputStream os = new FileOutputStream ("F:\\images\\"+fileName);
+		            
+		            // write bytes taken from uploaded file to target file
+		            int ch = is.read();
+		            while (ch != -1) {
+		                 os.write(ch);
+		                 ch = is.read();
+		            }
+		            os.close();
+
+		            schemeVO.setImagePath("F:\\images\\"+fileName);
+
 					MinistryVO ministryVO = new MinistryVO(Long.parseLong(request.getParameter("ministry")));
 					schemeVO.setMinistryVO(ministryVO);
 					

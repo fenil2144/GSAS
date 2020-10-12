@@ -44,7 +44,7 @@
 			<a href="citizenLogin.jsp">Citizen Login</a>
 		</div>
 		<div class="content">
-			<a href="listSchemes.jsp">List Schemes</a>
+			<a href="index.jsp">List Schemes</a>
 		</div>
 		<div class="content">
 			<a href="AddCitizenServlet">Citizen Register</a>

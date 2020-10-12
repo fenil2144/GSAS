@@ -65,20 +65,6 @@
             </h3>
         </c:if>
         </div>
-        <div class="message">
-        <c:if test="${message != null}">
-            <h3>
-                <c:out value="${message}" />
-            </h3>
-        </c:if>
-        </div>
-        <div class="error">
-        <c:if test="${err != null}">
-            <h3>
-                <c:out value="${err}" />
-            </h3>
-        </c:if>
-        </div>
             <div class="main1">
             <h1>Schemes</h1>
             <div class="row">
@@ -94,7 +80,7 @@
                             <img src="${schemeVO.imagePath }" class="cardImage">
                             <p>${schemeVO.summary }</p>
                             <p>
-                                <c:url value="Training_GSAS/ApplySchemeServlet" var="editURL">
+                                <c:url value="GovernmentSchemesApplicationSystem/ApplySchemeServlet" var="editURL">
                                     <c:param name="schemeId" value="${schemeVO.schemeId}" />
                                     
                                 </c:url>

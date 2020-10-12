@@ -51,7 +51,7 @@
                 <h2> Menu </h2>
             </div>
             <div class="content" id="first">
-                <a href="index.jsp">Logout</a>
+                <a href="LogoutServlet">Logout</a>
             </div>
             
      </div>

@@ -61,7 +61,7 @@
         </c:if>
         </div>
 		<div class="main1">
-			<form method="POST" action="UpdateSchemeServlet">
+			<form method="POST" action="UpdateSchemeServlet" enctype="multipart/form-data">
 			<input type="hidden" name="schemeId" id="schemeId" value="${schemeVO.schemeId}">
 			<input type="hidden" name="schemeEligibilityId" id="schemeEligibilityId" value="${schemeVO.schemeEligibilityVO.schemeEligibilityId}">
 				<div class="col1">
@@ -79,7 +79,7 @@
 							cols="50" id="description" name="description"  required>${schemeVO.description}</textarea>
 				</div>
 				<div class="col1">
-					<label class="required-field">Upload Image </label><input type="file" id="image" name="image" value="${schemeVO.imagePath}" required>
+					<label class="required-field">Upload Image </label><input type="file" id="imagePath" name="imagePath" value="${schemeVO.imagePath}" required>
 
 				</div>
 				<div class="col1">
