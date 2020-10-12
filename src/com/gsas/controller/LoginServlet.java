@@ -41,6 +41,7 @@ public class LoginServlet extends HttpServlet {
 			
 		} catch (AuthenticationException e) {
 			rd = request.getRequestDispatcher("loginFailure.jsp");
+			e.printStackTrace();
 			request.setAttribute("err", e.getMessage());
 			rd.forward(request, response);
 		}

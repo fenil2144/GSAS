@@ -40,6 +40,20 @@
 	</div>
 
 	<div class="main">
+	<div class="message">
+        <c:if test="${message != null}">
+            <h3>
+                <c:out value="${message}" />
+            </h3>
+        </c:if>
+        </div>
+        <div class="error">
+        <c:if test="${err != null}">
+            <h3>
+                <c:out value="${err}" />
+            </h3>
+        </c:if>
+        </div>
 		<div class="main1">
 			<c:if test="${message != null}">
 				<p>

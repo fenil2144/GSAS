@@ -69,6 +69,7 @@ public class InsertSchemeJsonServlet extends HttpServlet {
 
 		            // get filename to use on the server
 		            fileName = new File(FileName.extractFileName(part)).getName();
+
 		            FileOutputStream os = new FileOutputStream ("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\json\\"+fileName);
 		            
 		            // write bytes taken from uploaded file to target file
@@ -84,6 +85,7 @@ public class InsertSchemeJsonServlet extends HttpServlet {
 	      
 				         //Parsing the contents of the JSON file
 				         JSONObject jsonObject = (JSONObject) jsonParser.parse(new FileReader("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\json\\"+fileName));
+
 				         //Retrieving the array
 				         JSONArray jsonArray = (JSONArray) jsonObject.get("scheme_data");
 			
@@ -96,8 +98,8 @@ public class InsertSchemeJsonServlet extends HttpServlet {
 							schemeVO.setSummary((String) record.get("summary"));
 							schemeVO.setDescription((String) record.get("description"));
 							
-							schemeVO.setImagePath((String) record.get("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\json\\"+fileName));
-							
+
+							schemeVO.setImagePath((String) record.get("imagePath"));
 							MinistryVO ministryVO = new MinistryVO(Long.parseLong((String) record.get("ministry")));
 							schemeVO.setMinistryVO(ministryVO);
 							

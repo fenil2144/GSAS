@@ -67,7 +67,7 @@ public class CitizenServiceImpl implements CitizenService {
 	public boolean isCitizenUnique(CitizenDetailsVO citizenDetailsVO) throws DatabaseException, DuplicateUserException {
 		boolean isUnique = citizenDao.isCitizenUnique(citizenDetailsVO);
 		if(isUnique == false) {
-			throw new DuplicateUserException("Username, Adhar Or Pan already registered.");
+			throw new DuplicateUserException("Username, Aadhar Or Pan already registered.");
 		}
 		return isUnique;
 	}

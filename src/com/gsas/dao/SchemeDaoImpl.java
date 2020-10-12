@@ -29,6 +29,7 @@ public class SchemeDaoImpl implements SchemeDao{
 	public void addScheme(SchemeVO schemeVO) throws DatabaseException, InvalidSequenceException {
 		try {
 			connection = DBUtility.getConnection();
+			connection.setAutoCommit(false);	//Implementing Transaction
 			PreparedStatement sequenceStatement = connection.prepareStatement("values(next value for scheme_seq)");
 			ResultSet resultSet = sequenceStatement.executeQuery();
 			long seq = 0;
@@ -107,8 +108,9 @@ public class SchemeDaoImpl implements SchemeDao{
 				selectStatement.setLong(3, bank.getBankId());
 				selectStatement.executeUpdate();
 			}
-			
-			connection.commit();
+
+			connection.commit();	//Committing the changes.
+
 			selectStatement.close();
 			connection.close();
 
@@ -123,8 +125,8 @@ public class SchemeDaoImpl implements SchemeDao{
 	public void editScheme(SchemeVO scheme) throws DatabaseException, InvalidSequenceException {
 		try {
 			Connection connection = DBUtility.getConnection();
-			connection.setAutoCommit(false);	//Imlementing Transaction
-			
+			connection.setAutoCommit(false);	//Implementing Transaction
+
 			PreparedStatement selectStatement = connection.prepareStatement("update scheme_eligibility set min_age=?, max_age=?, income_group_ref=?, gender=?, profession_ref=? where scheme_eligibility_id=?");
 			selectStatement.setInt(1, scheme.getSchemeEligibilityVO().getMinAge());
 			selectStatement.setInt(2, scheme.getSchemeEligibilityVO().getMaxAge());
@@ -205,7 +207,8 @@ public class SchemeDaoImpl implements SchemeDao{
 				selectStatement.setLong(3, bank.getBankId());
 				selectStatement.executeUpdate();
 			}
-			connection.commit();
+
+			connection.commit();	//Committing the changes.
 			selectStatement.close();
 			connection.close();
 			
@@ -383,7 +386,7 @@ public class SchemeDaoImpl implements SchemeDao{
 				throw new SchemeNotFoundException("Schemes Not Found");
 			}
 		} catch(SQLException | ClassNotFoundException e) {
-
+			e.printStackTrace();
 			throw new DatabaseException(e.getMessage());
 		}
 		return schemeList;
@@ -398,6 +401,7 @@ public class SchemeDaoImpl implements SchemeDao{
 		try {
 			Connection connection = DBUtility.getConnection();
 			connection.setAutoCommit(false);	//Implementing Transaction
+
 			PreparedStatement sequenceStatement = connection.prepareStatement("values(next value for scheme_seq)");
 			ResultSet resultSet = sequenceStatement.executeQuery();
 			long seq = 0;
@@ -431,12 +435,14 @@ public class SchemeDaoImpl implements SchemeDao{
 				insertStatement.execute();
 				
 			}
-			connection.commit();	//Committing the changes.
+			connection.commit();
+
 			insertStatement.close();
 			connection.close();
 			
 
 		}catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
 			throw new DatabaseException(e.getMessage());
 		}
 		
@@ -478,6 +484,7 @@ public class SchemeDaoImpl implements SchemeDao{
 			connection.close();
 			
 		}catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
 			throw new DatabaseException(e.getMessage());
 		}
 	}
@@ -500,6 +507,7 @@ public class SchemeDaoImpl implements SchemeDao{
 			}
 			
 		}catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
 			throw new DatabaseException(e.getMessage());
 		}
 		return documentList;
@@ -523,6 +531,7 @@ public class SchemeDaoImpl implements SchemeDao{
 			}
 			
 		}catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
 			throw new DatabaseException(e.getMessage());
 		}
 		return bankList;

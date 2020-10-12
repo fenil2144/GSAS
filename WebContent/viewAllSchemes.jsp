@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -22,6 +23,7 @@
                 margin-right:20%;
        
             }
+            
         </style>
         
     </head>
@@ -42,85 +44,122 @@
                 <a href="EditCitizenDetailsServlet">Edit Details</a>
             </div>
             <div class="content">
-             <a href="index.jsp">Logout</a>
+             <a href="LogoutServlet">Logout</a>
             </div>
             
             
      </div>
      
         <div class="main">
+        <div class="message">
+        <c:if test="${message != null}">
+            <h3>
+                <c:out value="${message}" />
+            </h3>
+        </c:if>
+        </div>
+        <div class="error">
+        <c:if test="${err != null}">
+            <h3>
+                <c:out value="${err}" />
+            </h3>
+        </c:if>
+        </div>
+        <div class="message">
+        <c:if test="${message != null}">
+            <h3>
+                <c:out value="${message}" />
+            </h3>
+        </c:if>
+        </div>
+        <div class="error">
+        <c:if test="${err != null}">
+            <h3>
+                <c:out value="${err}" />
+            </h3>
+        </c:if>
+        </div>
             <div class="main1">
-			<h1>Schemes</h1>
-			<div class="row">
-			<form action="ApplySchemeServlet">
-				
-				<c:forEach items="${notAppliedSchemeList}" var="notAppliedSchemeList">
-				<input type="hidden" name="schemeId" value="${notAppliedSchemeList.schemeId }">
-					<div class="column">
-						<div class="card">
-							
-							<h2>${notAppliedSchemeList.schemeName } </h2>
-							<img src="${notAppliedSchemeList.imagePath }" class="cardImage">
-							<p>${notAppliedSchemeList.summary }</p>
-							<p>
-								<button type="submit">Apply</button>
-							</p>
-
-						</div>
-						</div>
-							</c:forEach>
-							</form>
-					</div>
-					</div>
+            <h1>Schemes</h1>
+            <div class="row">
+            
+                
+                <c:forEach items="${notAppliedSchemeList}" var="schemeVO">
+                <input type="hidden" name="schemeId" value="${schemeVO.schemeId }">
+                    <div class="column">
+                    <div class="col1">
+                        <div class="card">
+                            
+                            <h2>${schemeVO.schemeName } </h2>
+                            <img src="${schemeVO.imagePath }" class="cardImage">
+                            <p>${schemeVO.summary }</p>
+                            <p>
+                                <c:url value="Training_GSAS/ApplySchemeServlet" var="editURL">
+                                    <c:param name="schemeId" value="${schemeVO.schemeId}" />
+                                    
+                                </c:url>
+                                
+                                <a href="/<c:out value="${editURL}"/>">
+                                    <button type="submit" id="${schemeVO.schemeId}">Apply Scheme</button>
+                                </a>
+                                
+                            </p>
+                        </div>
+                        </div>
+                        </div>
+                            </c:forEach>
+                            
+                    </div>
+                    </div>
                 <div class="main1">
                     <h1> Applied Schemes</h1>
                     <div class="row">
-				
-				<c:forEach items="${acceptedSchemeList}" var="acceptedSchemeList">
-				<input type="hidden" name="schemeId" value="${acceptedSchemeList.schemeId }">
-					<div class="column">
-						<div class="card">
-							
-							<h2>${acceptedSchemeList.schemeName } </h2>
-							<img src="${acceptedSchemeList.imagePath }" class="cardImage">
-							<p>${acceptedSchemeList.summary }</p>
+                
+                <c:forEach items="${acceptedSchemeList}" var="schemeApplicantVO">
+                <input type="hidden" name="schemeId" value="${schemeApplicantVO.schemeVO.schemeId}">
+                    <div class="column">
+                        <div class="card">
+                            
+                            <h2>${schemeApplicantVO.schemeVO.schemeName} </h2>
+                            <img src="${schemeApplicantVO.schemeVO.imagePath}" class="cardImage">
+                            <p>${schemeApplicantVO.schemeVO.summary}</p>
 
-						</div>
-						</div>
-							</c:forEach>
-							
-					</div>
+                        </div>
+                        </div>
+                            </c:forEach>
+                            
+                    </div>
                 </div>
-                <div class="main1">
+                 <div class="main1">
                     <h1> Rejected Schemes</h1>
                     <div class="row">
-				
-			<c:forEach items="${rejectedSchemeList}" var="schemeApplicantVO">
-			 	<input type="hidden" name="schemeId" value="${schemeApplicantVO.schemeVO.schemeId}">
-					<div class="column">
-						<div class="card">
-							
-							<h2>${schemeApplicantVO.schemeVO.schemeName } </h2>
-							<img src="${schemeApplicantVO.schemeVO.imagePath }" class="cardImage">
-							<p>${schemeApplicantVO.schemeVO.summary }</p>
-							<p>
-								${schemeApplicantVO.reason }
-							</p>
+                
+                <c:forEach items="${rejectedSchemeList}" var="schemeApplicantVO">
+                <input type="hidden" name="schemeId" value="${schemeApplicantVO.schemeVO.schemeId}">
+                    <div class="column">
+                        <div class="card">
+                            
+                            <h2>${schemeApplicantVO.schemeVO.schemeName} </h2>
+                            <img src="${schemeApplicantVO.schemeVO.imagePath}" class="cardImage">
+                            <p>${schemeApplicantVO.schemeVO.summary}</p>
+                            <p style="color:red;">
+                                ${schemeApplicantVO.reason}
+                            </p>
 
-						</div>
-						</div>
-			</c:forEach>
-							
-					</div>
-                </div> 
-
+                        </div>
+                        </div>
+                            </c:forEach>
+                            
+                    </div>
+                </div>
+ 
             
         </div>
         
  
 
         <div class="footer">
-            <h2>Footer</h2>
+            <h2>Coordinated by: Team Agastya</h2>
         </div>
         
     

@@ -70,6 +70,7 @@ public class InsertSchemeServlet extends HttpServlet {
 
 		            // get filename to use on the server
 		            fileName = new File(FileName.extractFileName(part)).getName();
+
 		            FileOutputStream os = new FileOutputStream ("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\images\\"+fileName);
 		            
 		            // write bytes taken from uploaded file to target file
@@ -81,6 +82,7 @@ public class InsertSchemeServlet extends HttpServlet {
 		            os.close();
 
 		            schemeVO.setImagePath("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\images\\"+fileName);
+
 
 					MinistryVO ministryVO = new MinistryVO(Long.parseLong(request.getParameter("ministry")));
 					schemeVO.setMinistryVO(ministryVO);

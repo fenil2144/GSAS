@@ -46,6 +46,20 @@
      </div>
      
         <div class="main">
+        <div class="message">
+        <c:if test="${message != null}">
+            <h3>
+                <c:out value="${message}" />
+            </h3>
+        </c:if>
+        </div>
+        <div class="error">
+        <c:if test="${err != null}">
+            <h3>
+                <c:out value="${err}" />
+            </h3>
+        </c:if>
+        </div>
 		<div class="main1">
 			<form method="POST" action="UpdateSchemeServlet">
 			<input type="hidden" name="schemeId" id="schemeId" value="${schemeVO.schemeId}">

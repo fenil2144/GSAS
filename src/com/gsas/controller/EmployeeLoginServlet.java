@@ -37,11 +37,13 @@ public class EmployeeLoginServlet extends HttpServlet {
 			HttpSession session = request.getSession();
 			LoginVO loginVO = (LoginVO) session.getAttribute("loginVO");
 			if(loginVO != null) {
-				if(loginVO.isEmployee() == true) {						//If employee is already logged in
+				if(loginVO.isEmployee() == true) {	//If employee is already logged in
+					System.out.println(loginVO.getUserName());
 					rd = request.getRequestDispatcher("viewSchemesEmployeeServlet");
 					rd.forward(request, response);
 				}
-				else {													//If user is already logged in
+				else {	//If user is already logged in
+					System.out.println(loginVO.getUserName());
 					rd = request.getRequestDispatcher("viewSchemesCitizenServlet");
 					rd.forward(request, response);
 				}

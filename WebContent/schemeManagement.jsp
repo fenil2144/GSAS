@@ -42,6 +42,20 @@
 	</div>
 
 	<div class="main">
+	<div class="message">
+        <c:if test="${message != null}">
+            <h3>
+                <c:out value="${message}" />
+            </h3>
+        </c:if>
+        </div>
+        <div class="error">
+        <c:if test="${err != null}">
+            <h3>
+                <c:out value="${err}" />
+            </h3>
+        </c:if>
+        </div>
 		<div class="main1">
 			<div class="row">
 				<!--  <form method="post" action="EditSchemeServlet">-->
@@ -52,7 +66,9 @@
 						<div class="card">
 
 							<h2>${scheme.schemeName }</h2>
-							<img src="${scheme.imagePath}" class=".cardImage">
+
+							<img src="${scheme.imagePath }" class="cardImage">
+
 							<p>${scheme.summary }</p>
 							<p>
 								<%-- <c:url value="GSAS/EditSchemeServlet" var="editURL"> --%>

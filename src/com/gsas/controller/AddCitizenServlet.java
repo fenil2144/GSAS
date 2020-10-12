@@ -38,6 +38,7 @@ public class AddCitizenServlet extends HttpServlet {
 
 			try {
 				if(loginVO != null) {		//Citizen must be Logged In in order to perform Edit Operation
+					System.out.println(loginVO.toString());
 					if(loginVO.isEmployee() == false) {	
 						
 						requestDispatcher = request.getRequestDispatcher("viewSchemesCitizenServlet");

@@ -24,13 +24,15 @@
             .col2{
                 width: 400px;
                 height: auto;
-                 border: 1px solid red;
+                /*border: 1px solid red;*/
+                margin : auto;
                 /*border-radius: 5px;
                 background-color: brown;*/
                 padding: 20px;
                 text-align: center;
                 align-self: center;
                 opacity: 0.8;
+                margin-left: 10%;
             }
         </style>
 </head>
@@ -55,18 +57,27 @@
      </div>
 
         <div class="main">
+        <div class="message">
+        <c:if test="${message != null}">
+            <h3>
+                <c:out value="${message}" />
+            </h3>
+        </c:if>
+        </div>
+        <div class="error">
+        <c:if test="${err != null}">
+            <h3>
+                <c:out value="${err}" />
+            </h3>
+        </c:if>
+        </div>
             <div class="main1">
                 
-                    <div class="row">
-				
-				
-				<input type="hidden" name="schemeId" value="${schemeVO.schemeId}">
-				${schemeVO.schemeId}
-					<div class="column">
+					<div class = "col2">
 						<div class="card">
 							
 							<h2>${schemeVO.schemeName} </h2>
-							<img src="${schemeVO.imagePath}" class=".cardImage">
+							<img src="${schemeVO.imagePath}" class="cardImage">
 							<p>${schemeVO.summary}</p>
 							<p>
 								${schemeVO.description}
@@ -74,16 +85,17 @@
 							<p>
 								${schemeVO.startDate}
 							</p>
-							
+						</div>	
 
-						</div>
-						</div>
+						
 							
 					</div>   
-					<form method="POST" action="ApplySchemeDocumentServlet" enctype="multipart/form-data">                
+
+					<form method="POST" action="ApplySchemeDocumentServlet" enctype="multipart/form-data" onsubmit="validateAccount(event1)">                 
 					 <div class="col1">
-						<label for="bank">Choose a bank:</label> <select
-							name="bank">
+					 <input type="hidden" name="schemeId" value="${schemeVO.schemeId}">
+						<label for="bank">Choose a bank:</label> 
+						<select name="bank">
 							<option value="">Select</option>
 							<c:forEach items="${schemeVO.bankList}" var="bank">
 							${bank.bankId}
@@ -140,7 +152,3 @@
         </div>
 </body>
 </html>
-
-
-
-

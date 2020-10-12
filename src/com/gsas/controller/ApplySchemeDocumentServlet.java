@@ -25,6 +25,7 @@ import com.gsas.model.SchemeApplicantDocumentsVO;
 import com.gsas.model.SchemeApplicantVO;
 import com.gsas.model.SchemeVO;
 import com.gsas.service.SchemeService;
+import com.gsas.utility.FileName;
 import com.gsas.utility.LayerType;
 import com.gsas.utility.ObjectFactory;
 
@@ -58,15 +59,10 @@ public class ApplySchemeDocumentServlet extends HttpServlet {
 					
 					SchemeApplicantDocumentsVO schemeApplicantDocuments =  null;
 					SchemeApplicantVO schemeApplicantVO = new SchemeApplicantVO();
+
 					List<SchemeApplicantDocumentsVO> applicantDocumentsdocList = new ArrayList<SchemeApplicantDocumentsVO>();
 					
-					//SchemeVO schemeVO = schemeService.getSchemeDetails(Long.parseLong(request.getParameter("schemeId"))); // get scheme from schemeID
-					
-//					request.setParameter("schemeVO",schemeVO);
-//					request.setParameter("scheme_banks",schemeVO.getBankList());
-//					request.getParameter("scheme_documents",schemeVO.getDocumentList());
-					
-					//schemeApplicantVO Object
+
 					schemeApplicantVO.setSchemeVO(new SchemeVO(Long.parseLong(request.getParameter("schemeId"))));
 					schemeApplicantVO.setLoginVO(loginVO);
 					schemeApplicantVO.setBankVO(new BankVO(Long.parseLong(request.getParameter("bank").trim())));
@@ -81,7 +77,7 @@ public class ApplySchemeDocumentServlet extends HttpServlet {
 						schemeApplicantDocuments =  new SchemeApplicantDocumentsVO();
 						schemeApplicantDocuments.setDocumentVO(documentVO);
 						
-						//Document Upload
+						      //Document Upload
 			            Part part = request.getPart(String.valueOf(documentVO.getDocumentId()));
 			            InputStream inputStream = part.getInputStream();
 
@@ -100,22 +96,18 @@ public class ApplySchemeDocumentServlet extends HttpServlet {
 						schemeApplicantDocuments.setDocumentPath("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\documents\\"+fileName);
 						applicantDocumentsdocList.add(schemeApplicantDocuments);
 
-					}
-					schemeApplicantVO.setApplicantDocumentsList(applicantDocumentsdocList);
-					
-					//validating documents and bank
-//					for(SchemeApplicantDocumentsVO items : schemeApplicantVO.getApplicantDocumentsList()) {
-//					schemeApplicantDocuments.setDocumentVO(new DocumentVO(Long.parseLong(request.getParameter("docId"))));
-//					schemeApplicantDocuments.setDocumentPath(request.getParameter("docPath"));
-//					applicantDocumentsdocList.add(schemeApplicantDocuments);
-//					}
-					
-					//schemeApplicantVO = schemeService.validate(SchemeVO schemeVO, schemeApplicantVO.getBankVO(), applicantDocumentsdocList, schemeApplicantVO);
-					if(schemeApplicantVO.isApprovedStatus() == false){  
+                    }
+                    schemeApplicantVO.setApplicantDocumentsList(applicantDocumentsdocList);
+                    
+                    System.out.println(schemeApplicantVO.toString());
+                    
+
+            if(schemeApplicantVO.isApprovedStatus() == false){  
 						request.setAttribute("err",schemeApplicantVO.getReason());
 					} 
 					else {
-						// fill scheme_applicant table with status=true and store document
+						
+						System.out.println("TRUE in else");
 						request.setAttribute("message","You have successfully applied for the scheme "+schemeApplicantVO.getSchemeVO().getSchemeName());
 						schemeService.addSchemeApplicant(schemeApplicantVO);
 					}
@@ -135,6 +127,7 @@ public class ApplySchemeDocumentServlet extends HttpServlet {
 			
 		} catch (DatabaseException e) {
 			requestDispatcher = request.getRequestDispatcher("viewSchemesCitizenServlet");
+			e.printStackTrace();
 			request.setAttribute("err", e.getMessage());
 			requestDispatcher.forward(request, response);
 		}

@@ -75,7 +75,7 @@ public class CitizenDaoImpl implements CitizenDao {
 			preparedStatement.setString(13, citizenDetailsVO.getPancardNumber());
 			preparedStatement.setLong(14, seq); //citizen_ref FK (citizen_credential)
 			preparedStatement.executeUpdate();
-			
+
 			connection.commit();	//Committing the changes.
 			preparedStatement.close();
 			connection.close();
@@ -212,6 +212,7 @@ public class CitizenDaoImpl implements CitizenDao {
 
 			connection.commit();	//Committing the changes.
 			updateStatement.close();
+			connection.commit();	//Committing the changes.
 			connection.close();
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
@@ -248,7 +249,8 @@ public class CitizenDaoImpl implements CitizenDao {
 				throw new SchemeNotFoundException("Scheme Not Found");
 			}*/
 		} catch(SQLException | ClassNotFoundException e) {
-
+			
+			e.printStackTrace();
 			throw new DatabaseException(e.getMessage());
 		}
 		return notAppliedSchemeList;
@@ -292,7 +294,8 @@ public class CitizenDaoImpl implements CitizenDao {
 				throw new SchemeNotFoundException("Scheme Not Found");
 			}*/
 		} catch(SQLException | ClassNotFoundException e) {
-
+			
+			e.printStackTrace();
 			throw new DatabaseException(e.getMessage());
 		}
 		return appliedSchemeList;
