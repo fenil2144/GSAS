@@ -5,7 +5,6 @@ import java.util.List;
 import com.gsas.exception.AuthenticationException;
 import com.gsas.exception.CitizenNotFoundException;
 import com.gsas.exception.DatabaseException;
-import com.gsas.exception.DuplicateUserException;
 import com.gsas.exception.InvalidSequenceException;
 import com.gsas.exception.SchemeNotFoundException;
 import com.gsas.model.CitizenDetailsVO;

@@ -55,7 +55,12 @@
 							<img src="${scheme.imagePath }" class=".cardImage">
 							<p>${scheme.summary }</p>
 							<p>
+<<<<<<< HEAD
 								<c:url value="Training_GSAS/EditSchemeServlet" var="editURL">
+=======
+								<%-- <c:url value="GSAS/EditSchemeServlet" var="editURL"> --%>
+								<c:url value="GovernmentSchemesApplicationSystem/EditSchemeServlet" var="editURL">
+>>>>>>> upstream/master
 									<c:param name="schemeId" value="${scheme.schemeId}" />
 									
 								</c:url>

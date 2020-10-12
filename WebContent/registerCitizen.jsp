@@ -25,7 +25,7 @@
 
 </head>
 <body>
-	<script src="JS\navigation.js"></script>
+	<script type="text/javascript" src="JS\navigation.js"></script>
 	<div class="header">
 		<h1>Citizen Registration</h1>
 	</div>
@@ -69,13 +69,13 @@
 						name="username" id="username"
 						placeholder="Enter your username." required><br>
 				</div>
-				<div class="col1" id="citizenPassword">
+				<div class="col1">
 					<label class="required-field"> Enter your password</label><input type="password"
 						name="password" id="citizenPassword"
 						placeholder="Enter your password." required><br>
 			
 				</div>
-				<div class="col1" id="confirmPassword">
+				<div class="col1">
 					<label class="required-field"> Confirm your password</label><input type="password"
 						name="password1" id="citizenPassword1"
 						placeholder="Enter your password." required><br>
@@ -171,7 +171,7 @@
 
 
 	<div class="footer">
-		<h2>Footer</h2>
+		<h2>Coordinated by: Team Agastya</h2>
 	</div>
 
 

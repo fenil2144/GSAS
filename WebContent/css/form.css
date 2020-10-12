@@ -149,6 +149,6 @@ input, textarea, select, .genderCol,.documentsCol,.bankCol {
 }
 
 .cardImage{
-  width:150px;
+  width:auto;
   height:150px;
 }

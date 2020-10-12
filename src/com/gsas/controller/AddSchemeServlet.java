@@ -55,6 +55,7 @@ public class AddSchemeServlet extends HttpServlet {
 					
 					ministryList = commonService.getAllMinistry();
 					request.setAttribute("ministryList", ministryList);
+					System.out.println("in employee "+ministryList.get(0).getMinistryId());
 					
 					sectorList = commonService.getAllSectors();
 					request.setAttribute("sectorList", sectorList);
@@ -86,7 +87,8 @@ public class AddSchemeServlet extends HttpServlet {
 				rd.forward(request, response);
 			}
 		}catch(DatabaseException | DataNotFoundException e) {
-			rd = request.getRequestDispatcher("viewAllSchemes.jsp");
+			e.printStackTrace();
+			rd = request.getRequestDispatcher("viewSchemesEmployeeServlet");
 			request.setAttribute("err", e.getMessage());
 			rd.forward(request, response);
 		} 
