@@ -60,6 +60,8 @@ public class ApplySchemeDocumentServlet extends HttpServlet {
 //					request.getParameter("scheme_documents",schemeVO.getDocumentList());
 					
 					//schemeApplicantVO Object
+					System.out.println(request.getParameter("schemeId"));
+					System.out.println(Long.parseLong(request.getParameter("schemeId")));
 					schemeApplicantVO.setSchemeVO(new SchemeVO(Long.parseLong(request.getParameter("schemeId"))));
 					schemeApplicantVO.setLoginVO(loginVO);
 					schemeApplicantVO.setBankVO(new BankVO(Long.parseLong(request.getParameter("bank").trim())));

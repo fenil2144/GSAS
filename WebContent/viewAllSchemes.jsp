@@ -22,7 +22,6 @@
                 margin-right:20%;
        
             }
-
         </style>
         
     </head>
@@ -96,8 +95,8 @@
                     <h1> Rejected Schemes</h1>
                     <div class="row">
 				
-				<c:forEach items="${rejectedSchemeList}" var="schemeApplicantVO">
-				<input type="hidden" name="schemeId" value="${schemeApplicantVO.schemeVO.schemeId }">
+			<c:forEach items="${rejectedSchemeList}" var="schemeApplicantVO">
+			<!-- 	<input type="hidden" name="schemeId" value="${schemeApplicantVO.schemeVO.schemeId}">-->
 					<div class="column">
 						<div class="card">
 							
@@ -113,7 +112,7 @@
 							</c:forEach>
 							
 					</div>
-                </div>
+                </div> 
 
             
         </div>

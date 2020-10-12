@@ -191,7 +191,7 @@ public class CitizenDaoImpl implements CitizenDao {
 			updateStatement.executeUpdate();
 			
 			//Update citizen_details
-			updateStatement = connection.prepareStatement("update citizen_details set first_name=?,middle_name=?,last_name=?,date_of_birth=?,gender=?,email=?,phone=?,address_ref=?,income_group_ref=?,profession_ref =?,adhar_number=?,pancard_number=?,citizen_ref=? where citizen_details_id=?");
+			updateStatement = connection.prepareStatement("update citizen_master set first_name=?,middle_name=?,last_name=?,date_of_birth=?,gender=?,email=?,phone=?,address_ref=?,income_group_ref=?,profession_ref =?,adhar_number=?,pancard_number=?,login_ref=? where citizen_details_id=?");
 			updateStatement.setString(1, citizenDetailsVO.getFirstName());
 			updateStatement.setString(2, citizenDetailsVO.getMiddleName());
 			updateStatement.setString(3, citizenDetailsVO.getLastName());
@@ -222,7 +222,7 @@ public class CitizenDaoImpl implements CitizenDao {
 		try {
 			Connection connection = DBUtility.getConnection();
 			
-			PreparedStatement selectStatement = connection.prepareStatement("SELECT scheme_id,scheme_name,summary,description,image_path,STATUS FROM scheme_master WHERE scheme_id NOT IN (SELECT scheme_ref FROM scheme_applicant WHERE citizen_ref = ? and status = ?)");
+			PreparedStatement selectStatement = connection.prepareStatement("SELECT scheme_id,scheme_name,summary,description,image_path,STATUS FROM scheme_master WHERE scheme_id NOT IN (SELECT scheme_ref FROM scheme_applicant WHERE login_ref = ? and status = ?)");
 			selectStatement.setLong(1, citizenId);
 			selectStatement.setBoolean(2, true);
 			
@@ -259,7 +259,7 @@ public class CitizenDaoImpl implements CitizenDao {
 		try {
 			Connection connection = DBUtility.getConnection();
 			
-			PreparedStatement selectStatement = connection.prepareStatement("SELECT scheme_id,scheme_name,summary,description,image_path,approved_status,reason FROM scheme_master s INNER JOIN scheme_applicant a ON s.scheme_id = a.scheme_ref WHERE citizen_ref = ? AND approved_status = ? and status = ?");
+			PreparedStatement selectStatement = connection.prepareStatement("SELECT scheme_id,scheme_name,summary,description,image_path,approved_status,reason FROM scheme_master s INNER JOIN scheme_applicant a ON s.scheme_id = a.scheme_ref WHERE login_ref = ? AND approved_status = ? and status = ?");
 			selectStatement.setLong(1, citizenId);
 			selectStatement.setBoolean(2, approvedStatus);
 			selectStatement.setBoolean(3, true);

@@ -133,13 +133,14 @@ public class InsertSchemeJsonServlet extends HttpServlet {
 				            int mid = Integer.parseInt((String) record.get("MID"));//fetches ministry id from json file
 				            int sect_id = Integer.parseInt((String) record.get("SECT_ID"));//fetches sector  id from json file
 				            String d=(String) record.get("DOS");//fetches date of start from json file(1st step)
-				            long dos = Date.valueOf(d).getTime();//fetches date of start from json file(two step process)
+				           // long dos = Date.valueOf(d).getTime();//fetches date of start from json file(two step process)				   
 				            boolean status=  (Boolean)record.get("STATUS");//fetches status of scheme file(in json we store boolean as 1 or 0)
 				            int sch_docid=Integer.parseInt((String) record.get("SCH_DOCID"));//fetches scheme document id from json file
 				            int docu_id=Integer.parseInt((String) record.get("DOCU_ID"));//fetches scheme eligibility id from json file
 				            int scheme_bank_id=Integer.parseInt((String) record.get("SCHEME_BANK_ID"));//fetches scheme bank id from json file
 				            int bank_id=Integer.parseInt((String) record.get("BANK_ID"));//fetches scheme bankid from json file
 				         }
+				}
 							else {													//If user is already logged in
 								rd = request.getRequestDispatcher("viewSchemesCitizenServlet");
 								rd.forward(request, response);

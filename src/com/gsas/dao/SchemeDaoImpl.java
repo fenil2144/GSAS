@@ -225,7 +225,7 @@ public class SchemeDaoImpl implements SchemeDao{
 				getSchemeResultset = getSchemeDetailsStatement.executeQuery();
 				
 				BankVO bankVO = null;
-				List<BankVO> bankList = null;
+				List<BankVO> bankList = new ArrayList<>();
 				while(getSchemeResultset.next()) {
 					bankVO = new BankVO();
 					bankVO.setBankId(getSchemeResultset.getLong("bank_id"));
@@ -240,7 +240,7 @@ public class SchemeDaoImpl implements SchemeDao{
 				getSchemeResultset = getSchemeDetailsStatement.executeQuery();
 				
 				DocumentVO documentVO = null;
-				List<DocumentVO> documentList = null;
+				List<DocumentVO> documentList = new ArrayList<>();
 				
 				while(getSchemeResultset.next()) {
 					documentVO = new DocumentVO();

@@ -55,7 +55,8 @@ public class ApplySchemeServlet extends HttpServlet {
 																												// citizenDetails
 																												// from
 																												// citizenId
-
+					
+					String successMessage="All criteria validated successfuly";
 					System.out.println(schemeVO.getSchemeName());
 					System.out.println(schemeVO.getSchemeId());
 					schemeVO.setBankList(
@@ -77,19 +78,23 @@ public class ApplySchemeServlet extends HttpServlet {
 					// checking if the citizen satisfies basic eligiblity criteria of the scheme
 					schemeApplicant.setReason(schemeService.validate(schemeEligibilityVO, citizenDetails));
 					// on successful validation
-					if (schemeApplicant.getReason().equals("All criteria validated successfuly")) {
+					if (schemeApplicant.getReason().equalsIgnoreCase(successMessage)) {
 						schemeApplicant.setApprovedStatus(true);
 						request.setAttribute("schemeVO", schemeVO);
+						requestDispatcher = request.getRequestDispatcher("applyScheme.jsp");
+						request.setAttribute("err", schemeApplicant.getReason());
+						requestDispatcher.forward(request, response);
 
 					}
 					// on failed validation
 					else {
 						schemeApplicant.setApprovedStatus(false);
 						schemeService.addRejectedSchemeApplicant(schemeApplicant);
+						requestDispatcher = request.getRequestDispatcher("viewSchemesEmployeeServlet");
+						request.setAttribute("err", schemeApplicant.getReason());
+						requestDispatcher.forward(request, response);
 					}
-					requestDispatcher = request.getRequestDispatcher("applyScheme.jsp");
-					request.setAttribute("err", schemeApplicant.getReason());
-					requestDispatcher.forward(request, response);
+
 				} else { // If employee is already logged in
 					requestDispatcher = request.getRequestDispatcher("viewSchemesEmployeeServlet");
 					requestDispatcher.forward(request, response);

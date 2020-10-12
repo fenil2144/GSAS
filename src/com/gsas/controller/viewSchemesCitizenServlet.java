@@ -56,9 +56,9 @@ public class viewSchemesCitizenServlet extends HttpServlet {
                     
                     rejectedSchemeList = citizenService.getAppliedSchemeList(loginVO.getLoginId(), false);
                     request.setAttribute("rejectedSchemeList", rejectedSchemeList);
-                    System.out.println(notAppliedSchemeList.size());
-                    System.out.println(acceptedSchemeList.size());
-                    System.out.println(rejectedSchemeList.size());
+                    //System.out.println(notAppliedSchemeList.size());
+                   // System.out.println(acceptedSchemeList.size());
+                   // System.out.println(rejectedSchemeList.size());
 
                     rd = request.getRequestDispatcher("viewAllSchemes.jsp");
                     System.out.println(notAppliedSchemeList.size());

@@ -60,15 +60,15 @@
                     <div class="row">
 				
 				
-				<input type="hidden" name="schemeId" value="${schemeApplicantVO.schemeVO.schemeId }">
+				<input type="hidden" name="schemeId" value="${schemeApplicantVO.schemeVO.schemeId}">
 					<div class="column">
 						<div class="card">
 							
-							<h2>${schemeApplicantVO.schemeVO.schemeName } </h2>
-							<img src="${schemeApplicantVO.schemeVO.imagePath }" class=".cardImage">
-							<p>${schemeApplicantVO.schemeVO.summary }</p>
+							<h2>${schemeApplicantVO.schemeVO.schemeName} </h2>
+							<img src="${schemeApplicantVO.schemeVO.imagePath}" class=".cardImage">
+							<p>${schemeApplicantVO.schemeVO.summary}</p>
 							<p>
-								${schemeApplicantVO.reason }
+								${schemeApplicantVO.reason}
 							</p>
 
 						</div>
