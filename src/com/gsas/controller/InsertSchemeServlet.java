@@ -1,7 +1,9 @@
 package com.gsas.controller;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -10,16 +12,13 @@ import java.util.Locale;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import javax.servlet.http.Part;
 
 import com.gsas.exception.DatabaseException;
 import com.gsas.exception.InvalidSequenceException;
@@ -33,6 +32,7 @@ import com.gsas.model.SchemeEligibilityVO;
 import com.gsas.model.SchemeVO;
 import com.gsas.model.SectorVO;
 import com.gsas.service.SchemeService;
+import com.gsas.utility.FileName;
 import com.gsas.utility.LayerType;
 import com.gsas.utility.ObjectFactory;
 
@@ -40,6 +40,7 @@ import com.gsas.utility.ObjectFactory;
  * Servlet implementation class InsertSchemeServlet
  */
 @WebServlet("/InsertSchemeServlet")
+@MultipartConfig
 public class InsertSchemeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -62,22 +63,25 @@ public class InsertSchemeServlet extends HttpServlet {
 					schemeVO.setSummary(request.getParameter("summary"));
 					schemeVO.setDescription(request.getParameter("description"));
 					System.out.println("in --"+request.getParameter("schemeName"));
+					String fileName = null;
 					
-					
-//					ServletFileUpload upload=new ServletFileUpload(new DiskFileItemFactory());
-//                    
-//                    List<FileItem> images=upload.parseRequest(request);//To store of list  files FileItem datatype is used 
-//                    
-//                        String name=images.get(0).getName();//gets the name of file  
-//                        try{name=name.substring(name.lastIndexOf("\\")+1);}catch(Exception e){}//this will give the name of file it removes stuffs like c:\downloads and gives the name
-//
-//                        //System.out.println(name);
-//                        images.get(0).write(new File("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\images"+name));//create folder imagescheme where image of the  will be stored
-//                        //images folder created in local computer and write function writes into that folder
+		            Part part = request.getPart("imagePath");
+		            InputStream is = part.getInputStream();
 
-                schemeVO.setImagePath("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\images");
-					System.out.println(request.getParameter("ministry"));
-					System.out.println(request.getParameter("sector"));
+		            // get filename to use on the server
+		            fileName = new File(FileName.extractFileName(part)).getName();
+		            FileOutputStream os = new FileOutputStream ("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\images\\"+fileName);
+		            
+		            // write bytes taken from uploaded file to target file
+		            int ch = is.read();
+		            while (ch != -1) {
+		                 os.write(ch);
+		                 ch = is.read();
+		            }
+		            os.close();
+
+		            schemeVO.setImagePath("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\images\\"+fileName);
+
 					MinistryVO ministryVO = new MinistryVO(Long.parseLong(request.getParameter("ministry")));
 					schemeVO.setMinistryVO(ministryVO);
 					

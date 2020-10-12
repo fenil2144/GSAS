@@ -11,7 +11,6 @@ import java.util.List;
 import com.gsas.exception.AuthenticationException;
 import com.gsas.exception.CitizenNotFoundException;
 import com.gsas.exception.DatabaseException;
-import com.gsas.exception.DuplicateUserException;
 import com.gsas.exception.InvalidSequenceException;
 import com.gsas.exception.SchemeNotFoundException;
 import com.gsas.model.AddressVO;
@@ -30,6 +29,7 @@ public class CitizenDaoImpl implements CitizenDao {
 	public void registerCitizen(CitizenDetailsVO citizenDetailsVO) throws DatabaseException, InvalidSequenceException {
 		try {
 			connection = DBUtility.getConnection();
+			connection.setAutoCommit(false);	//Implementing Transaction
 			PreparedStatement sequenceStatement = connection.prepareStatement("values(next value for citizen_seq)");
 			ResultSet rs = sequenceStatement.executeQuery();
 			long seq = 0;
@@ -75,6 +75,8 @@ public class CitizenDaoImpl implements CitizenDao {
 			preparedStatement.setString(13, citizenDetailsVO.getPancardNumber());
 			preparedStatement.setLong(14, seq); //citizen_ref FK (citizen_credential)
 			preparedStatement.executeUpdate();
+			
+			connection.commit();	//Committing the changes.
 			preparedStatement.close();
 			connection.close();
 			
@@ -173,7 +175,7 @@ public class CitizenDaoImpl implements CitizenDao {
 	public void updateCitizenDetails(CitizenDetailsVO citizenDetailsVO) {
 		try {
 			connection = DBUtility.getConnection();
-			
+			connection.setAutoCommit(false);	//Implementing Transaction
 			//Update citizen_credential
 			PreparedStatement updateStatement = connection.prepareStatement("update login_credential set user_name=?,password=? where citizen_id=?");
 			updateStatement.setString(1, citizenDetailsVO.getLoginVO().getUserName());
@@ -208,6 +210,7 @@ public class CitizenDaoImpl implements CitizenDao {
 			updateStatement.setLong(14, citizenDetailsVO.getCitizenDetailsId());
 			updateStatement.executeUpdate();
 
+			connection.commit();	//Committing the changes.
 			updateStatement.close();
 			connection.close();
 		} catch (ClassNotFoundException | SQLException e) {

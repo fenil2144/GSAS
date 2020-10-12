@@ -52,7 +52,7 @@
 						<div class="card">
 
 							<h2>${scheme.schemeName }</h2>
-							<img src="${scheme.imagePath }" class=".cardImage">
+							<img src="${scheme.imagePath}" class=".cardImage">
 							<p>${scheme.summary }</p>
 							<p>
 								<%-- <c:url value="GSAS/EditSchemeServlet" var="editURL"> --%>

@@ -80,7 +80,7 @@
 						</div>
 							
 					</div>   
-					<form method="POST" action="ApplySchemeDocumentServlet">                
+					<form method="POST" action="ApplySchemeDocumentServlet" enctype="multipart/form-data">                
 					 <div class="col1">
 						<label for="bank">Choose a bank:</label> <select
 							name="bank">

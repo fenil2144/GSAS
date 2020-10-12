@@ -40,8 +40,8 @@ public class SchemeDaoImpl implements SchemeDao{
 				System.out.println("Error in sequence number");
 				throw new InvalidSequenceException();
 			}
-
-//			
+			connection.setAutoCommit(false);		//Imlementing Transaction
+			
 			//Add into Scheme eligibility table
 			PreparedStatement selectStatement = connection.prepareStatement("insert into scheme_eligibility values(?,?,?,?,?,?)");
 			selectStatement.setLong(1, seq);//scheme eligibility ID
@@ -108,7 +108,7 @@ public class SchemeDaoImpl implements SchemeDao{
 				selectStatement.executeUpdate();
 			}
 			
-			
+			connection.commit();
 			selectStatement.close();
 			connection.close();
 
@@ -123,6 +123,8 @@ public class SchemeDaoImpl implements SchemeDao{
 	public void editScheme(SchemeVO scheme) throws DatabaseException, InvalidSequenceException {
 		try {
 			Connection connection = DBUtility.getConnection();
+			connection.setAutoCommit(false);	//Imlementing Transaction
+			
 			PreparedStatement selectStatement = connection.prepareStatement("update scheme_eligibility set min_age=?, max_age=?, income_group_ref=?, gender=?, profession_ref=? where scheme_eligibility_id=?");
 			selectStatement.setInt(1, scheme.getSchemeEligibilityVO().getMinAge());
 			selectStatement.setInt(2, scheme.getSchemeEligibilityVO().getMaxAge());
@@ -203,7 +205,7 @@ public class SchemeDaoImpl implements SchemeDao{
 				selectStatement.setLong(3, bank.getBankId());
 				selectStatement.executeUpdate();
 			}
-
+			connection.commit();
 			selectStatement.close();
 			connection.close();
 			
@@ -395,6 +397,7 @@ public class SchemeDaoImpl implements SchemeDao{
 			throws DatabaseException {
 		try {
 			Connection connection = DBUtility.getConnection();
+			connection.setAutoCommit(false);	//Implementing Transaction
 			PreparedStatement sequenceStatement = connection.prepareStatement("values(next value for scheme_seq)");
 			ResultSet resultSet = sequenceStatement.executeQuery();
 			long seq = 0;
@@ -428,7 +431,7 @@ public class SchemeDaoImpl implements SchemeDao{
 				insertStatement.execute();
 				
 			}
-			
+			connection.commit();	//Committing the changes.
 			insertStatement.close();
 			connection.close();
 			

@@ -1,15 +1,21 @@
 package com.gsas.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import com.gsas.exception.DatabaseException;
 import com.gsas.model.BankVO;
@@ -26,6 +32,7 @@ import com.gsas.utility.ObjectFactory;
  * Servlet implementation class ApplySchemeDocumentServlet
  */
 @WebServlet("/ApplySchemeDocumentServlet")
+@MultipartConfig
 public class ApplySchemeDocumentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -51,7 +58,7 @@ public class ApplySchemeDocumentServlet extends HttpServlet {
 					
 					SchemeApplicantDocumentsVO schemeApplicantDocuments =  null;
 					SchemeApplicantVO schemeApplicantVO = new SchemeApplicantVO();
-					List<SchemeApplicantDocumentsVO> applicantDocumentsdocList = null;
+					List<SchemeApplicantDocumentsVO> applicantDocumentsdocList = new ArrayList<SchemeApplicantDocumentsVO>();
 					
 					//SchemeVO schemeVO = schemeService.getSchemeDetails(Long.parseLong(request.getParameter("schemeId"))); // get scheme from schemeID
 					
@@ -68,11 +75,29 @@ public class ApplySchemeDocumentServlet extends HttpServlet {
 					schemeApplicantVO.setIfsc(request.getParameter("ifsc"));
 					schemeApplicantVO.setBranch(request.getParameter("branch"));
 					
+					String fileName = null;
 					List<DocumentVO> documentList = schemeService.getSchemeDocumentsList(Long.parseLong(request.getParameter("schemeId")));
 					for(DocumentVO documentVO : documentList) {
 						schemeApplicantDocuments =  new SchemeApplicantDocumentsVO();
 						schemeApplicantDocuments.setDocumentVO(documentVO);
-						schemeApplicantDocuments.setDocumentPath("");
+						
+						//Document Upload
+			            Part part = request.getPart(String.valueOf(documentVO.getDocumentId()));
+			            InputStream inputStream = part.getInputStream();
+
+			            // get filename to use on the server
+			            fileName = new File(extractFileName(part)).getName();
+			            FileOutputStream os = new FileOutputStream ("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\documents\\"+fileName);
+			            
+			            // write bytes taken from uploaded file to target file
+			            int ch = inputStream.read();
+			            while (ch != -1) {
+			                 os.write(ch);
+			                 ch = inputStream.read();
+			            }
+			            os.close();
+						
+						schemeApplicantDocuments.setDocumentPath("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\documents\\"+fileName);
 						applicantDocumentsdocList.add(schemeApplicantDocuments);
 
 					}
@@ -96,7 +121,7 @@ public class ApplySchemeDocumentServlet extends HttpServlet {
 					}
 					requestDispatcher = request.getRequestDispatcher("viewSchemesCitizenServlet");
 					requestDispatcher.forward(request, response);
-				}else {													//If employee is already logged in
+				}else {													//If employee inputStream already logged in
 					requestDispatcher = request.getRequestDispatcher("viewSchemesEmployeeServlet");
 					requestDispatcher.forward(request, response);
 				}
@@ -115,5 +140,14 @@ public class ApplySchemeDocumentServlet extends HttpServlet {
 		}
 		
 	}
-
+	 private String extractFileName(Part part) {
+	        String contentDisp = part.getHeader("content-disposition");
+	        String[] items = contentDisp.split(";");
+	        for (String s : items) {
+	            if (s.trim().startsWith("filename")) {
+	                return s.substring(s.indexOf("=") + 2, s.length()-1);
+	            }
+	        }
+	        return "";
+	    }
 }
