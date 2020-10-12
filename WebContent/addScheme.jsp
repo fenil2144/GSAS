@@ -68,11 +68,13 @@
 
 				</div>
 				<div class="col1">
-					<label for="ministry" class="required-field">Choose a ministry:</label> <select
-						name="ministry" id="ministry" required>
-						<option value="select" id="select">Select</option>
+					<label for="ministry" class="required-field">Choose a ministry:</label> 
+					<select name="ministry" id="ministry" required>
+						<option value="select" >Select</option>
 						<c:forEach items="${ministryList}" var="ministry">
 							<option value="${ministry.ministryId}">${ministry.ministryName}</option>
+							${ministry.ministryId}
+							${ministry.ministryName}
 						</c:forEach>
 					</select>
 				</div>

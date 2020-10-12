@@ -55,6 +55,7 @@ public class AddSchemeServlet extends HttpServlet {
 					
 					ministryList = commonService.getAllMinistry();
 					request.setAttribute("ministryList", ministryList);
+					System.out.println(ministryList.size());
 					
 					sectorList = commonService.getAllSectors();
 					request.setAttribute("sectorList", sectorList);
