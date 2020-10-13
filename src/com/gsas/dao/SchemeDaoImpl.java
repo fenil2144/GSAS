@@ -52,7 +52,7 @@ public class SchemeDaoImpl implements SchemeDao{
 			selectStatement.executeUpdate();
 			
 
-			
+6			
 			//Add into Scheme Table
 			selectStatement = connection.prepareStatement("insert into scheme_master values(?,?,?,?,?,?,?,?,?,?)");
 			selectStatement.setLong(1, seq);//scheme id
