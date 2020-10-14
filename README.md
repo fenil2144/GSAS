@@ -21,7 +21,7 @@ Employee can add scheme image and citizen can upload the documents. The images a
 
 <br/>
 
-**Note** : Create Dynamic Web project & import src & Webcontent folders into it. Create 3 folders namely JSON, Documents and images in web-content folder if not present.
+**Note** : Create Dynamic Web project & copy src & Webcontent folders into it. Create 3 folders namely JSON, Documents and images in web-content folder if not present.
 
 ## Set Paths of folder
 ```
