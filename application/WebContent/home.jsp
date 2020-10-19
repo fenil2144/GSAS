@@ -26,7 +26,7 @@
 	</div>
 	<div class="sidenav">
 		<div class="image">
-			<img src="logo\logo.jpeg">
+			<img src="logo\logo.jpeg" alt="LOGO">
 		</div>
 
 		<div class="heading">
@@ -66,7 +66,8 @@
 			<p>GSAS is a government scheme application software. Where you
 				can visit all the schemes and apply for them. It helps the citizen
 				to visit all the schemes and see the eligibility criteria and apply
-				for them.</p>
+				for them.
+				</p>
 		</div>
 	</div>
 		<div class="main1">
@@ -80,7 +81,7 @@
 						<div class="card">
 
 							<h2>${scheme.schemeName }</h2>
-							<img src="${scheme.imagePath }" class=".cardImage">
+							<img src="${scheme.imagePath }" class=".cardImage" alt="Scheme Image">
 							<p>${scheme.summary }</p>
 
 						</div>
@@ -94,7 +95,7 @@
 	
 
 	<div class="footer">
-		<p>Coordinated by: Team Agastya</p>
+		<h2>Coordinated by: Team Agastya</h2>
 	</div>
 
 

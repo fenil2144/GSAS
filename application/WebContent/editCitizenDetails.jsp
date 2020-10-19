@@ -28,7 +28,7 @@
         </div>
         <div class="sidenav">
         <div class="image">
-                <img src="logo\logo.jpeg">
+                <img src="logo\logo.jpeg" alt="LOGO">
             </div>
             
             <div class="heading">

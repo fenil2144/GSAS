@@ -15,7 +15,7 @@
     margin-left: 10%;
     width: 600px;
     height: 400px;
-    border: 1px solid #a30000;
+    border: 1px solid #ef3125;
     padding: 20px;
     text-align: left;
     align-self: left;
@@ -27,7 +27,7 @@ input, textarea, select {
     padding: 12px 20px;
     margin: 8px 0;
     box-sizing: border-box;
-    border: 1px solid #a30000;
+    border: 1px solid #ef3125;
     text-align: left;
     align-self: left;
 }
@@ -72,7 +72,7 @@ input, textarea, select, .genderCol,.documentsCol,.bankCol {
     padding: 12px 20px;
     margin: 8px 0;
     box-sizing: border-box;
-    border: 1px solid #a30000;
+    border: 1px solid #ef3125;
     text-align: left;
     align-self: left;
 }
@@ -86,7 +86,7 @@ input, textarea, select, .genderCol,.documentsCol,.bankCol {
 .section {
     width: auto;
     height: 100%;
-    border: 1px solid #a30000;
+    border: 1px solid #ef3125;
     /*border-radius: 5px;
                 background-color: brown;*/
     text-align: center;
@@ -109,6 +109,7 @@ input, textarea, select, .genderCol,.documentsCol,.bankCol {
   margin-left: 10%;
   text-align: center;
   font-family: 'Times New Roman', Times, serif;
+  padding:5px;
 }
 
 .price {
@@ -150,4 +151,11 @@ input, textarea, select, .genderCol,.documentsCol,.bankCol {
 .cardImage{
   width:150px;
   height:150px;
+}
+.message{
+	text-align:center;
+}
+.error{
+	text-align:center;
+	color:red;
 }

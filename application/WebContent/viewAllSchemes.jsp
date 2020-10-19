@@ -34,7 +34,7 @@
         </div>
         <div class="sidenav">
         <div class="image">
-                <img src="logo\logo.jpeg">
+                <img src="logo\logo.jpeg" alt="lOGO">
             </div>
             
             <div class="heading">
@@ -77,7 +77,7 @@
                         <div class="card">
                             
                             <h2>${schemeVO.schemeName } </h2>
-                            <img src="${schemeVO.imagePath }" class="cardImage">
+                            <img src="${schemeVO.imagePath }" class="cardImage" alt="Scheme Image">
                             <p>${schemeVO.summary }</p>
                             <p>
                                 <c:url value="GovernmentSchemesApplicationSystem/ApplySchemeServlet" var="editURL">
@@ -107,7 +107,7 @@
                         <div class="card">
                             
                             <h2>${schemeApplicantVO.schemeVO.schemeName} </h2>
-                            <img src="${schemeApplicantVO.schemeVO.imagePath}" class="cardImage">
+                            <img src="${schemeApplicantVO.schemeVO.imagePath}" class="cardImage" alt="Scheme Image">
                             <p>${schemeApplicantVO.schemeVO.summary}</p>
 
                         </div>
@@ -126,7 +126,7 @@
                         <div class="card">
                             
                             <h2>${schemeApplicantVO.schemeVO.schemeName} </h2>
-                            <img src="${schemeApplicantVO.schemeVO.imagePath}" class="cardImage">
+                            <img src="${schemeApplicantVO.schemeVO.imagePath}" class="cardImage" alt="Scheme Image">
                             <p>${schemeApplicantVO.schemeVO.summary}</p>
                             <p style="color:red;">
                                 ${schemeApplicantVO.reason}
