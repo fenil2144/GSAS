@@ -29,7 +29,7 @@
 	</div>
 	<div class="sidenav">
 		<div class="image">
-			<img src="logo\logo.jpeg">
+			<img src="logo\logo.jpeg" alt="LOGO">
 		</div>
 
 		<div class="heading">
@@ -67,7 +67,7 @@
 
 							<h2>${scheme.schemeName }</h2>
 
-							<img src="${scheme.imagePath }" class="cardImage">
+							<img src="${scheme.imagePath }" class="cardImage" alt="Scheme Image">
 
 							<p>${scheme.summary }</p>
 							<p>
@@ -114,7 +114,7 @@
 
 
 	<div class="footer">
-		<p>Coordinated by: Team Agastya</p>
+		<h2>Coordinated by: Team Agastya</h2>
 	</div>
 
 </body>
