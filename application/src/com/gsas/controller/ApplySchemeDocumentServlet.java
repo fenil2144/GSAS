@@ -46,7 +46,6 @@ public class ApplySchemeDocumentServlet extends HttpServlet {
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		RequestDispatcher requestDispatcher = null;
 		
 		try {
@@ -82,7 +81,7 @@ public class ApplySchemeDocumentServlet extends HttpServlet {
 			            InputStream inputStream = part.getInputStream();
 
 			            // get filename to use on the server
-			            fileName = new File(extractFileName(part)).getName();
+			            fileName = new File(FileName.extractFileName(part)).getName();
 			            FileOutputStream os = new FileOutputStream ("F:\\documents\\"+fileName);
 			            
 			            // write bytes taken from uploaded file to target file
@@ -99,15 +98,12 @@ public class ApplySchemeDocumentServlet extends HttpServlet {
                     }
                     schemeApplicantVO.setApplicantDocumentsList(applicantDocumentsdocList);
                     
-                    System.out.println(schemeApplicantVO.toString());
-                    
 
             if(schemeApplicantVO.isApprovedStatus() == false){  
 						request.setAttribute("err",schemeApplicantVO.getReason());
 					} 
 					else {
 						
-						System.out.println("TRUE in else");
 						request.setAttribute("message","You have successfully applied for the scheme "+schemeApplicantVO.getSchemeVO().getSchemeName());
 						schemeService.addSchemeApplicant(schemeApplicantVO);
 					}
@@ -133,14 +129,5 @@ public class ApplySchemeDocumentServlet extends HttpServlet {
 		}
 		
 	}
-	 private String extractFileName(Part part) {
-	        String contentDisp = part.getHeader("content-disposition");
-	        String[] items = contentDisp.split(";");
-	        for (String s : items) {
-	            if (s.trim().startsWith("filename")) {
-	                return s.substring(s.indexOf("=") + 2, s.length()-1);
-	            }
-	        }
-	        return "";
-	    }
+
 }

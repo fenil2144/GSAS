@@ -38,7 +38,6 @@ public class SchemeDaoImpl implements SchemeDao{
 			} 
 			if(seq == 0) {
 				
-				System.out.println("Error in sequence number");
 				throw new InvalidSequenceException();
 			}
 			connection.setAutoCommit(false);		//Imlementing Transaction
@@ -80,7 +79,6 @@ public class SchemeDaoImpl implements SchemeDao{
 					documentSeq = resultSet.getLong(1);
 				} 
 				if(documentSeq == 0) {
-					System.out.println("Error in sequence number");
 					throw new InvalidSequenceException();
 				}
 				selectStatement = connection.prepareStatement("insert into scheme_documents values(?,?,?)");
@@ -99,7 +97,6 @@ public class SchemeDaoImpl implements SchemeDao{
 					banktSeq = resultSet.getLong(1);
 				} 
 				if(banktSeq == 0) {
-					System.out.println("Error in sequence number");
 					throw new InvalidSequenceException();
 				}
 				selectStatement = connection.prepareStatement("insert into scheme_banks values(?,?,?)");
@@ -125,8 +122,7 @@ public class SchemeDaoImpl implements SchemeDao{
 	public void editScheme(SchemeVO scheme) throws DatabaseException, InvalidSequenceException {
 		try {
 			Connection connection = DBUtility.getConnection();
-			connection.setAutoCommit(false);	//Implementing Transaction
-
+			//connection.setAutoCommit(false);	//Implementing Transaction
 			PreparedStatement selectStatement = connection.prepareStatement("update scheme_eligibility set min_age=?, max_age=?, income_group_ref=?, gender=?, profession_ref=? where scheme_eligibility_id=?");
 			selectStatement.setInt(1, scheme.getSchemeEligibilityVO().getMinAge());
 			selectStatement.setInt(2, scheme.getSchemeEligibilityVO().getMaxAge());
@@ -134,6 +130,7 @@ public class SchemeDaoImpl implements SchemeDao{
 			selectStatement.setString(4, scheme.getSchemeEligibilityVO().getGender());
 			selectStatement.setLong(5, scheme.getSchemeEligibilityVO().getProfessionVO().getProfessionId());
 			selectStatement.setLong(6, scheme.getSchemeEligibilityVO().getSchemeEligibilityId());
+			selectStatement.executeUpdate();
 			
 			selectStatement = connection.prepareStatement("update scheme_master set scheme_name=?, summary=?, description=?, image_path=?, ministry_ref=?, sector_ref=?, start_date=?, scheme_eligibility_ref=?, status=? where scheme_id=?");
 			selectStatement.setString(1, scheme.getSchemeName());
@@ -146,9 +143,8 @@ public class SchemeDaoImpl implements SchemeDao{
 			selectStatement.setLong(8, scheme.getSchemeEligibilityVO().getSchemeEligibilityId());
 			selectStatement.setBoolean(9, scheme.isStatus());
 			selectStatement.setLong(10, scheme.getSchemeId());
-			System.out.println(scheme.toString());
+			
 			selectStatement.executeUpdate();
-			System.out.println(selectStatement);
 			
 			PreparedStatement sequenceStatement = connection.prepareStatement("values(next value for scheme_seq)");
 			ResultSet resultSet = sequenceStatement.executeQuery();
@@ -157,7 +153,6 @@ public class SchemeDaoImpl implements SchemeDao{
 				seq = resultSet.getLong(1);
 			} 
 			if(seq == 0) {
-				//Need to throw an error
 				System.out.println("Error in sequence number");
 			}
 			
@@ -175,7 +170,6 @@ public class SchemeDaoImpl implements SchemeDao{
 					documentSeq = resultSet.getLong(1);
 				} 
 				if(documentSeq == 0) {
-					System.out.println("Error in sequence number");
 					throw new InvalidSequenceException();
 				}
 				selectStatement = connection.prepareStatement("insert into scheme_documents values(?,?,?)");
@@ -198,7 +192,6 @@ public class SchemeDaoImpl implements SchemeDao{
 					bankSeq = resultSet.getLong(1);
 				} 
 				if(bankSeq == 0) {
-					System.out.println("Error in sequence number");
 					throw new InvalidSequenceException();
 				}
 				selectStatement = connection.prepareStatement("insert into scheme_banks values(?,?,?)");
@@ -208,7 +201,7 @@ public class SchemeDaoImpl implements SchemeDao{
 				selectStatement.executeUpdate();
 			}
 
-			connection.commit();	//Committing the changes.
+			//connection.commit();	//Committing the changes.
 			selectStatement.close();
 			connection.close();
 			
@@ -222,7 +215,6 @@ public class SchemeDaoImpl implements SchemeDao{
 
 	@Override
 	public SchemeVO getSchemeDetails(Long schemeId) throws SchemeNotFoundException, DatabaseException {
-		// TODO Auto-generated method stub
 		SchemeVO schemeVO = null;
 		
 		try {
@@ -409,7 +401,7 @@ public class SchemeDaoImpl implements SchemeDao{
 				seq = resultSet.getLong(1);
 			} 
 			if(seq == 0) {
-				//Need to throw an error
+				
 				System.out.println("Error in sequence number");
 			}
 			
@@ -463,7 +455,7 @@ public class SchemeDaoImpl implements SchemeDao{
 				seq = resultSet.getLong(1);
 			} 
 			if(seq == 0) {
-				//Need to throw an error
+				
 				System.out.println("Error in sequence number");
 			}
 			PreparedStatement ps = connection.prepareStatement("insert into scheme_applicant values(?,?,?,?,?,?,?,?,?,?)");

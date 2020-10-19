@@ -79,7 +79,6 @@ public class EditSchemeServlet extends HttpServlet {
 					
 					SchemeVO schemeVO = schemeService.getSchemeDetails(Long.parseLong(request.getParameter("schemeId")));
 					request.setAttribute("schemeVO", schemeVO);
-					System.out.println(request.getParameter("schemeId"));
 				
 					rd = request.getRequestDispatcher("editScheme.jsp");
 					rd.forward(request, response);

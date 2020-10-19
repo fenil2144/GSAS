@@ -126,7 +126,6 @@ public class InsertSchemeJsonServlet extends HttpServlet {
 				         JSONArray documentJsonArray = (JSONArray) record.get("document");
 				         for(Object object1 : documentJsonArray) {
 					            JSONObject record1 = (JSONObject) object1;
-					            System.out.print(Long.parseLong((String)record1.get("documentId")));
 					            documentIdList.add(new DocumentVO(Long.parseLong((String)record1.get("documentId"))));
 				         }
 				         schemeVO.setDocumentList(documentIdList);
@@ -135,11 +134,9 @@ public class InsertSchemeJsonServlet extends HttpServlet {
 				         JSONArray bankJsonArray = (JSONArray) record.get("bank");
 				         for(Object object1 : bankJsonArray) {
 					            JSONObject record1 = (JSONObject) object1;
-					            System.out.print(Long.parseLong((String)record1.get("bankId")));
 					            bankIdList.add(new BankVO(Long.parseLong((String)record1.get("bankId"))));
 				         }
 				         schemeVO.setBankList(bankIdList);
-						System.out.print(record.toString());
 
 						
 						schemeService.addScheme(schemeVO);

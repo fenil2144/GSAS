@@ -95,7 +95,6 @@ public class UpdateSchemeServlet extends HttpServlet {
 					
 					SchemeEligibilityVO schemeEligibilityVO = new SchemeEligibilityVO();
 					schemeEligibilityVO.setSchemeEligibilityId(Long.parseLong(request.getParameter("schemeEligibilityId")));
-					System.out.println(Long.parseLong(request.getParameter("schemeEligibilityId")));
 					schemeEligibilityVO.setMinAge(Integer.parseInt(request.getParameter("minAge")));
 					schemeEligibilityVO.setMaxAge(Integer.parseInt(request.getParameter("maxAge")));
 					schemeEligibilityVO.setGender(request.getParameter("gender"));
@@ -117,7 +116,6 @@ public class UpdateSchemeServlet extends HttpServlet {
 						bankList.add(new BankVO(Long.parseLong(bankId)));
 					}
 					schemeVO.setBankList(bankList);
-					
 					schemeService.updateScheme(schemeVO);
 					request.setAttribute("message","Scheme Updated Successfully!");
 					rd = request.getRequestDispatcher("viewSchemesEmployeeServlet");

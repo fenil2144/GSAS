@@ -37,7 +37,6 @@ public class CitizenDaoImpl implements CitizenDao {
 				seq = rs.getLong(1);
 			} 
 			if(seq == 0) {
-				System.out.println("Error in sequence number");
 				throw new InvalidSequenceException();
 			}
 			//citizen_credential
@@ -134,6 +133,7 @@ public class CitizenDaoImpl implements CitizenDao {
 				loginVO.setEmployee(resultSet.getBoolean("is_employee"));
 				
 				AddressVO addressVO = new AddressVO();
+				addressVO.setAddressId(resultSet.getLong("address_id"));
 				addressVO.setStreet(resultSet.getString("street"));
 				addressVO.setCity(resultSet.getString("city"));
 				addressVO.setState(resultSet.getString("state"));
@@ -177,7 +177,7 @@ public class CitizenDaoImpl implements CitizenDao {
 			connection = DBUtility.getConnection();
 			connection.setAutoCommit(false);	//Implementing Transaction
 			//Update citizen_credential
-			PreparedStatement updateStatement = connection.prepareStatement("update login_credential set user_name=?,password=? where citizen_id=?");
+			PreparedStatement updateStatement = connection.prepareStatement("update login_credential set user_name=?,password=? where login_id=?");
 			updateStatement.setString(1, citizenDetailsVO.getLoginVO().getUserName());
 			updateStatement.setString(2, citizenDetailsVO.getLoginVO().getPassword());
 			updateStatement.setLong(3, citizenDetailsVO.getLoginVO().getLoginId());
@@ -193,7 +193,7 @@ public class CitizenDaoImpl implements CitizenDao {
 			updateStatement.executeUpdate();
 			
 			//Update citizen_details
-			updateStatement = connection.prepareStatement("update citizen_master set first_name=?,middle_name=?,last_name=?,date_of_birth=?,gender=?,email=?,phone=?,address_ref=?,income_group_ref=?,profession_ref =?,adhar_number=?,pancard_number=?,login_ref=? where citizen_details_id=?");
+			updateStatement = connection.prepareStatement("update citizen_master set first_name=?,middle_name=?,last_name=?,date_of_birth=?,gender=?,email=?,phone=?,address_ref=?,income_group_ref=?,profession_ref =?,aadhar_number=?,pancard_number=?,citizen_ref=? where citizen_details_id=?");
 			updateStatement.setString(1, citizenDetailsVO.getFirstName());
 			updateStatement.setString(2, citizenDetailsVO.getMiddleName());
 			updateStatement.setString(3, citizenDetailsVO.getLastName());
@@ -209,10 +209,8 @@ public class CitizenDaoImpl implements CitizenDao {
 			updateStatement.setLong(13, citizenDetailsVO.getLoginVO().getLoginId()); //citizen_ref FK (citizen_credential)
 			updateStatement.setLong(14, citizenDetailsVO.getCitizenDetailsId());
 			updateStatement.executeUpdate();
-
 			connection.commit();	//Committing the changes.
 			updateStatement.close();
-			connection.commit();	//Committing the changes.
 			connection.close();
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();

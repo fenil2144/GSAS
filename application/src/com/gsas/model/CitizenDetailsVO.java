@@ -250,6 +250,15 @@ public class CitizenDetailsVO {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "CitizenDetailsVO [citizenDetailsId=" + citizenDetailsId + ", firstName=" + firstName + ", middleName="
+				+ middleName + ", lastName=" + lastName + ", dateOfBirth=" + dateOfBirth + ", gender=" + gender
+				+ ", email=" + email + ", phone=" + phone + ", addressVO=" + addressVO + ", incomeGroup=" + incomeGroup
+				+ ", profession=" + profession + ", adharNumber=" + adharNumber + ", pancardNumber=" + pancardNumber
+				+ ", loginVO=" + loginVO + "]";
+	}
+
 
 
 	

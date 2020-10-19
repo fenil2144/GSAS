@@ -73,11 +73,10 @@ public class UpdateCitizenDetailsServlet extends HttpServlet {
 			citizenDetailsVO.setAdharNumber(Long.parseLong( request.getParameter("adharNumber") ));
 			citizenDetailsVO.setPancardNumber(request.getParameter("pancardNumber"));
 			citizenDetailsVO.setLoginVO(loginVO);
-			
 			citizenService.updateCitizenDetails(citizenDetailsVO);
 			
 			session.setAttribute("loginVO", loginVO);
-			session.setAttribute("message", "CitizenDetails Updated Successfully for Citizen Name: "+loginVO.getUserName());
+			request.setAttribute("message", "CitizenDetails Updated Successfully for Citizen Name: "+loginVO.getUserName());
 			
 			
 			requestDispatcher = request.getRequestDispatcher("viewSchemesCitizenServlet");

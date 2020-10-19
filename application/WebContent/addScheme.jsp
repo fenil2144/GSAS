@@ -112,17 +112,17 @@ fun(app){
 				<div class="col1">Select eligibility criteria</div>
 				<div class="section">
 					<div class="eligibilityCol">
-						<label>Enter minimum age</label> 
-						<input type="number" name="minAge" id="minAge" placeholder="Enter min age"><br>
+						<label class="required-field">Enter minimum age</label> 
+						<input type="number" name="minAge" id="minAge" placeholder="Enter min age" required min="0" max="130"><br>
 					</div>
 					<div class="eligibilityCol">
-						<label>Enter maximum age</label> 
-							<input type="number" name="maxAge" id="maxAge" placeholder="Enter max age"><br>
+						<label class="required-field">Enter maximum age</label> 
+							<input type="number" name="maxAge" id="maxAge" placeholder="Enter max age" required max="130" min="0"><br>
 					</div>
 
 					<div class="col1">
-						<label for="profession">Choose a profession:</label> 
-						<select	name="profession">
+						<label for="profession" class="required-field">Choose a profession:</label> 
+						<select	name="profession" required>
 							<option value="" id="select">Select</option>
 							<c:forEach items="${professionList}" var="profession">
 								<option value="${profession.professionId}">${profession.professionName}</option>
@@ -130,12 +130,12 @@ fun(app){
 						</select>
 					</div>
 					<div class="gender">
-						<label>Select gender</label>
+						<label class="required-field">Select gender</label>
 
 					</div>
 					<div class="genderCol">
 
-						<input type="radio" id="male" name="gender" value="male">
+						<input type="radio" id="male" name="gender" value="male" required>
 						<label for="male"> Male</label><br> 
 							<input type="radio"	id="female" name="gender" value="female"> 
 						<label for="female"> Female</label><br> 
@@ -145,8 +145,8 @@ fun(app){
 
 					</div>
 					<div class="col1">
-						<label for="incomeGroup">Choose a income group:</label> 
-						<select	name="incomeGroup">
+						<label for="incomeGroup" class="required-field">Choose a income group:</label> 
+						<select	name="incomeGroup" required>
 							<option value="select" id="select">Select</option>
 							<c:forEach items="${incomeGroupList}" var="incomeGroup">
 								<option value="${incomeGroup.incomeGroupId}">${incomeGroup.incomeGroupName}</option>
@@ -160,7 +160,7 @@ fun(app){
 				</div>
 				<div class="documentsCol" id="documentsCol">
 					<c:forEach items="${documentList}" var="document">
-						<input type="checkbox" id="document" name="document" value="${document.documentId}">
+						<input type="checkbox" id="document" name="document" value="${document.documentId}" >
 						<label for="document">${document.documentName}</label><br> 
 						
 					</c:forEach>
@@ -179,7 +179,7 @@ fun(app){
 				</div>
 				<div class="bankCol" id="bankCol">
 					<c:forEach items="${bankList}" var="bank">
-						<input type="checkbox" id="bank" name="bank" value="${bank.bankId}">
+						<input type="checkbox" id="bank" name="bank" value="${bank.bankId}" >
 						<label for="bank">${bank.bankName}</label><br> 
 						
 					</c:forEach>

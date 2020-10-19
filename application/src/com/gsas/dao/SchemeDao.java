@@ -7,7 +7,6 @@ import com.gsas.exception.InvalidSequenceException;
 import com.gsas.exception.SchemeNotFoundException;
 import com.gsas.model.BankVO;
 import com.gsas.model.DocumentVO;
-import com.gsas.model.SchemeApplicantDocumentsVO;
 import com.gsas.model.SchemeApplicantVO;
 import com.gsas.model.SchemeVO;
 

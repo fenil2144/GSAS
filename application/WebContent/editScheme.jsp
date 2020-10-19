@@ -67,7 +67,7 @@
 				<div class="col1">
 					<label class="required-field">Enter scheme name</label> <input type="text"
 						name="schemeName" id="schemeName" value="${schemeVO.schemeName}" placeholder="Enter scheme name" required>
-						<p>${schemeVO.schemeName}</p>
+						
 				</div>
 				<div class="col1">
 					<label class="required-field"> Summary of the scheme </label>
@@ -108,17 +108,17 @@
 				<div class="col1">Select eligibility criteria</div>
 				<div class="section">
 					<div class="eligibilityCol">
-						<label>Enter minimum age</label> <input type="number"
-							name="minAge" id="minAge" placeholder="Enter min age" value="${schemeVO.schemeEligibilityVO.minAge }"><br>
+						<label class="required-field">Enter minimum age</label> <input type="number"
+							name="minAge" id="minAge" placeholder="Enter min age" value="${schemeVO.schemeEligibilityVO.minAge }"  required min="0" max="130"><br>
 					</div>
 					<div class="eligibilityCol">
-						<label>Enter maximum age</label> <input type="number"
-							name="maxAge" id="maxAge" placeholder="Enter max age" value="${schemeVO.schemeEligibilityVO.maxAge }"><br>
+						<label class="required-field">Enter maximum age</label> <input type="number"
+							name="maxAge" id="maxAge" placeholder="Enter max age" value="${schemeVO.schemeEligibilityVO.maxAge }"  required min="0" max="130"><br>
 					</div>
 
 					<div class="col1">
-						<label for="profession">Choose a profession:</label> <select
-							name="profession">
+						<label for="profession" class="required-field">Choose a profession:</label> 
+						<select	name="profession" required>
 							<option value="select">Select</option>
 							<c:forEach items="${professionList}" var="profession">
 								<option value="${profession.professionId}" <c:if test="${profession.professionId eq schemeVO.schemeEligibilityVO.professionVO.professionId}">selected="selected"</c:if>>${profession.professionName}</option>
@@ -126,22 +126,22 @@
 						</select>
 					</div>
 					<div class="gender">
-						<label>Select gender</label>
+						<label class="required-field">Select gender</label>
 
 					</div>
 					<div class="genderCol">
 
-						<input type="radio" id="male" name="gender" <c:if test="${schemeVO.schemeEligibilityVO.gender eq 'male'}">checked="checked"</c:if> >
-						<label for="male"> Male</label><br> 
-							<input type="radio"	id="female" name="gender" <c:if test="${schemeVO.schemeEligibilityVO.gender eq 'female'}">checked="checked"</c:if> > <label
+						<input type="radio" id="male" name="gender" value="male" <c:if test="${schemeVO.schemeEligibilityVO.gender eq 'male'}">checked="checked"</c:if> >
+						<label for="male" > Male</label><br> 
+							<input type="radio"	id="female" name="gender" value="female" <c:if test="${schemeVO.schemeEligibilityVO.gender eq 'female'}">checked="checked"</c:if> > <label
 							for="female"> Female</label><br> 
-							<input type="radio"	id="other" name="gender"  <c:if test="${schemeVO.schemeEligibilityVO.gender eq 'both'}">checked="checked"</c:if> > 
-							<label for="both"> Both</label><br>
+							<input type="radio"	id="other" name="gender"  value="others" <c:if test="${schemeVO.schemeEligibilityVO.gender eq 'other'}">checked="checked"</c:if> > 
+							<label for="other"> Other</label><br>
 
 					</div>
 					<div class="col1">
-						<label for="incomeGroup">Choose a income group:</label> <select
-							name="incomeGroup">
+						<label for="incomeGroup" class="required-field">Choose a income group:</label> <select
+							name="incomeGroup" required>
 							<option value="select">Select</option>
 							<c:forEach items="${incomeGroupList}" var="incomeGroup">
 								<option value="${incomeGroup.incomeGroupId}" <c:if test="${incomeGroup.incomeGroupId eq schemeVO.schemeEligibilityVO.incomeGroupVO.incomeGroupId}">selected="selected"</c:if>>${incomeGroup.incomeGroupName}</option>
@@ -155,7 +155,7 @@
 				</div>
 				<div class="documentsCol" id="documentsCol">
 					<c:forEach items="${documentList}" var="document">
-						<input type="checkbox" id="document" name="document" value="${document.documentId}">
+						<input type="checkbox" id="document" name="document" value="${document.documentId}" >
 						<label for="document">${document.documentName}</label><br> 
 						
 					</c:forEach>

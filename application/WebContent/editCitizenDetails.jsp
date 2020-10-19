@@ -84,14 +84,16 @@
 					<label class="required-field">Select gender</label>
 
 				</div>
+				
+
 				<div class="col1" id="col2">
 
-					<input type="radio" id="male" name="gender" value="male"> 
-					<label for="male"> Male</label><br> 
-						<input type="radio" id="female"	name="gender" value="female"> <label for="female">
-						Female</label><br> 
-						<input type="radio" id="other" name="gender" value="others"> <label for="other"> Other</label><br>
-
+					<input type="radio" id="male" name="gender" value="male" <c:if test="${citizenDetailsVO.gender eq 'male'}">checked="checked"</c:if> >
+					<label for="male" > Male</label><br> 
+					<input type="radio"	id="female" name="gender" value="female" <c:if test="${citizenDetailsVO.gender eq 'female'}">checked="checked"</c:if> > 
+					<label for="female"> Female</label><br> 
+					<input type="radio"	id="other" name="gender"  value="others" <c:if test="${citizenDetailsVO.gender eq 'other'}">checked="checked"</c:if> > 
+					<label for="other"> Other</label><br>
 
 				</div>
 				<div class="col1" id="phoneNumber">

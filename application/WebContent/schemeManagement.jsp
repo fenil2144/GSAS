@@ -105,8 +105,8 @@
 		<form method="post" action="InsertSchemeJsonServlet" enctype="multipart/form-data">
 			<div class="add">
 				Upload scheme in JSON/XML format <input type="file" id="uploadSchemeJson" name="uploadSchemeJson">
-			</div>
 			<button type="submit" name="Upload" id="Upload"> Upload Scheme </button>
+			</div>
 		</form>
 
 	</div>

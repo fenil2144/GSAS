@@ -54,7 +54,7 @@ function validate(event) {
 	status = true
 	var count=1
 	if (password.length <= 6) {
-		alert("Password should be more than 6 characters!");
+		
 		status = false;
 		error += count+". Password should be more than 6 characters!" + "<br>";
 		count=count+1
@@ -63,9 +63,9 @@ function validate(event) {
 		f1 = true
 	}
 	if (password.localeCompare(retype) != 0) {
-		alert("Password and confirm password should be same");
+		/*alert("Password and confirm password should be same");*/
 		status = false;
-		error += count+". Password and confirm password should be same" + "<br>";
+		error += count+". Passwords do not match" + "<br>";
 		count=count+1
 		f2 = false
 	} else {
@@ -74,7 +74,7 @@ function validate(event) {
 	if (aadharCheck.test(aadhar)) {
 		f3 = true
 	} else {
-		alert("Adhaar Number should be of 12 digits");
+		/*alert("Adhaar Number should be of 12 digits");*/
 		error += count+". Adhaar Number should be of 12 digits" + "<br>";
 		count=count+1
 		status = false;
@@ -84,7 +84,7 @@ function validate(event) {
 	if (phoneCheck.test(phone)) {
 		f4 = true
 	} else {
-		alert("Phone Number should be of 10 digits");
+		/*alert("Phone Number should be of 10 digits");*/
 		status = false;
 		error += count+". Phone Number should be of 10 digits" + "<br>";
 		count=count+1
@@ -94,7 +94,7 @@ function validate(event) {
 	if (panCheck.test(pan)) {
 		f5 = true
 	} else {
-		alert("Invalid Pan Number");
+		/*alert("Invalid Pan Number");*/
 		status = false;
 		error += count+". Invalid Pan Number" + "<br>";
 		count=count+1
@@ -129,7 +129,7 @@ function validateAccount(event) {
 	if (accountCheck.test(number)) {
 		f4 = true
 	} else {
-		alert("Enter a valid account number.");
+		/*alert("Enter a valid account number.");*/
 		status = false;
 		error += count+". Enter a valid account number." + "<br>";
 		count=count+1
@@ -138,7 +138,7 @@ function validateAccount(event) {
 	if (ifsc.test(ifscCheck)) {
 		f3 = true
 	} else {
-		alert("Enter a valid ifsc code.");
+		/*alert("Enter a valid ifsc code.");*/
 		status = false;
 		error += count+". Enter a valid ifsc code." + "<br>";
 		count=count+1
@@ -147,7 +147,7 @@ function validateAccount(event) {
 
 	
 	if (status == "false") {
-		let li = document.createElement('li');
+		let li = document.createElement('p');
 		li.innerHTML = error;
 		val.appendChild(li);
 		event.preventDefault();

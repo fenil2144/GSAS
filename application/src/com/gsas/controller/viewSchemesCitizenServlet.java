@@ -48,7 +48,6 @@ public class viewSchemesCitizenServlet extends HttpServlet {
             if(loginVO != null) {
                 if(loginVO.isEmployee() == false) { 
                     //If user is already logged in
-                    System.out.println("In here.");
                     
                     notAppliedSchemeList = citizenService.getNotAppliedSchemeList(loginVO.getLoginId());            //return list of all schemes
                     request.setAttribute("notAppliedSchemeList", notAppliedSchemeList);
@@ -58,14 +57,8 @@ public class viewSchemesCitizenServlet extends HttpServlet {
                     
                     rejectedSchemeList = citizenService.getAppliedSchemeList(loginVO.getLoginId(), false);
                     request.setAttribute("rejectedSchemeList", rejectedSchemeList);
-                    //System.out.println(notAppliedSchemeList.size());
-                   // System.out.println(acceptedSchemeList.size());
-                   // System.out.println(rejectedSchemeList.size());
 
                     rd = request.getRequestDispatcher("viewAllSchemes.jsp");
-                    System.out.println(notAppliedSchemeList.size());
-                    System.out.println(acceptedSchemeList.size());
-                    System.out.println(rejectedSchemeList.size());
                     rd.forward(request, response);
             
                 }
