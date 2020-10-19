@@ -80,7 +80,7 @@ public class UpdateCitizenDetailsServlet extends HttpServlet {
 			session.setAttribute("message", "CitizenDetails Updated Successfully for Citizen Name: "+loginVO.getUserName());
 			
 			
-			requestDispatcher = request.getRequestDispatcher("viewAllSchemes.jsp");
+			requestDispatcher = request.getRequestDispatcher("viewSchemesCitizenServlet");
 			requestDispatcher.forward(request, response);
 		}
 		else {

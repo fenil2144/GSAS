@@ -40,7 +40,7 @@ public class CitizenLoginServlet extends HttpServlet {
 			rd.forward(request, response);
 			
 		} catch (AuthenticationException e) {
-			rd = request.getRequestDispatcher("loginFailure.jsp");
+			rd = request.getRequestDispatcher("index.jsp");
 			e.printStackTrace();
 			request.setAttribute("err", e.getMessage());
 			rd.forward(request, response);

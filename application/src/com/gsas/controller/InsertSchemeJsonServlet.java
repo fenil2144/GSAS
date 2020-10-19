@@ -8,12 +8,12 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -45,6 +45,7 @@ import com.gsas.utility.ObjectFactory;
  * Servlet implementation class InsertSchemeJsonServlet
  */
 @WebServlet("/InsertSchemeJsonServlet")
+@MultipartConfig
 public class InsertSchemeJsonServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -61,16 +62,15 @@ public class InsertSchemeJsonServlet extends HttpServlet {
 			LoginVO loginVO = (LoginVO) session.getAttribute("loginVO");
 			if(loginVO != null) {
 				if(loginVO.isEmployee() == true) {
-					
 					String fileName = null;
 					
-		            Part part = request.getPart("imagePath");
+		            Part part = request.getPart("uploadSchemeJson");
 		            InputStream is = part.getInputStream();
 
 		            // get filename to use on the server
 		            fileName = new File(FileName.extractFileName(part)).getName();
 
-		            FileOutputStream os = new FileOutputStream ("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\json\\"+fileName);
+		            FileOutputStream os = new FileOutputStream ("F:\\json\\"+fileName);
 		            
 		            // write bytes taken from uploaded file to target file
 		            int ch = is.read();
@@ -78,68 +78,76 @@ public class InsertSchemeJsonServlet extends HttpServlet {
 		                 os.write(ch);
 		                 ch = is.read();
 		            }
-		            os.close();				
+		            os.close();
+
+		            		
 					//Creating a JSONParser object
-				      JSONParser jsonParser = new JSONParser();
+				    JSONParser jsonParser = new JSONParser();
 				      
 	      
-				         //Parsing the contents of the JSON file
-				         JSONObject jsonObject = (JSONObject) jsonParser.parse(new FileReader("F:\\sts-Workspace\\GovernmentSchemesApplicationSystem\\WebContent\\json\\"+fileName));
-
-				         //Retrieving the array
-				         JSONArray jsonArray = (JSONArray) jsonObject.get("scheme_data");
+			         //Parsing the contents of the JSON file
+			         JSONObject jsonObject = (JSONObject) jsonParser.parse(new FileReader("F:\\json\\"+fileName));
+	
+			         //Retrieving the array
+			         JSONArray jsonArray = (JSONArray) jsonObject.get("scheme_data");
 			
 				         
-				         for(Object object : jsonArray) {
-				            JSONObject record = (JSONObject) object;
-				            
-							SchemeVO schemeVO = new SchemeVO();
-							schemeVO.setSchemeName((String) record.get("schemeName"));
-							schemeVO.setSummary((String) record.get("summary"));
-							schemeVO.setDescription((String) record.get("description"));
-							
+			         for(Object object : jsonArray) {
+			            JSONObject record = (JSONObject) object;
+			            
+						SchemeVO schemeVO = new SchemeVO();
+						schemeVO.setSchemeName((String) record.get("schemeName"));
+						schemeVO.setSummary((String) record.get("summary"));
+						schemeVO.setDescription((String) record.get("description"));
+						
 
-							schemeVO.setImagePath((String) record.get("imagePath"));
-							MinistryVO ministryVO = new MinistryVO(Long.parseLong((String) record.get("ministry")));
-							schemeVO.setMinistryVO(ministryVO);
-							
-							SectorVO sectorVO = new SectorVO(Long.parseLong((String) record.get("sector")));
-							schemeVO.setSectorVO(sectorVO);
-							
-							DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-							formatter = formatter.withLocale( Locale.ENGLISH );  // Locale specifies human language for translating, and cultural norms for lowercase/uppercase and abbreviations and such. Example: Locale.US or Locale.CANADA_FRENCH
-							LocalDate date = LocalDate.parse((String) record.get("startDate"), formatter);
-							schemeVO.setStartDate(date);
-							
-							SchemeEligibilityVO schemeEligibilityVO = new SchemeEligibilityVO();
-							schemeEligibilityVO.setMinAge(Integer.parseInt((String) record.get("minAge")));
-							schemeEligibilityVO.setMaxAge(Integer.parseInt((String) record.get("maxAge")));
-							schemeEligibilityVO.setGender(request.getParameter((String) record.get("gender")));
-							schemeEligibilityVO.setIncomeGroupVO(new IncomeGroupVO(Long.parseLong((String) record.get("incomeGroup"))));
-							schemeEligibilityVO.setProfessionVO(new ProfessionVO(Long.parseLong((String) record.get("profession"))));
-							schemeVO.setSchemeEligibilityVO(schemeEligibilityVO);
-							schemeVO.setStatus(Boolean.parseBoolean((String) record.get("status")));
-
-							String[] documentIdList = (String[]) record.get("document");
-							List<DocumentVO> documentList = new ArrayList<DocumentVO>();
-							for(String documentId : documentIdList) {
-								documentList.add(new DocumentVO(Long.parseLong(documentId)));
-							}
-							schemeVO.setDocumentList(documentList);
-							
-							String[] bankIdList = (String[]) record.get("bank");
-							List<BankVO> bankList = new ArrayList<BankVO>();
-							for(String bankId : bankIdList) {
-								bankList.add(new BankVO(Long.parseLong(bankId)));
-							}
-							schemeVO.setBankList(bankList);
-							
-							schemeService.addScheme(schemeVO);
-							request.setAttribute("message","Scheme Added Successfully!");
-							rd = request.getRequestDispatcher("AddSchemeServlet");
-							rd.forward(request, response);
-				            
+						schemeVO.setImagePath("F:\\images\\defaultScheme.jpeg");
+						MinistryVO ministryVO = new MinistryVO(Long.parseLong((String) record.get("ministry")));
+						schemeVO.setMinistryVO(ministryVO);
+						
+						SectorVO sectorVO = new SectorVO(Long.parseLong((String) record.get("sector")));
+						schemeVO.setSectorVO(sectorVO);
+						
+						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+						formatter = formatter.withLocale( Locale.ENGLISH );  // Locale specifies human language for translating, and cultural norms for lowercase/uppercase and abbreviations and such. Example: Locale.US or Locale.CANADA_FRENCH
+						LocalDate date = LocalDate.parse((String) record.get("startDate"), formatter);
+						schemeVO.setStartDate(date);
+						
+						SchemeEligibilityVO schemeEligibilityVO = new SchemeEligibilityVO();
+						schemeEligibilityVO.setMinAge(Integer.parseInt((String) record.get("minAge")));
+						schemeEligibilityVO.setMaxAge(Integer.parseInt((String) record.get("maxAge")));
+						schemeEligibilityVO.setGender(((String) record.get("gender")));
+						schemeEligibilityVO.setIncomeGroupVO(new IncomeGroupVO(Long.parseLong((String) record.get("incomeGroup"))));
+						schemeEligibilityVO.setProfessionVO(new ProfessionVO(Long.parseLong((String) record.get("profession"))));
+						schemeVO.setSchemeEligibilityVO(schemeEligibilityVO);
+						schemeVO.setStatus(Boolean.parseBoolean((String) record.get("status")));
+						
+						List<DocumentVO> documentIdList = new ArrayList<DocumentVO>();
+				         JSONArray documentJsonArray = (JSONArray) record.get("document");
+				         for(Object object1 : documentJsonArray) {
+					            JSONObject record1 = (JSONObject) object1;
+					            System.out.print(Long.parseLong((String)record1.get("documentId")));
+					            documentIdList.add(new DocumentVO(Long.parseLong((String)record1.get("documentId"))));
 				         }
+				         schemeVO.setDocumentList(documentIdList);
+				         
+						List<BankVO> bankIdList = new ArrayList<BankVO>();
+				         JSONArray bankJsonArray = (JSONArray) record.get("bank");
+				         for(Object object1 : bankJsonArray) {
+					            JSONObject record1 = (JSONObject) object1;
+					            System.out.print(Long.parseLong((String)record1.get("bankId")));
+					            bankIdList.add(new BankVO(Long.parseLong((String)record1.get("bankId"))));
+				         }
+				         schemeVO.setBankList(bankIdList);
+						System.out.print(record.toString());
+
+						
+						schemeService.addScheme(schemeVO);
+						request.setAttribute("message","Scheme Added Successfully!");
+						rd = request.getRequestDispatcher("viewSchemesEmployeeServlet");
+						rd.forward(request, response);
+			            
+			         }
 				}
 						else {													//If user is already logged in
 							rd = request.getRequestDispatcher("viewSchemesCitizenServlet");
@@ -152,12 +160,13 @@ public class InsertSchemeJsonServlet extends HttpServlet {
 							rd.forward(request, response);
 						}   
 			} catch (DatabaseException | InvalidSequenceException e) {
-				rd = request.getRequestDispatcher("AddSchemeServlet");
+				e.printStackTrace();
+				rd = request.getRequestDispatcher("viewSchemesEmployeeServlet");
 				request.setAttribute("err", e.getMessage());
 				rd.forward(request, response);
 			} catch (Exception e) {
 				e.printStackTrace();
-				rd = request.getRequestDispatcher("AddSchemeServlet");
+				rd = request.getRequestDispatcher("viewSchemesEmployeeServlet");
 				request.setAttribute("err", e.getMessage());
 				rd.forward(request, response);
 			}
