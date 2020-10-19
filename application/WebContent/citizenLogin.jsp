@@ -18,7 +18,7 @@
 	</div>
 	<div class="sidenav">
 		<div class="image">
-			<img src="logo\logo.jpeg">
+			<img src="logo\logo.jpeg" alt="LOGO">
 		</div>
 
 		<div class="heading">
@@ -55,11 +55,6 @@
         </c:if>
         </div>
 		<div class="main1">
-			<c:if test="${message != null}">
-				<p>
-					<c:out value="${message}" />
-				<p>
-			</c:if>
 
 			<form method="post" action="CitizenLoginServlet">
 				<div class="col1" id="citizenUsername">
