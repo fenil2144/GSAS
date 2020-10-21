@@ -129,28 +129,30 @@ function validateAccount(event) {
 	if (accountCheck.test(number)) {
 		f4 = true
 	} else {
-		/*alert("Enter a valid account number.");*/
+		alert("Enter a valid account number.");
 		status = false;
 		error += count+". Enter a valid account number." + "<br>";
 		count=count+1
 		f4 = false
 	}
-	if (ifsc.test(ifscCheck)) {
+	if (ifscCheck.test(ifsc)) {
 		f3 = true
 	} else {
-		/*alert("Enter a valid ifsc code.");*/
+		alert("Enter a valid ifsc code.");
 		status = false;
 		error += count+". Enter a valid ifsc code." + "<br>";
 		count=count+1
 		f3 = false
 	}
 
-	
+	debugger
 	if (status == "false") {
 		let li = document.createElement('p');
 		li.innerHTML = error;
+		debugger
 		val.appendChild(li);
 		event.preventDefault();
+		debugger
 	}
 
 }

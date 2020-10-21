@@ -89,7 +89,7 @@
 			</div>
 
 			<form method="POST" action="ApplySchemeDocumentServlet"
-				enctype="multipart/form-data" onsubmit="validateAccount(event1)">
+				enctype="multipart/form-data">		
 				<div class="col1">
 					<input type="hidden" name="schemeId" value="${schemeVO.schemeId}">
 					<label for="bank">Choose a bank:</label> <select name="bank">
@@ -104,7 +104,7 @@
 
 				<div class="col1">
 					<input type="number" name="accountNumber" id="accountNumber"
-						placeholder="Enter Account Number" required><br>
+						placeholder="Enter Account Number" required pattern="^d{10}$"><br>
 				</div>
 
 
@@ -121,7 +121,7 @@
 
 				<div class="col1">
 					<input type="text" name="ifsc" id="ifsc"
-						placeholder="Enter IFSC Code" required><br>
+						placeholder="Enter IFSC Code" required pattern="^[A-Z]{4}0[A-Z0-9]{6}$"><br>
 				</div>
 				<div class="col1">
 					<label for="documents">Upload documents:</label><br>
@@ -137,7 +137,6 @@
 					<button type="submit" id="submit">Save</button>
 
 				</div>
-				<p id="val"> </p>
 				<div class="col1">
 
 					<button type="button" id="button" onclick="cancelScheme()">

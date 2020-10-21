@@ -24,6 +24,7 @@
         </style>
             </head>
     <body>
+    <script type="text/javascript" src="JS\navigation.js"></script>
         <div class="header">
             <h1>Edit Scheme</h1>
             
@@ -61,7 +62,7 @@
         </c:if>
         </div>
 		<div class="main1">
-			<form method="POST" action="UpdateSchemeServlet" enctype="multipart/form-data">
+			<form method="POST" action="UpdateSchemeServlet" enctype="multipart/form-data" onsubmit="validate(event)">
 			<input type="hidden" name="schemeId" id="schemeId" value="${schemeVO.schemeId}">
 			<input type="hidden" name="schemeEligibilityId" id="schemeEligibilityId" value="${schemeVO.schemeEligibilityVO.schemeEligibilityId}">
 				<div class="col1">
@@ -194,7 +195,9 @@
 					
 				</div>
 				
-
+				<div class="error">
+				<p id="val"><p>
+				</div>
 			</form>
 
 		</div>
